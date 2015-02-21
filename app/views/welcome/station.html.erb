@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Station Page</title>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <h1>Station Page - # train - Direction</h1>
+  <%= yield %>
+  <p>Currently stations from this page is static. All station should pull from db dynamically.</p>
+
+  <table class="direction">
+    <tr>
+      <td><a href="#">28 St</a></td>
+    </tr>
+    <tr>
+      <td><a href="#">23 St</a></td>
+    </tr>
+    <tr>
+      <td><a href="#">18 St</a></td>
+    </tr>
+    <tr>
+      <td><a href="#">14 St - Union Sq</a></td>
+    </tr>
+  </table>
+
+</body>
+</html>
