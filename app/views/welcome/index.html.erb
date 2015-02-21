@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DA</title>
-  <%= stylesheet_link_tag "application", media: "all" %>
-  <!--%= javascript_include_tag 'welcome', 'data-turbolinks-track' => true %-->
+  <title>Subwaz</title>
   <%= csrf_meta_tags %>
 </head>
 
 <body>
   <div class="header">
-    <h1>DA</h1>
+    <h1>Subwaz</h1>
   </div>
   
   <div class="station-img">
-    <a href="#"><%= image_tag "circular108.png" %></a>
+    <div class="sixth-train-link">6</div>
+    <div class="direction">
+      <span class="tag" style="display:none;">
+        <%= link_to 'Uptown', welcome_station_path %> | <%= link_to 'Downtown', welcome_station_path %>
+      </span>
+    </div>
+    <!-- a href="#"><%= image_tag "circular108.png" %></a -->
   </div>
   
 </body>

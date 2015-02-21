@@ -2,6 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@media (max-width: 320px)
+{
+
+}
+
+a {
+  text-decoration:none;
+}
+
 .header {
   text-align: center;
 }
@@ -9,3 +18,39 @@
 .station-img {
   text-align: center;
 }
+
+.sixth-train-link {
+  text-decoration:none;
+  margin-left: auto;
+  margin-right: auto;
+  color: #00933C;
+  border: 5px solid #00933C;
+	border-radius: 50%;
+	opacity: 0.6;
+  font-size: 50px;
+
+	-webkit-box-shadow: 0 0 1px 0px rgb( 255, 255, 255);
+	box-shadow: 0 0 1px 0px rgb( 255, 255, 255);
+	width: 100px;
+	height: 100px;
+	z-index: 86;
+  line-height: 110px;
+
+	-webkit-transition: background-color .5s ease-in-out;
+	-moz-transition: background-color .5s ease-in-out;
+	-o-transition: background-color .5s ease-in-out;
+	-ms-transition: background-color .5s ease-in-out;
+	transition: background-color .5s ease-in-out;
+}
+
+.sixth-train-link:hover{
+  color: white;
+  text-decoration:none;
+  background:#00933C;
+}
+
+.direction {
+  margin-top: 1%;
+  margin-left: 1.3%;
+}
+
