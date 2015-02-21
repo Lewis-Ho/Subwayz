@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
-  get 'welcome/index'
-  get 'welcome/station'
+  get 'poll'    => 'result#poll'
+  get 'result'  => 'result#result'
+
+  get 'index'   => 'welcome#index'
+  get 'station' => 'welcome#station'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

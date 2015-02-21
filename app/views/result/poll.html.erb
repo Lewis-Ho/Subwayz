@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Poll</title>
+</head>
+<body>
+
+  <h1>Poll page</h1>
+  <p>This page was hardcoded in html form type. Should be code in ruby somehow? (form_for ?) </p>
+
+
+  <p>Is the train come on time?</p>
+  <form action="">
+    <input type="button" name="yes" value="Yes">
+    <input type="button" name="no" value="No">
+    <br><br>
+    <!-- input type="submit" id="form_id" value="Submit" -->
+    <%= link_to 'submit', result_path , :onclick => "$('#form_id').submit()" %>
+  </form>
+
+</body>
+</html>
