@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.2.0'
 
+gem 'json', '~> 1.8.2'
+
 gem 'geocoder', '~> 1.2.7'
 
 gem 'gmaps4rails'

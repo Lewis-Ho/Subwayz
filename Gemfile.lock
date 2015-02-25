@@ -169,6 +169,7 @@ DEPENDENCIES
   google_places
   jbuilder (~> 2.0)
   jquery-rails
+  json (~> 1.8.2)
   pg (= 0.17.1)
   rails (= 4.2.0)
   rails_12factor (= 0.0.2)
