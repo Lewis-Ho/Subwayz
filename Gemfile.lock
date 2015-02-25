@@ -58,6 +58,7 @@ GEM
     execjs (2.3.0)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
+    gmaps4rails (2.1.2)
     google_places (0.29.0)
       httparty (~> 0.13.1)
     hike (1.2.3)
@@ -162,6 +163,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  gmaps4rails
   google_places
   jbuilder (~> 2.0)
   jquery-rails
