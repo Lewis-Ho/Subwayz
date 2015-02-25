@@ -26,10 +26,10 @@ class WelcomeController < ApplicationController
     lng = -73.72719089999998.to_s
     radius = 500.to_s
     type = "subway"
-    sensor = "true"
     key = "AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
 
-    combine = baseurl + 'location=' + lat + ',' + lng  + '&' + 'radius=' + radius + '&' + "types=" + type + '&' + "sensor=" + sensor +  '&' + "key=" + key
+    #combine = baseurl + 'location=' + lat + ',' + lng  + '&' + 'radius=' + radius + '&' + "types=" + type + '&' + "key=" + key
+    combine = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
 
     url = combine
     result = open(url) do |file|
