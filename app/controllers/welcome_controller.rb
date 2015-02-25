@@ -19,7 +19,7 @@ class WelcomeController < ApplicationController
     # end
     # @data2 = result
     
-
+    
 
     baseurl = "https://maps.googleapis.com/maps/api/place/search/json?"
     lat = 40.7851185.to_s
@@ -37,6 +37,11 @@ class WelcomeController < ApplicationController
     end
     @data2 = result
     
+    geourl = "https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
+    georesult = open(geourl) do |file|
+      JSON.parse(file.read)
+    end
+    @data3 = georesult
   end
   
   def station
