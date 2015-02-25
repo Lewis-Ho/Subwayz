@@ -15,14 +15,16 @@
 <div>
 <script type="text/javascript">
   handler = Gmaps.build('Google');
-handler.buildMap({ provider: {
+handler.buildMap({ provider:
+ {
     zoom: 30
 
 }, internal: {id: 'map'}}, function(){
   markers = handler.addMarkers([
     {
-      "lat": 40.7719566,
-      "lng": -73.9621715,
+      "zoom": 10,
+      "lat": position.coords.latitude,
+      "lng": position.coords.longitude,
       "picture": {
         "url": "https://addons.cdn.mozilla.net/img/uploads/addon_icons/13/13028-64.png",
         "width":  36,
