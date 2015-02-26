@@ -10,7 +10,6 @@ $(document).ready(function(){
 
       function initialize() {
 
-      	
         var mapOptions = {
           //center: { lat: -34.397, lng: 150.644},
           zoom: 11
@@ -39,20 +38,20 @@ $(document).ready(function(){
               var marker =  new google.maps.Marker({
                 position: pos,
                 map: map,
-                title: 'Uluru (Ayers Rock)'
               });
 
               google.maps.event.addListener(marker, 'click', function() {
-              infowindow.open(map,marker);
-              
+                infowindow.open(map,marker);
               });
 
               marker.setMap(map);
 
               map.setCenter(pos);
+
             }, function() {
               handleNoGeolocation(true);
             });
+
           } else {
             // Browser doesn't support Geolocation
             handleNoGeolocation(false);
@@ -65,12 +64,6 @@ $(document).ready(function(){
         } else {
           var content = 'Error: Your browser doesn\'t support geolocation.';
         }
-
-        var options = {
-          map: map,
-          position: new google.maps.LatLng(60, 105),
-          content: content
-        };
 
         var infowindow = new google.maps.InfoWindow(options);
         map.setCenter(options.position);
