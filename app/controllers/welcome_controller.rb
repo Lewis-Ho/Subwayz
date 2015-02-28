@@ -5,45 +5,34 @@ class WelcomeController < ApplicationController
   require 'json'
   
   def index
+
+    # baseurl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+    # lat = -33.8670522.to_s
+    # lng = 151.1957362.to_s
+    # radius = 500.to_s
+    # type = "subway_station"
     # key = "AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-#     @key = key
-#     @client = GooglePlaces::Client.new(@key)
-#
-#     @station = @client.spots(40.7851185, -73.72719089999998, :types => 'subway')
-    #puts "AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-    
-    
-    # url = 'https://maps.googleapis.com/maps/api/place/details/json?location=40.7851185,-73.72719089999998&radius=500&types=subway&sensor=false&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM'
+    #
+    # # Show All Nearest Station
+    # #combine = baseurl + 'location=' + lat + ',' + lng  + '&' + 'radius=' + radius + '&' + "types=" + type + '&' + "key=" + key
+    # combine = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.695076256618954,-73.9809462044349&radius=500&types=subway_station&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
+    #
+    # #@pos = params[:selectingCommand]
+    # @lng_lat = [params[:lng].to_f, params[:lat].to_f]
+    # @alt = params[:alt].to_f
+    #
+    # url = combine
     # result = open(url) do |file|
     #   JSON.parse(file.read)
     # end
-    # @data2 = result
-    
-    
-
-    baseurl = "https://maps.googleapis.com/maps/api/place/search/json?"
-    lat = 40.7851185.to_s
-    lng = -73.72719089999998.to_s
-    radius = 500.to_s
-    type = "subway"
-    key = "AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-
-    #combine = baseurl + 'location=' + lat + ',' + lng  + '&' + 'radius=' + radius + '&' + "types=" + type + '&' + "key=" + key
-    combine = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-
-    url = combine
-    result = open(url) do |file|
-      JSON.parse(file.read)
-    end
-    @data2 = result
-    
-    geourl = "https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-    georesult = open(geourl) do |file|
-      JSON.parse(file.read)
-    end
-    @data3 = georesult
+    # @data2 = @lng_lat
   end
   
   def station
+  end
+  
+  def create
+    @lng_lat = [params[:lng].to_f, params[:lat].to_f]
+    @alt = params[:alt].to_f
   end
 end
