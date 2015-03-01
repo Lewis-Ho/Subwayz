@@ -1,38 +1,79 @@
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
 $(document).ready(function(){
+  var map;
   var directionsDisplay;
   var directionsService = new google.maps.DirectionsService();
-  var map;
-  var haight = new google.maps.LatLng(37.7699298, -122.4469157);
-  var oceanBeach = new google.maps.LatLng(37.7683909618184, -122.51089453697205);
+  var lat;
+  var lon;
+  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
 
   function initialize() {
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    var mapOptions = {
-      zoom: 14,
-      center: haight
+
+    // Try HTML5 geolocation
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+        console.log(pos);
+
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var mapOptions = {
+          zoom: 11,
+          center: pos
+        };
+        // Draw map
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        directionsDisplay.setMap(map);
+        
+        var request = {
+            origin: pos,
+            destination: hunter,
+            travelMode: google.maps.TravelMode.TRANSIT
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          }
+        });
+
+        map.setCenter(pos);
+      }, function() {
+        handleNoGeolocation(true);
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
     }
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    directionsDisplay.setMap(map);
-    
-    console.log("haight");
-    var request = {
-        origin: haight,
-        destination: oceanBeach,
-        // Note that Javascript allows us to access the constant
-        // using square brackets and a string value as its
-        // "property."
-        travelMode: google.maps.TravelMode.TRANSIT
-    };
-    directionsService.route(request, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      }
-    });
   }
 
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag) {
+      var content = 'Error: The Geolocation service failed.';
+    } else {
+      var content = 'Error: Your browser doesn\'t support geolocation.';
+    }
+
+    // Center map if geolocaiton not supported
+    var options = {
+      map: map,
+      position: new google.maps.LatLng(60, 105),
+      content: content
+    };
+
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
+  }
+
+  // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
+
+  //var haight = new google.maps.LatLng(37.7699298, -122.4469157);
+  //var oceanBeach = new google.maps.LatLng(40.695076256618954, -73.9809462044349);
+
+  
   
   
   /*
