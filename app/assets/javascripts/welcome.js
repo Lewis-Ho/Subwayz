@@ -1,5 +1,6 @@
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
+/*
 $(document).ready(function(){
   var map;
   var directionsDisplay;
@@ -152,7 +153,8 @@ $(document).ready(function(){
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
   */
-  
+
+  /*
   $('.sixth-train-link').click(function(e){
     e.preventDefault();
     $('.tag').fadeToggle('slow');
@@ -160,4 +162,6 @@ $(document).ready(function(){
     //console.log(position.coords.latitude,position.coords.longitude);
   });
 });
+
+*/
 
