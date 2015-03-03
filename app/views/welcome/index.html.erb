@@ -1,43 +1,30 @@
 <!DOCTYPE html>
-
-
 <html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Displaying text directions with <code>setPanel()</code></title>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+  </head>
+  <body>
+    <div id="control">
+      <strong>Start:</strong><input id ="start" type="text" data-bind="value:start"/>
+      <strong>End:</strong><input id="end" type="text" data-bind="value:end"/>
 
-<head>
-  <title>Subwaz</title>
-  <%= csrf_meta_tags %>
-
-   <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEDBGSYZACJSTFx3EBAUpi7Ni90VWA5hM"
-      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true">
-    </script>
-    
-</head>
-
-
-
-<body>
-
-<div id="map-canvas"></div>
-
-  <div class="header">
-    <h1>Subwaz</h1>
-  </div>
-  
-  <div class="station-img">
-    <div class="sixth-train-link">6</div>
-    <div class="direction">
-      <span class="tag" style="display:none;">
-        data2 <%= @data2.inspect %>
-        <%= link_to 'Uptown', station_path %> | <%= link_to 'Downtown', station_path %>
-      </span>
+      <button onclick="calcRoute(); hideMessage();">Get Directions</button>
     </div>
-    <!-- a href="#"><%= image_tag "circular108.png" %></a -->
-  </div>
-  
 
-
-
+    <div id="map-canvas"></div>
+    <div id="directions-panel">
+      <div id="init-message">
+        <p>Please Select Point A and B</p>
+      </div>
+    </div>
+    <div id="station-info">
+      <p>Station Info: </p>
+      <div id="info">
+        
+      </div>
+    </div>
+  </body>
 </html>
-
-
