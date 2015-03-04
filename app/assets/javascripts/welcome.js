@@ -4,6 +4,19 @@ var directionsDisplay;
 var directionsService;
 
 $(document).ready(function(){
+  // Change info dynamically
+  $("#directions-panel").click(function(e) {
+    var content = $(e.target).html();
+    var theObj = $(e.target);
+    console.log(content);
+    if ( content != "" ) {
+      //alert(content);
+      alert(theObj);
+      document.getElementById("station-info").innerHTML = content;
+      $("#station-info").text(content);
+    }
+  });
+  
   directionsService = new google.maps.DirectionsService();
   
   function initialize() {
@@ -12,15 +25,9 @@ $(document).ready(function(){
       zoom: 13
     };
 
-  //GEO
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        // var infowindow = new google.maps.InfoWindow({
-        //   map: map,
-        //   position: pos,
-        //   content: 'Location found using HTML5.'
-        // });
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
@@ -84,37 +91,13 @@ function calcRoute() {
       }
     }
   });
-  // var route = response.routes[0];
-  // var summaryPanel = document.getElementById('directions_panel');
-  // summaryPanel.innerHTML = '';
-  // // For each route, display summary information.
-  // for (var i = 0; i < route.legs.length; i++) {
-  //   var routeSegment = i + 1;
-  //   console.log (summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + '</b><br>');
-  //   console.log (summaryPanel.innerHTML += route.legs[i].start_address + ' to ');
-  //   console.log (summaryPanel.innerHTML += route.legs[i].end_address + '<br>');
-  //   console.log (summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>');
-  //   //summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + '</b><br>';
-  //   //summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-  //   //summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-  //   //summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
-  // }
 };
 
 function hideMessage(){
   $('#init-message').hide(1000);
 };
 
-$(this).click(function(e) {
-  //console.log($(event.target).text());
-  var text = $(event.target).html();
-  console.log(text);
-  document.getElementById("info").innerHTML = text;
-  $("#info").html(text);
-  //var element = document.getElementById("info");
-  //element.innerHTML = String($(event.target).text());
-  //$('#info').show(1000);
-});
+
 /*
 $(document).ready(function(){
   var map;
