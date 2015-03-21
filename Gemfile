@@ -1,11 +1,9 @@
 source 'https://rubygems.org'
-ruby '2.2.0'
 
 gem 'json', '~> 1.8.2'
-
-gem 'geocoder', '~> 1.2.7'
-
 gem 'gmaps4rails'
+gem 'geocoder', '~> 1.2.7'
+gem 'google_places'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
@@ -26,8 +24,6 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-gem 'google_places'
 
 #gem 'ruby-protocol-buffers'
 
@@ -54,6 +50,8 @@ group :development, :test do
 end
 
 group :production do
+  # pg has a dependency on postgresql-devel package
+  # use "sudo apt-get install libpq-dev"
   gem 'pg',             '0.17.1'
   gem 'rails_12factor', '0.0.2'
 end
