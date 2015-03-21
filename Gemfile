@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# Specified Ruby version 2.2.0
+ruby '2.2.0'
+
 # Added jSon
 gem 'json', '~> 1.8.2'
 
@@ -7,6 +10,13 @@ gem 'json', '~> 1.8.2'
 gem 'gmaps4rails'
 gem 'geocoder', '~> 1.2.7'
 gem 'google_places'
+
+# Adds Bootstrap CSS assets.
+gem 'bootstrap-sass', '~> 3.2.0'
+# Adds proper vendor prefixes to CSS code when compiled.
+gem 'autoprefixer-rails'
+# Bootstrap guide here: 
+# http://www.gotealeaf.com/blog/integrating-rails-and-bootstrap-part-1
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
