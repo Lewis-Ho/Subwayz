@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
+# Added jSon
 gem 'json', '~> 1.8.2'
+
+# GIS relevant gems (Google API)
 gem 'gmaps4rails'
 gem 'geocoder', '~> 1.2.7'
 gem 'google_places'
