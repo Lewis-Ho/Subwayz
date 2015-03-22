@@ -109,7 +109,7 @@ $(document).ready(function(){
         map.setCenter(pos);
       }, function() {
         handleNoGeolocation(true);
-      });
+      }); 
     } else {
       // Browser doesn't support Geolocation
       handleNoGeolocation(false);
@@ -135,9 +135,11 @@ $(document).ready(function(){
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
+    /*
     var control = document.getElementById('control');
     control.style.display = 'block';
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+    */
   }
   google.maps.event.addDomListener(window, 'load', initialize);
 });
@@ -147,8 +149,8 @@ function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
   var request = {
-    origin: start,
-    destination: end,
+    origin: start + 'new york city',
+    destination: end + 'new york city',
     travelMode: google.maps.TravelMode.TRANSIT
   };
   directionsService.route(request, function(response, status) {
