@@ -32,6 +32,7 @@ function getTransitDetail(obj){
 };
 
 $(document).ready(function(){
+  // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function(){
     return false;
   });
