@@ -7,12 +7,12 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
   </head>
   <body>
-    <class center>
-      <strong>Start:</strong><input id ="start" type="text" data-bind="value:start"/><br>
-    </class>
-      <strong>End:</strong><input id="end" type="text" data-bind="value:end"/>
 
-      <button class="btn btn-success" onclick="calcRoute(); hideMessage();">Get Directions</button>
+      <strong>Start:</strong>
+        <input id="start" type="text" class="form-control searchBar" data-bind="value:start" placeholder="Current Location"/><br>
+      <strong>End:</strong><input id="end" type="text" class="form-control searchBar" data-bind="value:end" placeholder="Destination"/><br>
+
+      <button class="btn btn-success" onclick="calcRoute(); hideMessage();">Get Directions</button><br>
 
     <div id="map-canvas"></div>
     <div id="directions-panel">

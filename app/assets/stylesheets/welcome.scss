@@ -29,25 +29,6 @@ html, body {
   border-color: red;
 }
 
-#control {
-  width:59%;
-  background: #ffff;
-  padding: 5px;
-  font-size: 14px;
-  font-family: Arial;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-  margin-left: auto;
-  margin-right: auto;
-  display: none;
-  border-color: red;
-  border-style: solid;
-}
-
-control:focus{
-  border-color: blue;
-}
-
 #init-message, #station-info {
   text-align: center;
 }
@@ -72,7 +53,8 @@ control:focus{
   }
 }
 
-.center {
+.form-control .searchBar{
   margin-left: auto;
   margin-right: auto;
+  width: 50%
 }
