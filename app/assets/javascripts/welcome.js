@@ -152,9 +152,13 @@ $(document).ready(function(){
 function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
+  if (start != '' && end != '') {
+    start += 'new york city';
+    end += 'new york city';
+  }
   var request = {
-    origin: start + 'new york city',
-    destination: end + 'new york city',
+    origin: start,
+    destination: end,
     travelMode: google.maps.TravelMode.TRANSIT
   };
   directionsService.route(request, function(response, status) {
