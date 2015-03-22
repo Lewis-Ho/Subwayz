@@ -8,18 +8,18 @@
   </head>
   <body>
 
-  <form id="pointAB">
+  <form id="pointAB" role="form">
     <div class="input-group center">
-      <strong>Start:</strong>
+        <label for="pointA">Start:</label>
         <input id="start" type="text" class="form-control searchBar" data-bind="value:start" placeholder="Current Location"/>
     </div>
 
     <div class="input-group center">
-      <strong>End:</strong>
+      <label for="pointB">End:</label>
       <input id="end" type="text" class="form-control searchBar" data-bind="value:end" placeholder="Destination"/>
     </div>
 
-    <div class="input-group center">
+    <div class="center">
       <button class="btn btn-custom" onclick="calcRoute(); hideMessage();">Get Directions</button><br>
     </div>
   </form>
@@ -29,7 +29,7 @@
       <div id="init-message">
         <p>Please Select Point A and B</p>
       </div>
-      <div id = "err-message">
+      <div id = "err-message" class="alert alert-danger" role="alert">
         <p>Error</p>
       </div>
     </div>

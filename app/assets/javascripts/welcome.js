@@ -112,6 +112,7 @@ $(document).ready(function(){
           map: map,
           title: 'Current Location'
         });
+        $('#start').val(pos);
         map.setCenter(pos);
       }, function() {
         handleNoGeolocation(true);
@@ -147,6 +148,7 @@ $(document).ready(function(){
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     */
   }
+
   google.maps.event.addDomListener(window, 'load', initialize);
 });
 
