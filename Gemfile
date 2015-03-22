@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specified Ruby version 2.2.0
+# Specified lRuby version 2.2.0
 ruby '2.2.0'
 
 # Added jSon

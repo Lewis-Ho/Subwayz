@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -7,12 +7,12 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
   </head>
   <body>
-    <div id="control">
-      <strong>Start:</strong><input id ="start" type="text" data-bind="value:start"/>
+    <class center>
+      <strong>Start:</strong><input id ="start" type="text" data-bind="value:start"/><br>
+    </class>
       <strong>End:</strong><input id="end" type="text" data-bind="value:end"/>
 
-      <button onclick="calcRoute(); hideMessage();">Get Directions</button>
-    </div>
+      <button class="btn btn-success" onclick="calcRoute(); hideMessage();">Get Directions</button>
 
     <div id="map-canvas"></div>
     <div id="directions-panel">
