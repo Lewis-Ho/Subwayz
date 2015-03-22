@@ -98,6 +98,8 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   // Initial map 
   function initialize() {
+    $('#err-message').hide (0);
+
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
@@ -156,6 +158,9 @@ function calcRoute() {
     start += 'new york city';
     end += 'new york city';
   }
+  else {  
+    $('#err-message').show (1000);
+  }
   var request = {
     origin: start,
     destination: end,
@@ -182,7 +187,6 @@ function calcRoute() {
 function hideMessage(){
   $('#init-message').hide(1000);
 };
-
 
 /*
 $(document).ready(function(){
