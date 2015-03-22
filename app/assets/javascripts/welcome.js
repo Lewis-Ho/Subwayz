@@ -31,8 +31,11 @@ function getTransitDetail(obj){
   $("#duration").text(obj.duration.text);
 };
 
-
 $(document).ready(function(){
+  $('#pointAB').on('submit', function(){
+    return false;
+  });
+
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
     var content = $(e.target).html();

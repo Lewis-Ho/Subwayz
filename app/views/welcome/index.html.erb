@@ -8,11 +8,21 @@
   </head>
   <body>
 
+  <form id="pointAB">
+    <div class="input-group center">
       <strong>Start:</strong>
-        <input id="start" type="text" class="form-control searchBar" data-bind="value:start" placeholder="Current Location"/><br>
-      <strong>End:</strong><input id="end" type="text" class="form-control searchBar" data-bind="value:end" placeholder="Destination"/><br>
+        <input id="start" type="text" class="form-control searchBar" data-bind="value:start" placeholder="Current Location"/>
+    </div>
 
-      <button class="btn btn-success" onclick="calcRoute(); hideMessage();">Get Directions</button><br>
+    <div class="input-group center">
+      <strong>End:</strong>
+      <input id="end" type="text" class="form-control searchBar" data-bind="value:end" placeholder="Destination"/>
+    </div>
+
+    <div class="input-group center">
+      <button class="btn btn-custom" onclick="calcRoute(); hideMessage();">Get Directions</button><br>
+    </div>
+  </form>
 
     <div id="map-canvas"></div>
     <div id="directions-panel">
