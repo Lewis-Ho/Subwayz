@@ -112,7 +112,8 @@ $(document).ready(function(){
           map: map,
           title: 'Current Location'
         });
-        $('#start').val(pos);
+        //Needs reverse geocoding.
+        //$('#start').val(pos);
         map.setCenter(pos);
       }, function() {
         handleNoGeolocation(true);
@@ -154,6 +155,7 @@ $(document).ready(function(){
 
 // Set route and request direction result 
 function calcRoute() {
+  $('#err-message').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
   if (start != '' && end != '') {
