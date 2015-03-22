@@ -38,4 +38,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Log level changed to warn. 
+  # Comment out line to change log level back to :debug
+  config.log_level = :warn
 end

@@ -1,11 +1,9 @@
-html, body, #map-canvas {
+html, body {
   height: 100%;
-  margin: 0px;
-  padding: 0px
+  border-style: solid;
+  border-color: red;
 }
-tr {
-  width: 100%;
-}
+
 #panel {
   position: absolute;
   top: 5px;
@@ -16,30 +14,25 @@ tr {
   padding: 5px;
   border: 1px solid #999;
 }
+
 #directions-panel, #station-info {
-  height: 100%;
+  height: 80%;
   float: left;
-  width: 25%;
-}
-#map-canvas {
-  //margin-right: 400px;
-  width: 50%;
-  float: left;
+  width: 23%;
 }
 
-#control {
-  background: #fff;
-  padding: 5px;
-  font-size: 14px;
-  font-family: Arial;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-  display: none;
+#map-canvas {
+  height: 93%;
+  width: 50%;
+  float: left;
+  border-style: solid;
+  border-color: red;
 }
 
 #init-message, #station-info {
   text-align: center;
 }
+
 #adp-placemark {
   margin-top: 0;
 }
@@ -58,4 +51,10 @@ tr {
     float: none;
     width: auto;
   }
+}
+
+.form-control .searchBar{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%
 }
