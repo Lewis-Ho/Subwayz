@@ -31,8 +31,12 @@ function getTransitDetail(obj){
   $("#duration").text(obj.duration.text);
 };
 
-
 $(document).ready(function(){
+  // Keeps form pointAB from refreshing the page.
+  $('#pointAB').on('submit', function(){
+    return false;
+  });
+
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
     var content = $(e.target).html();
@@ -94,6 +98,8 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   // Initial map 
   function initialize() {
+    $('#err-message').hide (0);
+
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
@@ -106,6 +112,8 @@ $(document).ready(function(){
           map: map,
           title: 'Current Location'
         });
+        //Needs reverse geocoding.
+        //$('#start').val(pos);
         map.setCenter(pos);
       }, function() {
         handleNoGeolocation(true);
@@ -141,16 +149,25 @@ $(document).ready(function(){
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
     */
   }
+
   google.maps.event.addDomListener(window, 'load', initialize);
 });
 
 // Set route and request direction result 
 function calcRoute() {
+  $('#err-message').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
+  if (start != '' && end != '') {
+    start += 'new york city';
+    end += 'new york city';
+  }
+  else {  
+    $('#err-message').show (1000);
+  }
   var request = {
-    origin: start + 'new york city',
-    destination: end + 'new york city',
+    origin: start,
+    destination: end,
     travelMode: google.maps.TravelMode.TRANSIT
   };
   directionsService.route(request, function(response, status) {
@@ -174,7 +191,6 @@ function calcRoute() {
 function hideMessage(){
   $('#init-message').hide(1000);
 };
-
 
 /*
 $(document).ready(function(){
