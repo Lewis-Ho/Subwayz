@@ -1,7 +1,5 @@
 html, body {
   height: 100%;
-  border-style: solid;
-  border-color: red;
 }
 
 #panel {
@@ -55,16 +53,24 @@ html, body {
 
 .form-control.searchBar {
   width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
 }
 
-.btn.btn-custom {
+.btn.gobtn {
   border-color: orange;
   color: orange;
   background: none;
+  margin-bottom: 10px;
 }
 
 .center {
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
+}
+
+.borderRed {
+  border-color: red;
+  border-style: solid;
 }

@@ -116,16 +116,16 @@ $(document).ready(function(){
         //$('#start').val(pos);
         map.setCenter(pos);
       }, function() {
-        handleNoGeolocation(true);
+        handleNoGeolocation(false);
       }); 
     } else {
       // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
+      handleNoGeolocation(true);
     }
     
     // Non-supporting geolocaiton handling
     function handleNoGeolocation(errorFlag) {
-      if (errorFlag) {
+      if (!errorFlag) {
         var content = 'Error: The Geolocation service failed.';
       } else {
         var content = 'Error: Your browser doesn\'t support geolocation.';
@@ -164,6 +164,7 @@ function calcRoute() {
   }
   else {  
     $('#err-message').show (1000);
+    $('ErrorMessage').val('Error: point A and B must be filled out.');
   }
   var request = {
     origin: start,
@@ -173,7 +174,7 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
-      
+      console.log(response);
       // Get route object
       var route = response.routes[0].legs[0];
       for (var i = 0; i < route.steps.length; i++) {
