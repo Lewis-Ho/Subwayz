@@ -1,11 +1,46 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+SubwA-Z
 
-Things you may want to cover:
+Requirement:
 
-* Ruby version
+Ruby version 2.2.0
+
+mySQL (under db folder)
+
+
+
+To Check if you have mySQL install:
+
+/usr/local/bin
+
+if there is no mysql, run this:
+
+brew install mysql (homebrew required!)
+
+
+To Write Database to mySQL:
+
+create a database called subwaz in MySQL
+
+download the file sql file
+
+Enter the following commend:
+
+mysql -u username -p subwaz < subwaz.sql  (specify your subwaz.sql location)
+
+
+To Retrive From cmd:
+
+USE subwaz;
+
+SHOW TABLES;
+
+
+
+
+
+Things To Add:
 
 * System dependencies
 
@@ -20,9 +55,3 @@ Things you may want to cover:
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
