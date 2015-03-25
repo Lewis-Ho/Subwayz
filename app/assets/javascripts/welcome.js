@@ -158,13 +158,27 @@ function calcRoute() {
   $('#err-container').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
-  if (start != '' && end != '') {
-    start += 'new york city';
-    end += 'new york city';
-  }
-  else {  
+  if (start == '' && end == '') {
     $('#err-container').show (1000);
     $('#err-message').text('Please fill out "Start" and "End".');
+    start='';
+    end='';
+  }
+  else if (start == '') {
+    $('#err-container').show (1000);
+    $('#err-message').text('Please fill out "Start".');  
+    start='';
+    end='';
+  }
+  else if (end == '') {
+    $('#err-container').show (1000);
+    $('#err-message').text('Please fill out "End".');  
+    start='';
+    end='';
+  }
+  else {
+    start += 'new york city';
+    end += 'new york city';
   }
   var request = {
     origin: start,

@@ -34,28 +34,6 @@ body {
   text-align: center;
 }
 
-#adp-placemark {
-  margin-top: 0;
-}
-
-.adp-warnbox {
-  display: none;
-}
-
-/*
-@media print {
-  #map-canvas {
-    height: 500px;
-    margin: 0;
-  }
-
-  #directions-panel {
-    float: none;
-    width: auto;
-  }
-}
-*/
-
 .input-group.searchBar {
   width: 50%;
   margin-left: auto;
@@ -69,14 +47,4 @@ body {
   background: none;
   margin-top: 15px;
   margin-bottom: 15px;
-}
-
-.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.borderRed {
-  border-color: red;
-  border-style: solid;
 }
