@@ -117,7 +117,12 @@ $(document).ready(function(){
     if(navigator.geolocation) {
 
       navigator.geolocation.getCurrentPosition(function(position) {
+<<<<<<< Updated upstream
         pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+=======
+        // Set current location to center map
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+>>>>>>> Stashed changes
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
@@ -157,12 +162,20 @@ $(document).ready(function(){
     // Non-supporting geolocaiton handling
     function handleNoGeolocation(errorFlag) {
       if (!errorFlag) {
+<<<<<<< Updated upstream
         $('#err-message').text('Geolocation services failed.');
         $('#err-container').show(1000);
       }
       else {
         $('#err-message').text('Your browser doesn\'t support geolocation.');
         $('#err-container').show(1000);
+=======
+        console.log(here);
+        var content = 'Error: The Geolocation service failed.';
+      } else {
+        console.log(here);
+        var content = 'Error: Your browser doesn\'t support geolocation.';
+>>>>>>> Stashed changes
       }
       
       var options = {
@@ -173,9 +186,13 @@ $(document).ready(function(){
       };
     }
 
-    // Draw Map
+<<<<<<< Updated upstream
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	map.setCenter(pos);
+    map.setCenter(pos);
+
+=======
+    // Draw Map
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     
     // Google Autocomplete
     var start_input = document.getElementById('start');
@@ -202,6 +219,7 @@ $(document).ready(function(){
     
     
     // Google Direction text route
+>>>>>>> Stashed changes
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
     
