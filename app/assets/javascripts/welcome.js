@@ -2,8 +2,11 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
 var directionsDisplay;
 var directionsService;
+var geocoder;
 // Store all transit involved route 
 var transit_obj = [];
+// Markers for current locaiton
+var markers = [];
 
 // If content 
 function showTransit(transit_obj, content){
@@ -98,13 +101,14 @@ $(document).ready(function(){
   
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  geocoder = new google.maps.Geocoder();
   // Initial map 
   function initialize() {
 
     var map;
     var pos;
 
-    directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
     };
@@ -118,7 +122,27 @@ $(document).ready(function(){
           map: map,
           title: 'Current Location'
         });
-        //Needs reverse geocoding.
+        markers.push(marker);
+        
+        //Reverse geocoding for starting location
+        geocoder.geocode({'latLng': pos}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results.length != 0) {
+              console.log("reverse geocoding result choice: ");
+              console.log(results);
+              
+              // Change input box value 
+              var startInput = document.getElementById("start");
+              startInput.value = results[0].formatted_address;
+              
+            } else {
+              alert('No results found');
+            }
+          } else {
+            alert('Geocoder failed due to: ' + status);
+          }
+        });
+        
         //$('#start').val(pos);
       }, function() {
         handleNoGeolocation(false);
@@ -142,7 +166,8 @@ $(document).ready(function(){
       
       var options = {
         map: map,
-        position: new google.maps.LatLng(60, 105),
+        // Hard code nyc lat lng
+        position: new google.maps.LatLng(40.7903, -73.9597),
         content: content
       };
     }
@@ -240,6 +265,13 @@ function prevSlide (){
 
 function homeSlide (){
   $('#navCarousel').carousel(0);
+};
+
+// Hide current locaiton marker on google map 
+function hideMarker(){
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
 };
 
 /*
