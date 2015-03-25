@@ -101,9 +101,6 @@ $(document).ready(function(){
   // Initial map 
   function initialize() {
 
-    var map;
-    var pos;
-
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
@@ -112,7 +109,7 @@ $(document).ready(function(){
     if(navigator.geolocation) {
 
       navigator.geolocation.getCurrentPosition(function(position) {
-        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
@@ -120,6 +117,7 @@ $(document).ready(function(){
         });
         //Needs reverse geocoding.
         //$('#start').val(pos);
+        map.setCenter(pos);
       }, function() {
         handleNoGeolocation(false);
       }); 
@@ -134,7 +132,7 @@ $(document).ready(function(){
       if (!errorFlag) {
         $('#err-message').text('Geolocation services failed.');
         $('#err-container').show(1000);
-      }
+      } 
       else {
         $('#err-message').text('Your browser doesn\'t support geolocation.');
         $('#err-container').show(1000);
@@ -147,21 +145,14 @@ $(document).ready(function(){
       };
     }
 
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    map.setCenter(pos);
-
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
-    
-    //Needed to resize maps 
-    google.maps.event.addDomListener (map, 'idle', function(){
-      google.maps.event.trigger (map, 'resize');
-      map.setCenter(pos);
-    });
 
   }
 
   google.maps.event.addDomListener(window, 'load', initialize);
+  google.maps.event.trigger(map, 'resize');
 
 });
 
@@ -200,7 +191,6 @@ function calcRoute() {
     destination: end,
     travelMode: google.maps.TravelMode.TRANSIT
   };
-
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
