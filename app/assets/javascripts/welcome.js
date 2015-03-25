@@ -159,22 +159,22 @@ function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
   if (start == '' && end == '') {
-    $('#err-container').show (1000);
     $('#err-message').text('Please fill out "Start" and "End".');
+    $('#err-container').show (1000);
     start='';
     end='';
     return;
   }
   else if (start == '') {
-    $('#err-container').show (1000);
     $('#err-message').text('Please fill out "Start".');  
+    $('#err-container').show (1000);
     start='';
     end='';
     return;
   }
   else if (end == '') {
+    $('#err-message').text('Please fill out "End".');
     $('#err-container').show (1000);
-    $('#err-message').text('Please fill out "End".');  
     start='';
     end='';
     return;
