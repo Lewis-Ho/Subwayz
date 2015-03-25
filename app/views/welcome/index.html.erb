@@ -9,7 +9,7 @@
   <body>
 
   <div id="carousel-container" class="container">
-  <div id="navCarousel" class="carousel slide col-xs-12" data-ride="carousel" data-interval="false">
+  <div id="navCarousel" class="col-xs-11 carousel slide" data-ride="carousel" data-interval="false">
 
       <div class="carousel-inner">
 
@@ -17,7 +17,7 @@
           <div class="container">
             <form id="pointAB" role="form">
               <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-11">  
                     <div class="input-group searchBar">
                       <label for="pointA">Start:</label>
                       <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
@@ -26,7 +26,7 @@
                 </div>
 
               <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-11">
                   <div class="input-group searchBar">
                     <label for="pointB">End:</label>
                     <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
@@ -35,7 +35,7 @@
               </div>
 
               <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-11">
                   <div class="input-group submitbtn">
                     <button class="btn gobtn" data-slide="next" onclick="calcRoute(); hideMessage();">Get Directions</button>
                   </div>
@@ -59,7 +59,7 @@
                 <p>Please Select Point A and B</p>
               </div>
             </div>
-            <div id="station-info" class="col-xs-3 col-xs-height">
+            <div id="station-info" class="col-xs-2 col-xs-height">
               <p>Station Info:</p>
               <p id="train"></p>
               <p id="train-stop-depart"></p>
