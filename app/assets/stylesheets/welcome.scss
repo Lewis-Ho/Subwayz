@@ -4,9 +4,21 @@ html {
 
 body {
   height: 100%;
-  padding: 5%;
+  padding: 10%;
   border-style: solid;
   border-color:red;
+  margin: 1%
+}
+
+#panel {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  margin-left: -180px;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
 }
 
 #directions-panel, #station-info {
@@ -17,13 +29,8 @@ body {
 }
 
 #map-canvas {
-<<<<<<< HEAD
   height: 400px;
-  width:400px;
-=======
-  height: 300px;
   float: left;
->>>>>>> parent of a2be779... Rudimentary carousel
   border-style: solid;
   border-color: red;
 }
@@ -49,9 +56,4 @@ body {
   background: none;
   margin-top: 15px;
   margin-bottom: 15px;
-}
-
-.redBorder {
-  border-color: red;
-  border-style: solid;
 }
