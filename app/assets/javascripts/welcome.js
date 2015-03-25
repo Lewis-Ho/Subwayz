@@ -32,6 +32,7 @@ function getTransitDetail(obj){
 };
 
 $(document).ready(function(){
+  $('#err-container').hide (0);
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function(){
     return false;
@@ -98,8 +99,6 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   // Initial map 
   function initialize() {
-    $('#err-container').hide (0);
-
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
