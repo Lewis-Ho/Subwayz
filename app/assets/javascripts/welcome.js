@@ -100,13 +100,16 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   // Initial map 
   function initialize() {
+
+    var pos;
+
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
     };
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
@@ -151,6 +154,7 @@ $(document).ready(function(){
   }
 
   google.maps.event.addDomListener(window, 'load', initialize);
+  google.maps.event.trigger(map,'resize');
 });
 
 // Set route and request direction result 
