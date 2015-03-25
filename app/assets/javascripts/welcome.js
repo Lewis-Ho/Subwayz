@@ -101,15 +101,17 @@ $(document).ready(function(){
   // Initial map 
   function initialize() {
 
-    var pos;
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
       zoom: 13
     };
+
     if(navigator.geolocation) {
+
       navigator.geolocation.getCurrentPosition(function(position) {
-        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
@@ -121,7 +123,8 @@ $(document).ready(function(){
       }, function() {
         handleNoGeolocation(false);
       }); 
-    } else {
+    } 
+    else {
       // Browser doesn't support Geolocation
       handleNoGeolocation(true);
     }
@@ -129,32 +132,27 @@ $(document).ready(function(){
     // Non-supporting geolocaiton handling
     function handleNoGeolocation(errorFlag) {
       if (!errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-      } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
+        $('#err-message').text('Geolocation services failed.');
+      } 
+      else {
+        $('#err-message').text('Your browser doesn\'t support geolocation.');
       }
+      
       var options = {
         map: map,
         position: new google.maps.LatLng(60, 105),
         content: content
       };
-      var infowindow = new google.maps.InfoWindow(options);
-      map.setCenter(options.position);
     }
 
-    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
-    /*
-    var control = document.getElementById('control');
-    control.style.display = 'block';
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
-    */
   }
 
   google.maps.event.addDomListener(window, 'load', initialize);
   google.maps.event.trigger(map,'resize');
+
 });
 
 // Set route and request direction result 
