@@ -33,6 +33,7 @@ function getTransitDetail(obj){
 
 $(document).ready(function(){
   $('#err-container').hide (0);
+  $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function(){
     return false;
@@ -162,23 +163,25 @@ function calcRoute() {
     $('#err-message').text('Please fill out "Start" and "End".');
     start='';
     end='';
+    return;
   }
   else if (start == '') {
     $('#err-container').show (1000);
     $('#err-message').text('Please fill out "Start".');  
     start='';
     end='';
+    return;
   }
   else if (end == '') {
     $('#err-container').show (1000);
     $('#err-message').text('Please fill out "End".');  
     start='';
     end='';
+    return;
   }
   else {
     start += 'new york city';
     end += 'new york city';
-    $('#navCarousel').carousel('next');
   }
   var request = {
     origin: start,
@@ -199,6 +202,13 @@ function calcRoute() {
           transit_obj.push(route.steps[i]);
         }
       }
+      //Move to next slide when directions have been retrieved.
+      $('#navCarousel').carousel('next');
+      //Disable loading icon pseudocode.
+      //$('#loadingIcon').hide(300);
+    }
+    else {
+      $('#err-message').text('No search results.');
     }
   });
 };
