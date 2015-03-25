@@ -98,7 +98,7 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   // Initial map 
   function initialize() {
-    $('#err-message').hide (0);
+    $('#err-container').hide (0);
 
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
@@ -155,7 +155,7 @@ $(document).ready(function(){
 
 // Set route and request direction result 
 function calcRoute() {
-  $('#err-message').hide (1000);
+  $('#err-container').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
   if (start != '' && end != '') {
@@ -163,8 +163,8 @@ function calcRoute() {
     end += 'new york city';
   }
   else {  
-    $('#err-message').show (1000);
-    $('ErrorMessage').val('Error: point A and B must be filled out.');
+    $('#err-container').show (1000);
+    $('#err-message').text('Please fill out "Start" and "End".');
   }
   var request = {
     origin: start,

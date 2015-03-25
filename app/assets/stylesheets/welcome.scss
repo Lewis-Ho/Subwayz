@@ -1,5 +1,10 @@
-html, body {
+html {
   height: 100%;
+}
+
+body {
+  height: 100%;
+  padding: 90px;
 }
 
 #panel {
@@ -14,20 +19,18 @@ html, body {
 }
 
 #directions-panel, #station-info {
-  height: 80%;
-  float: left;
-  width: 23%;
+  border-style:solid;
+  border-color: gray;
 }
 
 #map-canvas {
-  height: 93%;
-  width: 50%;
+  height: 300px;
   float: left;
   border-style: solid;
   border-color: red;
 }
 
-#init-message, #err-message, #station-info {
+#init-message, #err-container, #station-info {
   text-align: center;
 }
 
@@ -39,6 +42,7 @@ html, body {
   display: none;
 }
 
+/*
 @media print {
   #map-canvas {
     height: 500px;
@@ -50,8 +54,9 @@ html, body {
     width: auto;
   }
 }
+*/
 
-.form-control.searchBar {
+.input-group.searchBar {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -62,7 +67,8 @@ html, body {
   border-color: orange;
   color: orange;
   background: none;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .center {
