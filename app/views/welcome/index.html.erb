@@ -8,16 +8,12 @@
   </head>
   <body>
 
+  <div id="carousel-container" class="container">
   <div id="navCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-
-    <ol class="carousel-indicators">
-      <li data-target="#navCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#navCarousel" data-slide-to="1" class="active"></li>
-    </ol>
 
       <div class="carousel-inner">
 
-        <div class="item active">
+        <div id="home" class="item active">
           <div class="container">
             <form id="pointAB" role="form">
               <div class="row">
@@ -41,7 +37,7 @@
               <div class="row">
                 <div class="col-xs-12">
                   <div class="input-group submitbtn">
-                    <button class="btn gobtn" onclick="calcRoute(); hideMessage();">Get Directions</button>
+                    <button class="btn gobtn" data-slide="next" onclick="calcRoute(); hideMessage();">Get Directions</button>
                   </div>
                 </div>
               </div>
@@ -81,6 +77,15 @@
       </div>
 
       </div>
+    </div>
+  
+    <ol class="carousel-indicators">
+      <li data-target="#navCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#navCarousel" data-slide-to="1" class="active"></li>
+    </ol>
+  
+  </div>
+  </div>
 
   </body>
 </html>

@@ -178,6 +178,7 @@ function calcRoute() {
   else {
     start += 'new york city';
     end += 'new york city';
+    $('#navCarousel').carousel('next');
   }
   var request = {
     origin: start,
@@ -204,6 +205,18 @@ function calcRoute() {
 
 function hideMessage(){
   $('#init-message').hide(1000);
+};
+
+function nextSlide() {
+  $('#navCarousel').carousel('next');
+};
+
+function prevSlide (){
+  $('#navCarousel').carousel('prev');
+};
+
+function homeSlide (){
+  $('#navCarousel').carousel(0);
 };
 
 /*
@@ -370,4 +383,3 @@ $(document).ready(function(){
 });
 
 */
-
