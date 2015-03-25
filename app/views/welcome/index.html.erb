@@ -8,6 +8,7 @@
   </head>
   <body>
 
+<<<<<<< HEAD
   <div id="carousel-container" class="container">
   <div id="navCarousel" class="col-xs-11 carousel slide" data-ride="carousel" data-interval="false">
 
@@ -72,11 +73,36 @@
               <!-- <%= link_to "an article", @station%> -->
               <!-- <div id="info"></div> -->
             </div>
+=======
+  <div class="container">
+    <form id="pointAB" role="form">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="input-group searchBar">
+              <label for="pointA">Start:</label>
+              <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
+            </div>
+          </div>
+        </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="input-group searchBar">
+            <label for="pointB">End:</label>
+            <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
+>>>>>>> parent of a2be779... Rudimentary carousel
           </div>
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="input-group submitbtn">
+            <button class="btn gobtn" onclick="calcRoute(); hideMessage();">Get Directions</button>
+          </div>
+        </div>
       </div>
+<<<<<<< HEAD
     </div>
   
     <ol class="carousel-indicators">
@@ -85,7 +111,38 @@
     </ol>
   
   </div>
+=======
+    </form>
+  
+    <div id = "err-container" class="alert alert-danger">
+      <span class="glyphicon glyphicon-warning-sign"></span>
+      <span id="err-message"></span>
+    </div>
+>>>>>>> parent of a2be779... Rudimentary carousel
   </div>
 
+  <div class="container">
+    <div class="row row-same-height">
+      <div id="map-canvas" class="col-xs-6 col-xs-height"></div>
+      <div id="directions-panel" class="col-xs-3 col-xs-height">
+        <div id="init-message">
+          <p>Please Select Point A and B</p>
+        </div>
+      </div>
+      <div id="station-info" class="col-xs-3 col-xs-height">
+        <p>Station Info:</p>
+        <p id="train"></p>
+        <p id="train-stop-depart"></p>
+        <p id="train-stop-end"></p>
+        <p id="num-stop"></p>
+        <p id="arrival_time"></p>
+        <p id="departure_time"></p>
+        <p id="distance"></p>
+        <p id="duration"></p>
+        <!-- <%= link_to "an article", @station%> -->
+        <!-- <div id="info"></div> -->
+      </div>
+    </div>
+  </div>
   </body>
 </html>
