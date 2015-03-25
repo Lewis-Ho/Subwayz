@@ -30,9 +30,15 @@ body {
 
 #map-canvas {
   height: 400px;
+  width: 400px;
   border-style: solid;
   border-color: red;
 }
+
+#map-canvas img {
+  max-width: none;
+}
+
 
 #init-message, #err-container, #station-info {
   text-align: center;
