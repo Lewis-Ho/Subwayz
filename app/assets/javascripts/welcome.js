@@ -5,6 +5,8 @@ var directionsService;
 var geocoder;
 // Store all transit involved route 
 var transit_obj = [];
+// Markers for current locaiton
+var markers = [];
 
 // If content 
 function showTransit(transit_obj, content){
@@ -98,10 +100,10 @@ $(document).ready(function(){
   
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  geocoder = new google.maps.Geocoder();
   // Initial map 
   function initialize() {
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    geocoder = new google.maps.Geocoder();
     var mapOptions = {
       zoom: 13
     };
@@ -113,6 +115,8 @@ $(document).ready(function(){
           map: map,
           title: 'Current Location'
         });
+        markers.push(marker);
+        
         //Reverse geocoding for starting location
         geocoder.geocode({'latLng': pos}, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
@@ -122,7 +126,7 @@ $(document).ready(function(){
               
               // Change input box value 
               var startInput = document.getElementById("start");
-              startInput.value = results[1].formatted_address;
+              startInput.value = results[0].formatted_address;
               
             } else {
               alert('No results found');
@@ -238,6 +242,13 @@ function prevSlide (){
 
 function homeSlide (){
   $('#navCarousel').carousel(0);
+};
+
+// Hide current locaiton marker on google map 
+function hideMarker(){
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
 };
 
 /*
