@@ -7,7 +7,7 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
-var currentAddress;
+var currentAddress = 'currentAddress';
 
 
 // If content 
@@ -106,6 +106,7 @@ $(document).ready(function(){
   
   // Initial map 
   function initialize() {
+    
     var map;
     var pos;
     
@@ -113,46 +114,8 @@ $(document).ready(function(){
       zoom: 13
     };
   
-    //getAddress();
-  /*
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        var marker = new google.maps.Marker({
-          position: pos,
-          map: map,
-          title: 'Current Location'
-        });
-        markers.push(marker);
-        
-      }, function() {
-        handleNoGeolocation(false);
-      }); 
-    } 
-    else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(true);
-    }
-    
-    // Non-supporting geolocaiton handling
-    function handleNoGeolocation(errorFlag) {
-      if (!errorFlag) {
-        $('#err-message').text('Geolocation services failed.');
-        $('#err-container').show(1000);
-      }
-      else {
-        $('#err-message').text('Your browser doesn\'t support geolocation.');
-        $('#err-container').show(1000);
-      }
-      
-      var options = {
-        map: map,
-        // Hard code nyc lat lng
-        position: new google.maps.LatLng(40.714728,-73.998672),
-        content: content
-      };
-    }
-*/
+    currentAddress = getAddress();
+
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
@@ -182,7 +145,7 @@ $(document).ready(function(){
     // Google Direction text route
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
-    
+
     //Needed to resize maps 
     google.maps.event.addDomListener (map, 'idle', function(){
       google.maps.event.trigger (map, 'resize');
@@ -283,12 +246,14 @@ function hideMarker(){
 
 // Get current location button function
 function getAddress(){
+  
   geocoder = new google.maps.Geocoder();
-  // If geolocation avaliable
+
+  // If geolocation available
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      console.log(pos);
+      //console.log(pos);
 
       //Reverse geocoding for starting location
       geocoder.geocode({'latLng': pos}, function(results, status) {
