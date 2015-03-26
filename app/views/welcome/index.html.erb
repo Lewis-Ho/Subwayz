@@ -16,11 +16,19 @@
         <div class="item active">
           <div class="col-xs-12 container">
             <form id="pointAB" role="form">
+
               <div class="row">
-                <div class="col-xs-11">  
-                    <div class="input-group searchBar">
-                      <label for="pointA">Start:</label>
+                <div class="col-xs-11"> 
+                <div class="input-group searchBar"> 
+                  <label for="pointA">Start:</label>
+                    <div class="input-group">
                       <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                          <span class="glyphicon glyphicon-map-marker redMarker" style="color:red"></span>
+                        </button>
+                      </span>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -29,11 +37,20 @@
                 <div class="col-xs-11">
                   <div class="input-group searchBar">
                     <label for="pointB">End:</label>
-                    <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
+                    <div class="input-group">
+                      <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" data-slide="next" onclick="calcRoute(); hideMessage(); hideMarker();">
+                          Go
+                        </button>
+                      </span>
                   </div>
                 </div>
               </div>
+            </div>
+          </form>
 
+<!--
               <div class="row">
                 <div class="col-xs-11">
                   <div class="input-group submitbtn">
@@ -42,10 +59,12 @@
                 </div>
               </div>
             </form>
-          
-            <div id = "err-container" class="alert alert-danger">
-              <span class="glyphicon glyphicon-warning-sign"></span>
-              <span id="err-message"></span>
+-->        
+            <div class "row">
+              <div id = "err-container" class="alert alert-danger errorAlert">
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                <span id="err-message"></span>
+              </div>
             </div>
           </div>
         </div>

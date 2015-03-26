@@ -5,8 +5,6 @@ html {
 body {
   height: 100%;
   padding: 10%;
-  border-style: solid;
-  border-color:red;
   margin: 1%
 }
 
@@ -39,7 +37,6 @@ body {
   max-width: none;
 }
 
-
 #init-message, #err-container, #station-info {
   text-align: center;
 }
@@ -61,4 +58,14 @@ body {
   background: none;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.alert.errorAlert {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.glyphicon-map-marker.redMarker {
+  color: #EE352E;
 }

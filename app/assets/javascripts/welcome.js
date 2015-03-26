@@ -132,7 +132,8 @@ $(document).ready(function(){
               console.log("reverse geocoding result choice: ");
               console.log(results);
               
-              // Change input box value 
+              // Change input box value
+              //$('#start').val (results[0].formatted_address); 
               var startInput = document.getElementById("start");
               startInput.value = results[0].formatted_address;
               
@@ -143,8 +144,6 @@ $(document).ready(function(){
             alert('Geocoder failed due to: ' + status);
           }
         });
-        
-        //$('#start').val(pos);
       }, function() {
         handleNoGeolocation(false);
       }); 
@@ -175,7 +174,7 @@ $(document).ready(function(){
 
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	map.setCenter(pos);
+    map.setCenter(pos);
     
     // Google Autocomplete
     var start_input = document.getElementById('start');
@@ -208,7 +207,6 @@ $(document).ready(function(){
     //Needed to resize maps 
     google.maps.event.addDomListener (map, 'idle', function(){
       google.maps.event.trigger (map, 'resize');
-      map.setCenter(pos);
     });
 
   }
@@ -222,6 +220,7 @@ function calcRoute() {
   $('#err-container').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
+
   if (start == '' && end == '') {
     $('#err-message').text('Please fill out "Start" and "End".');
     $('#err-container').show (1000);
@@ -247,6 +246,7 @@ function calcRoute() {
     start += 'new york city';
     end += 'new york city';
   }
+
   var request = {
     origin: start,
     destination: end,
@@ -299,6 +299,10 @@ function hideMarker(){
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
   }
+};
+
+function reverseGeo (){
+
 };
 
 /*
