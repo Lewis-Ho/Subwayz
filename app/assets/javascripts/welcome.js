@@ -7,6 +7,7 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
+var currentLocation;
 
 // If content 
 function showTransit(transit_obj, content){
@@ -35,12 +36,11 @@ function getTransitDetail(obj){
 };
 
 $(document).ready(function(){
+
   $('#err-container').hide (0);
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
-  $('#pointAB').on('submit', function(){
-    return false;
-  });
+  $('#pointAB').on('submit', function() { return false; } );
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -134,8 +134,9 @@ $(document).ready(function(){
               
               // Change input box value
               //$('#start').val (results[0].formatted_address); 
-              var startInput = document.getElementById("start");
-              startInput.value = results[0].formatted_address;
+              //var startInput = document.getElementById("start");
+              //startInput = results[0].formatted_address;
+              currentLocation = results[0].formatted_address;
               
             } else {
               alert('No results found');
@@ -175,7 +176,7 @@ $(document).ready(function(){
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
-    
+
     // Google Autocomplete
     var start_input = document.getElementById('start');
     var end_input = document.getElementById('end');
@@ -197,8 +198,6 @@ $(document).ready(function(){
     );
     start_autocomplete.setBounds(bounds);
     end_autocomplete.setBounds(bounds);
-    
-    
     
     // Google Direction text route
     directionsDisplay.setMap(map);
@@ -301,9 +300,9 @@ function hideMarker(){
   }
 };
 
-function reverseGeo (){
-
-};
+function getAddress (){
+  $('#start').val(currentLocation);
+}
 
 /*
 $(document).ready(function(){
