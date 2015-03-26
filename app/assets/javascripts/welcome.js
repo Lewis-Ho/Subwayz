@@ -7,7 +7,7 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
-var currentLocation;
+
 
 // If content 
 function showTransit(transit_obj, content){
@@ -102,20 +102,17 @@ $(document).ready(function(){
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
-  geocoder = new google.maps.Geocoder();
   
   // Initial map 
   function initialize() {
-
     var map;
     var pos;
-
+    
     var mapOptions = {
       zoom: 13
     };
 
     if(navigator.geolocation) {
-
       navigator.geolocation.getCurrentPosition(function(position) {
         pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var marker = new google.maps.Marker({
@@ -125,26 +122,6 @@ $(document).ready(function(){
         });
         markers.push(marker);
         
-        //Reverse geocoding for starting location
-        geocoder.geocode({'latLng': pos}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if (results.length != 0) {
-              console.log("reverse geocoding result choice: ");
-              console.log(results);
-              
-              // Change input box value
-              //$('#start').val (results[0].formatted_address); 
-              //var startInput = document.getElementById("start");
-              //startInput = results[0].formatted_address;
-              currentLocation = results[0].formatted_address;
-              
-            } else {
-              alert('No results found');
-            }
-          } else {
-            alert('Geocoder failed due to: ' + status);
-          }
-        });
       }, function() {
         handleNoGeolocation(false);
       }); 
@@ -300,9 +277,35 @@ function hideMarker(){
   }
 };
 
-function getAddress (){
-  $('#start').val(currentLocation);
-}
+// Get current location button function
+function getAddress(){
+  geocoder = new google.maps.Geocoder();
+  
+  // If geolocation avaliable
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      //Reverse geocoding for starting location
+      geocoder.geocode({'latLng': pos}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results.length != 0) {
+            // Change input box value
+            $('#start').val (results[0].formatted_address);
+          } else {
+            alert('No results found');
+          }
+        } else {
+          alert('Geocoder failed due to: ' + status);
+        }
+      });
+    })
+  }
+  // Browser doesn't support geolocaiton
+  else {
+    console.log("Browser doesn't support geolocaiton");
+  }
+};
 
 /*
 $(document).ready(function(){
