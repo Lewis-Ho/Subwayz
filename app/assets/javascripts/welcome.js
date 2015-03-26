@@ -7,6 +7,7 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
+var currentAddress;
 
 
 // If content 
@@ -111,7 +112,9 @@ $(document).ready(function(){
     var mapOptions = {
       zoom: 13
     };
-
+  
+    //getAddress();
+  /*
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -149,7 +152,7 @@ $(document).ready(function(){
         content: content
       };
     }
-
+*/
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
@@ -230,6 +233,7 @@ function calcRoute() {
   };
 
   directionsService.route(request, function(response, status) {
+    console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       console.log(response);
@@ -280,18 +284,18 @@ function hideMarker(){
 // Get current location button function
 function getAddress(){
   geocoder = new google.maps.Geocoder();
-  
   // If geolocation avaliable
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log(pos);
 
       //Reverse geocoding for starting location
       geocoder.geocode({'latLng': pos}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           if (results.length != 0) {
             // Change input box value
-            $('#start').val (results[0].formatted_address);
+            currentAddress = results[0].formatted_address;
           } else {
             alert('No results found');
           }
@@ -306,6 +310,11 @@ function getAddress(){
     console.log("Browser doesn't support geolocaiton");
   }
 };
+
+function fillAddress() {
+  getAddress();
+  $('#start').val (currentAddress);
+}
 
 /*
 $(document).ready(function(){
