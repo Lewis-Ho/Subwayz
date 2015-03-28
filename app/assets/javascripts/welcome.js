@@ -38,7 +38,7 @@ function getTransitDetail(obj){
 
 $(document).ready(function(){
 
-  $('#err-container').hide (0);
+  $('#message-container').hide (0);
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function() { return false; } );
@@ -159,27 +159,33 @@ $(document).ready(function(){
 
 // Set route and request direction result 
 function calcRoute() {
-  $('#err-container').hide (1000);
+  $('#message-container').hide (0);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
 
   if (start == '' && end == '') {
-    $('#err-message').text('Please fill out "Start" and "End".');
-    $('#err-container').show (1000);
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+    $('#message').text('Please fill out "Start" and "End".');
+    $('#message-container').show (1000);
     start='';
     end='';
     return;
   }
   else if (start == '') {
-    $('#err-message').text('Please fill out "Start".');  
-    $('#err-container').show (1000);
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+    $('#message').text('Please fill out "Start".');  
+    $('#message-container').show (1000);
     start='';
     end='';
     return;
   }
   else if (end == '') {
-    $('#err-message').text('Please fill out "End".');
-    $('#err-container').show (1000);
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+    $('#message').text('Please fill out "End".');
+    $('#message-container').show (1000);
     start='';
     end='';
     return;
@@ -216,7 +222,7 @@ function calcRoute() {
       //$('#loadingIcon').hide(300);
     }
     else {
-      $('#err-message').text('No search results.');
+      $('#message').text('No search results.');
     }
   });
 };
@@ -277,8 +283,13 @@ function getAddress(){
 };
 
 function fillAddress() {
+  $('#message-container').hide (0);
   getAddress();
   $('#start').val (currentAddress);
+  document.getElementById('message-container').className = "alert alert-success";
+  document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
+  $('#message').text('Got your location!');
+  $('#message-container').show (1000);
 }
 
 /*
