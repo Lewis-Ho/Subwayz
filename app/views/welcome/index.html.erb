@@ -8,18 +8,17 @@
   </head>
   <body>
 
-  <div id="carousel-container" class="container">
+  <div id="carousel-container" class="container-fluid" style={max-width: 300px}>
   <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false">
 
       <div class="carousel-inner">
 
         <div class="item active">
-          <div class="col-xs-12 container">
+          <div class="col-xs-12">
             <form id="pointAB" role="form">
 
               <div class="row">
-                <div class="col-xs-11"> 
-                <div class="input-group searchBar"> 
+                <div class="searchBar"> 
                   <label for="pointA">Start:</label>
                     <div class="input-group">
                       <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
@@ -30,12 +29,10 @@
                       </span>
                     </div>
                     </div>
-                  </div>
                 </div>
 
               <div class="row">
-                <div class="col-xs-11">
-                  <div class="input-group searchBar">
+                <div class="searchBar">
                     <label for="pointB">End:</label>
                     <div class="input-group">
                       <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
@@ -46,20 +43,9 @@
                       </span>
                   </div>
                 </div>
-              </div>
             </div>
           </form>
 
-<!--
-              <div class="row">
-                <div class="col-xs-11">
-                  <div class="input-group submitbtn">
-                    <button class="btn gobtn" data-slide="next" onclick="calcRoute(); hideMessage(); hideMarker();">Get Directions</button>
-                  </div>
-                </div>
-              </div>
-            </form>
--->        
             <div class "row">
               <div id = "err-container" class="alert alert-danger">
                 <span class="glyphicon glyphicon-warning-sign"></span>
@@ -70,15 +56,15 @@
         </div>
       
       <div class="item">
-        <div class="col-xs-12 container">
+        <div class="col-xs-11">
           <div class="row row-same-height">
-            <div id="map-canvas" class="col-xs-6 col-xs-height"></div>
-            <div id="directions-panel" class="col-xs-3 col-xs-height">
+            <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
+            <div id="directions-panel" class="col-xs-5 col-xs-height col-sm-3 col-sm-height">
               <div id="init-message">
               <p>Select point A and B</p>
               </div>
             </div>
-            <div id="station-info" class="col-xs-2 col-xs-height">
+            <div id="station-info" class="col-xs-6 col-xs-height col-sm-2 col-sm-height">
               <p>Station Info:</p>
               <p> 
               <p id="train"></p>

@@ -23,12 +23,11 @@ body {
   border-style:solid;
   border-color: gray;
   overflow-y: scroll;
-  height: 400px;
+  height: 30%;
 }
 
 #map-canvas {
-  height: 400px;
-  width: 400px;
+  height: 40%;
   border-style: solid;
   border-color: red;
 }
@@ -45,7 +44,7 @@ body {
   background: red;
 }
 
-.input-group.searchBar, .input-group.submitbtn {
+.searchBar form-group {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -62,4 +61,8 @@ body {
 
 .glyphicon-map-marker.redMarker {
   color: #EE352E;
+}
+
+.container-fluid {
+  max-width: 640px;
 }

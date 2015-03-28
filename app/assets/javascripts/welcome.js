@@ -114,7 +114,7 @@ $(document).ready(function(){
       zoom: 13
     };
   
-    currentAddress = getAddress();
+    getAddress();
 
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
