@@ -23,7 +23,7 @@ body {
   border-style:solid;
   border-color: gray;
   overflow-y: scroll;
-  height: 30%;
+  height: 400px;
 }
 
 #map-canvas {
@@ -32,12 +32,17 @@ body {
   border-color: red;
 }
 
-#map-canvas img {
-  max-width: none;
-}
-
 #init-message, #message-container, #station-info {
   text-align: center;
+}
+
+<<<<<<< HEAD
+#init-message, #message-container, #station-info {
+  text-align: center;
+=======
+#alt-routes-btn {
+  overflow: visible;
+>>>>>>> welcomePage
 }
 
 .carousel-indicators {
@@ -58,14 +63,25 @@ body {
   margin-bottom: 15px;
 }
 
+<<<<<<< HEAD
 .btn-circle {
+=======
+.btn-default.btn-circle {
+>>>>>>> welcomePage
   width: 30px;
   height: 30px;
   text-align: center;
   padding: 6px 0;
   font-size: 12px;
   line-height: 1.42;
+<<<<<<< HEAD
   border-radius: 15px;
+=======
+  border-radius: 50%;
+  background: #EE352E;
+  margin-bottom: 15px;
+  color: white;
+>>>>>>> welcomePage
 }
 
 .glyphicon-map-marker.redMarker {
