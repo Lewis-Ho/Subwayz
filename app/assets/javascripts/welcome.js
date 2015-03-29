@@ -293,6 +293,10 @@ function pushMessage (messageType, message) {
       document.getElementById('message-container').className = "alert alert-warning";
       document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
   }
+  else {
+    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
+    console.error ("Please check your messageType.")
+  }
 
   $('#message').text(message);
 

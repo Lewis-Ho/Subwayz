@@ -18,6 +18,9 @@ gem 'autoprefixer-rails'
 # Bootstrap guide here: 
 # http://www.gotealeaf.com/blog/integrating-rails-and-bootstrap-part-1
 
+# Adds velocity.js for svg animation
+gem 'velocityjs-rails', '~> 2.0.0'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use SCSS for stylesheet
