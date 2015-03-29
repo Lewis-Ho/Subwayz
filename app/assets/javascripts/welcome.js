@@ -7,7 +7,7 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
-var currentAddress = 'currentAddress';
+var currentAddress = 'placeholder';
 
 
 // If content 
@@ -268,14 +268,21 @@ function getAddress(){
   }
   // Browser doesn't support geolocaiton
   else {
+    pushMessage ('error', 'Your browser doesn\'t support geolocation.');
     console.log("Browser doesn't support geolocaiton");
   }
 };
 
 function fillAddress() {
   getAddress();
-  $('#start').val (currentAddress);
-  pushMessage ('success', "Got your current location!");
+  if (currentAddress != 'placeholder') {
+    $('#start').val (currentAddress);  
+    pushMessage ('success', "Got your current location!");
+  }
+  else {
+    pushMessage ('warn', 'Please share your location to use this feature.');
+    console.error ('User hasn\'t shared location')  
+  }
 };
 
 function pushMessage (messageType, message) {
