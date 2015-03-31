@@ -4,7 +4,7 @@ html {
 
 body {
   height: 100%;
-  padding: 10%;
+  padding: 5%;
   margin: 1%
 }
 
@@ -27,7 +27,8 @@ body {
 }
 
 #map-canvas {
-  height: 350px;
+  min-width: 200px;
+  min-height: 200px;
   border-style: solid;
   border-color: red;
 }
@@ -38,6 +39,10 @@ body {
 
 #alt-routes-btn {
   overflow: visible;
+}
+
+#carousel-container {
+  max-width:800px;
 }
 
 .carousel-indicators {
