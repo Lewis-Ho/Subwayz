@@ -9,7 +9,6 @@ var transit_obj = [];
 var markers = [];
 var currentAddress = 'placeholder';
 
-
 // If content 
 function showTransit(transit_obj, content){
   // Retrieve route from array
@@ -233,7 +232,7 @@ function homeSlide (){
   $('#navCarousel').carousel(0);
 };
 
-// Hide current locaiton marker on google map 
+// Hide current location marker on google map 
 function hideMarker(){
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
@@ -245,17 +244,16 @@ function getAddress(){
   
   geocoder = new google.maps.Geocoder();
 
-  // If geolocation available
+  // If geolocation available, get position
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       //console.log(pos);
 
-      //Reverse geocoding for starting location
+      //Reverse geocoding for current location
       geocoder.geocode({'latLng': pos}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           if (results.length != 0) {
-            // Change input box value
             currentAddress = results[0].formatted_address;
           } else {
             alert('No results found');
@@ -266,7 +264,7 @@ function getAddress(){
       });
     })
   }
-  // Browser doesn't support geolocaiton
+  //Else, browser doesn't support geolocaiton
   else {
     pushMessage ('error', 'Your browser doesn\'t support geolocation.');
     console.log("Browser doesn't support geolocaiton");
