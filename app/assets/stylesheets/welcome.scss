@@ -47,7 +47,8 @@ body {
 }
 
 .carousel-indicators {
-  background: red;
+  background-color: blue;
+
 }
 
 .form-group.searchBar {
@@ -84,4 +85,17 @@ body {
 .container-fluid {
   max-width: 640px;
   overflow-y: hidden;
+}
+
+#sidebar {
+  width: 300px;
+  position: fixed;
+}
+
+.sidebar-hidden {
+  margin-left: -250px;
+}
+
+.sidebar-appear {
+  margin-left: 0px;
 }

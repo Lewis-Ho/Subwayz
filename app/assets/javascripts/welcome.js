@@ -281,6 +281,8 @@ function fillAddress() {
     pushMessage ('warn', 'Please share your location to use this feature.');
     console.error ('User hasn\'t shared location')  
   }
+
+  document.getElementById('sidebar').className = "sidebar-appear";
 };
 
 function pushMessage (messageType, message) {
