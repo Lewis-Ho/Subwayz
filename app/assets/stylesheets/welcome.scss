@@ -4,7 +4,7 @@ html {
 
 body {
   height: 100%;
-  padding: 10%;
+  padding: 5%;
   margin: 1%
 }
 
@@ -22,12 +22,13 @@ body {
 #directions-panel, #station-info {
   border-style:solid;
   border-color: gray;
-  overflow-y: scroll;
+  min-width: 200px;
   height: 400px;
 }
 
 #map-canvas {
-  height: 350px;
+  min-width: 200px;
+  min-height: 200px;
   border-style: solid;
   border-color: red;
 }
@@ -43,6 +44,11 @@ body {
 #alt-routes-btn {
   overflow: visible;
 >>>>>>> welcomePage
+}
+
+#carousel-container {
+  min-height: 300px;
+  max-width:800px;
 }
 
 .carousel-indicators {
