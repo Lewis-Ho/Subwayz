@@ -182,8 +182,8 @@ function calcRoute() {
     return;
   }
   else {
-    start += 'new york city';
-    end += 'new york city';
+    start += ' new york city';
+    end += ' new york city';
   }
 
   var request = {
@@ -197,6 +197,7 @@ function calcRoute() {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       console.log(response);
+      console.log("There are " + response.routes.length + " routes available.");
       // Get route object
       var route = response.routes[0].legs[0];
       for (var i = 0; i < route.steps.length; i++) {
@@ -213,7 +214,9 @@ function calcRoute() {
       //$('#loadingIcon').hide(300);
     }
     else {
-      $('#message').text('No search results.');
+      //If DirectionsStatus.NOT_FOUND 
+      //or DirectionsStatus.ZERO_RESULTS
+      pushMessage ('error', 'No directions found.');
     }
   });
 };
