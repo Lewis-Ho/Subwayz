@@ -4,8 +4,6 @@ html {
 
 body {
   height: 100%;
-  padding: 5%;
-  margin: 1%
 }
 
 #panel {
@@ -42,8 +40,22 @@ body {
 }
 
 #carousel-container {
+  margin-left: 30px;
   min-height: 300px;
-  max-width:800px;
+  max-width: 800px;
+}
+
+#logo {
+  margin-top: 30px;
+}
+
+.something {
+  background-color: white;
+  border-color: red;
+}
+
+.carousel-indicators .active {
+  background-color: orange;
 }
 
 .carousel-indicators {
@@ -89,7 +101,11 @@ body {
 
 #sidebar {
   width: 300px;
+  max-width: 300px;
+  height: 100%;
   position: fixed;
+  z-index: 2000;
+  background-color: #2850AD;
   list-style-type: none;
 }
 
@@ -99,4 +115,18 @@ body {
 
 .sidebar-appear {
   margin-left: 0px;
+}
+
+#sidebar > li > a {
+  color: orange;
+  margin: 20px;
+}
+
+#sidebar > button, #sidebar > button:active {
+  float: right;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+
 }

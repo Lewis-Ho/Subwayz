@@ -7,12 +7,15 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
   </head>
   <body>
-
-  <span id="sidebar" class="sidebar-hidden">
+  
+  <div id="sidebar" class="sidebar-appear">
+      <button class="btn btn-default" type="button" onclick="toggleSidebar()">
+        <span class="glyphicon glyphicon-th-large"></span>
+      </button>
       <li><a href="#">Home</a></li>
       <li><a href="#">Profile</a></li>
       <li><a href="#">Messages</a></li>
-  </span>
+  </div>
 
   <div id="carousel-container" class="container-fluid">
   <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false">
@@ -21,7 +24,7 @@
 
         <div class="item active">
           <div class="col-xs-12">
-            <img src="logo.png" class="img-responsive" alt="Logo">
+            <img id="logo" src="logo.png" class="img-responsive" alt="Logo">
             <form id="pointAB" role="form">
 
               <div class="row">
@@ -86,11 +89,13 @@
             </div>
           </div>
           </div>
+          <!--
           <div id="alt-routes-btn" class="col-xs-2">
             <button class="btn btn-default btn-circle">1</button>
             <button class="btn btn-default btn-circle">2</button>
             <button class="btn btn-default btn-circle">3</button>  
           </div>
+          -->
         </div>
       </div>
     </div>  
