@@ -8,6 +8,7 @@ var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
 var currentAddress = 'placeholder';
+var sidebool = false;
 
 // If content 
 function showTransit(transit_obj, content){
@@ -38,6 +39,7 @@ function getTransitDetail(obj){
 $(document).ready(function(){
 
   $('#message-container').hide (0);
+  document.getElementById('sidebar').className = 'sidebar-hidden';
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function() { return false; } );
@@ -224,12 +226,23 @@ function nextSlide() {
   $('#navCarousel').carousel('next');
 };
 
-function prevSlide (){
+function prevSlide(){
   $('#navCarousel').carousel('prev');
 };
 
-function homeSlide (){
+function homeSlide(){
   $('#navCarousel').carousel(0);
+};
+
+function toggleSidebar() {
+  if (sidebool == false) {  
+    document.getElementById('sidebar').className = "sidebar-appear";
+    sidebool = true;
+  }
+  else {
+    document.getElementById('sidebar').className = "sidebar-hidden";
+    sidebool = false;
+  }
 };
 
 // Hide current location marker on google map 
