@@ -67,11 +67,28 @@
         <div class="col-xs-12">
           <div class="row row-same-height">
             <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
-            <div id="directions-panel" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
+            <div id="tabs">
+            <!--<div id="directions-panel" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
               <div id="init-message">
               <p>Select point A and B</p>
               </div>
+							</div>
+            -->
+            	<ul class="nav nav-tabs">
+            		<li><a class="active" href="#tab1">Bleh</a></li>
+            		<li><a href="#tab2">Blah</a></li>
+            	</ul>
+
+            	<div class="tab-content">
+	            	<div id="tab1">
+  	          		<p>Bleh Content</p>
+    	        	</div>
+      	      	<div id="tab2">
+        	    		<p>Blah Content</p>
+          	  	</div>
+            	</div>
             </div>
+
             <div id="station-info" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
               <p>Station Info:</p>
               <p id="train"></p>

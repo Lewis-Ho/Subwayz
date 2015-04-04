@@ -43,6 +43,7 @@ $(document).ready(function(){
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function() { return false; } );
+  $('#tab1').tabs();
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -297,6 +298,8 @@ function fillAddress() {
     pushMessage ('warn', 'Please share your location to use this feature.');
     console.error ('User hasn\'t shared location')  
   }
+
+
 };
 
 function pushMessage (messageType, message) {
