@@ -6,9 +6,7 @@
     <title>Displaying text directions with <code>setPanel()</code></title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
   </head>
-  <body>
-  
-  <div id="sidebar" class="sidebar-appear">
+  <div id="sidebar">
       <button class="btn btn-default" type="button" onclick="toggleSidebar()">
         <span class="glyphicon glyphicon-th-large"></span>
       </button>
@@ -18,7 +16,7 @@
   </div>
 
   <div id="carousel-container" class="container-fluid">
-  <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false">
+  <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false">
 
       <div class="carousel-inner">
 
@@ -85,7 +83,6 @@
               <p id="distance"></p>
               <p id="duration"></p>
               <!-- <%= link_to "an article", @station%> -->
-              <!-- <div id="info"></div> -->
             </div>
           </div>
         </div>

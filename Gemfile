@@ -12,7 +12,7 @@ gem 'geocoder', '~> 1.2.7'
 gem 'google_places'
 
 # Adds Bootstrap CSS assets.
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass', '~> 3.3.4.1'
 # Adds proper vendor prefixes to CSS code when compiled.
 gem 'autoprefixer-rails'
 # Bootstrap guide here: 
