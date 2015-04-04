@@ -4,6 +4,7 @@
 }
 
 #carousel-container {
+  padding-top: 30px;
   min-height: 300px;
   max-width: 800px;
 }
@@ -19,14 +20,10 @@
   border: 1px solid #999;
 }
 
-#logo {
-  margin-top: 30px;
-}
-
 #map-canvas {
   min-width: 200px;
-  max-width: 300px;
   min-height: 200px;
+  max-width: 300px;
   max-height: 300px;
   border-style: solid;
   border-color: red;
@@ -108,7 +105,7 @@
 }
 
 .sidebar-hidden {
-  margin-left: -250px;
+  margin-left: -280px;
 }
 
 .sidebar-appear {
