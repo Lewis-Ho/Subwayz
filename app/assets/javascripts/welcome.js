@@ -43,7 +43,12 @@ $(document).ready(function(){
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function() { return false; } );
-  $('#tab1').tabs();
+
+  $('#tabs').tab();
+  $('#tabs a').click( function (e) { 
+  	e.preventDefault();
+  	$(this).tab('show');
+  });
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
