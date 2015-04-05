@@ -117,6 +117,28 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   
+  // Google Autocomplete
+  var start_input = document.getElementById('start');
+  var end_input = document.getElementById('end');
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(40.532980, -74.118551),
+    new google.maps.LatLng(40.895218, -73.735403)
+  );
+  
+  // Bounds right now only restrict country
+  var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  start_autocomplete.setBounds(bounds);
+  end_autocomplete.setBounds(bounds);
+  
   // Initial map 
   function initialize() {
     
@@ -132,28 +154,6 @@ $(document).ready(function(){
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
-
-    // Google Autocomplete
-    var start_input = document.getElementById('start');
-    var end_input = document.getElementById('end');
-    var bounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(40.532980, -74.118551),
-      new google.maps.LatLng(40.895218, -73.735403)
-    );
-    
-    // Bounds right now only restrict country
-    var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    start_autocomplete.setBounds(bounds);
-    end_autocomplete.setBounds(bounds);
     
     // Google Direction text route
     directionsDisplay.setMap(map);
@@ -268,7 +268,7 @@ function hideMarker(){
 };
 
 // Get current location button function
-getAddress = function(callback){
+function getAddress(callback){
   geocoder = new google.maps.Geocoder();
 
   // If geolocation available, get position
@@ -280,8 +280,10 @@ getAddress = function(callback){
     pushMessage ('error', 'Your browser doesn\'t support geolocation.');
     console.log("Browser doesn't support geolocaiton");
   }
-  
-  callback();
+  // Optional callback
+  if (callback){
+    callback();
+  }
 };
 
 function successCallback(position){
