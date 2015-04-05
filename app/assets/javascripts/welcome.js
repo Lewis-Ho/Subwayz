@@ -145,6 +145,11 @@ $(document).ready(function(){
     var map;
     var pos;
     
+    // Default pos for map will be center of Manhattan
+    if(!pos){
+      pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
+    }
+    
     var mapOptions = {
       zoom: 13
     };
