@@ -348,7 +348,9 @@ function makeNewTab() {
 	var newTab = 'tab' + tabCount;
 	console.log ('New Tab.');
 
+	//Adds tab to nav bar
 	$('#endOfTabs').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	//Adds contents of tab
 	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'">NEW TAB CONTENT</div>');
 	$('#'+newTab).addClass("tab-pane");
 };
