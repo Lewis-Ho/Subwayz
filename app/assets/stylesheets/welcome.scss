@@ -1,3 +1,7 @@
+/*###############################################
+	0. HTML, Body, General Styles
+###############################################*/
+
 html {
   height: 100%;
   width: 100%;
@@ -8,6 +12,57 @@ body {
   width: 100%;
 }
 
+.centered {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.something {
+  background-color: white;
+  border-color: red;
+}
+
+
+/*###############################################
+	1a. Sidebar
+###############################################*/
+
+#sidebar {
+  width: 300px;
+  max-width: 300px;
+  height: 100%;
+  position: fixed;
+  z-index: 2000;
+  background-color: #2850AD;
+  list-style-type: none;
+}
+
+.sidebar-hidden {
+  margin-left: -250px;
+}
+
+.sidebar-appear {
+  margin-left: 0px;
+}
+
+#sidebar > li > a {
+  color: orange;
+  margin: 20px;
+}
+
+#sidebar > button,
+#sidebar > button:active {
+  float: right;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+}
+
+/*###############################################
+	1. Carousel
+###############################################*/
+
 #carousel-container {
   padding-top: 30px;
   padding-bottom: 80px;
@@ -16,16 +71,38 @@ body {
   max-width: 1000px;
 }
 
-#panel {
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  margin-left: -180px;
-  z-index: 5;
-  background-color: #fff;
-  padding: 5px;
-  border: 1px solid #999;
+.carousel-indicators {
+  background-color: #2850AD;
 }
+
+.container-fluid {
+  overflow-y: hidden;
+}
+
+/*###############################################
+	1a. Slide 1 Content
+###############################################*/
+
+.form-group.searchBar {
+  margin-bottom: 15px;
+  max-width: 400px;
+}
+
+.glyphicon-map-marker.redMarker {
+  color: #EE352E;
+}
+
+.btn.gobtn {
+  border-color: orange;
+  color: orange;
+  background: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/*###############################################
+	1b. Slide 2 Content
+###############################################*/
 
 #map-canvas {
   min-width: 200px;
@@ -52,44 +129,6 @@ body {
   overflow: visible;
 }
 
-.centered {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.something {
-  background-color: white;
-  border-color: red;
-}
-
-/*
-.carousel-indicators > .active {
-  background-color: orange;
-}
-
-.adp-substep {
-	border-style: solid !important;
-	border-color: red !important;
-}
-*/
-
-.carousel-indicators {
-  background-color: #2850AD;
-}
-
-.form-group.searchBar {
-  margin-bottom: 15px;
-  max-width: 400px;
-}
-
-.btn.gobtn {
-  border-color: orange;
-  color: orange;
-  background: none;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
 .btn-default.btn-circle {
   width: 30px;
   height: 30px;
@@ -103,43 +142,3 @@ body {
   color: white;
 }
 
-.glyphicon-map-marker.redMarker {
-  color: #EE352E;
-}
-
-.container-fluid {
-  max-width: 800px;
-  overflow-y: hidden;
-}
-
-#sidebar {
-  width: 300px;
-  max-width: 300px;
-  height: 100%;
-  position: fixed;
-  z-index: 2000;
-  background-color: #2850AD;
-  list-style-type: none;
-}
-
-.sidebar-hidden {
-  margin-left: -250px;
-}
-
-.sidebar-appear {
-  margin-left: 0px;
-}
-
-#sidebar > li > a {
-  color: orange;
-  margin: 20px;
-}
-
-#sidebar > button, #sidebar > button:active {
-  float: right;
-  background: none;
-  border: none;
-  outline: none;
-  color: white;
-
-}
