@@ -24,18 +24,24 @@ function showTransit(transit_obj, content){
     }
   }
   // Print transit detail
-  getTransitDetail(current_route);
+  getTransitDetail(current_route, tabCount);
 };
 
-function getTransitDetail(obj){
-  $("#train").text(obj.transit.line.short_name + " Train");
-  $("#train-stop-depart").text(obj.transit.departure_stop.name);
-  $("#train-stop-end").text(obj.transit.arrival_stop.name);
-  $("#num-stop").text(obj.transit.num_stops + " Stops");
-  $("#arrival_time").text(obj.transit.arrival_time.text);
-  $("#departure_time").text(obj.transit.departure_time.text);
-  $("#distance").text(obj.distance.text);
-  $("#duration").text(obj.duration.text);
+function getTransitDetail(obj, tabNo){
+
+	var parent='';
+	if (tabNo) {
+		parent='div#tab'+tabNo+' ';
+	}
+
+  $(parent+'#train').text(obj.transit.line.short_name + " Train");
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text(obj.transit.departure_time.text);
+  $(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
 };
 
 $(document).ready(function(){
@@ -55,7 +61,7 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
-  $('#make').click(makeNewTab);
+  $('#make').click(trainTab);
   $('#deletes').click(deleteTabs);
 
   // Change station info dynamically base on clicking on route section 
@@ -219,6 +225,7 @@ function calcRoute() {
         // Find all possible transit 
         if (route.steps[i].travel_mode == "TRANSIT") {
           console.log(route.steps[i].transit.line.short_name);
+          //#ADDHERE
           // Push to transit_obj array
           transit_obj.push(route.steps[i]);
         }
@@ -351,9 +358,28 @@ function makeNewTab() {
 	//Adds tab to nav bar
 	$('#endOfTabs').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
 	//Adds contents of tab
-	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'">NEW TAB CONTENT</div>');
+	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'"></div>');
 	$('#'+newTab).addClass("tab-pane");
 };
+
+function trainTab (transit_obj, content) {
+
+	makeNewTab();
+	$('#tab'+tabCount).append (
+			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
+			  <p>Station Info:</p>\
+			  <p id="train"></p>\
+		    <p id="train-stop-depart"></p>\
+		    <p id="train-stop-end"></p>\
+		    <p id="num-stop"></p>\
+		    <p id="arrival_time"></p>\
+		    <p id="departure_time"></p>\
+		    <p id="distance"></p>\
+		    <p id="duration"></p>\
+		    <!-- <%= link_to "an article", @station%> -->\
+		  </div>');
+	showTransit (transit_obj, content);
+}
 
 function deleteTabs() {
 
