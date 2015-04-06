@@ -43,7 +43,8 @@ function getTransitDetail(obj, tabNo){
   $(parent+'#departure_time').text(obj.transit.departure_time.text);
   $(parent+'#distance').text(obj.distance.text);
   $(parent+'#duration').text(obj.duration.text);
-=======
+};
+
 // Get current time from device
 function getTime(){
   var currentdate = new Date(); 
@@ -54,18 +55,6 @@ function getTime(){
               + currentdate.getMinutes() + ":" 
               + currentdate.getSeconds();
   return datetime;
-};
-
-function getTransitDetail(obj){
-  $("#train").text(obj.transit.line.short_name + " Train");
-  $("#train-stop-depart").text(obj.transit.departure_stop.name);
-  $("#train-stop-end").text(obj.transit.arrival_stop.name);
-  $("#num-stop").text(obj.transit.num_stops + " Stops");
-  $("#arrival-time").text(obj.transit.arrival_time.text);
-  $("#departure-time").text(obj.transit.departure_time.text);
-  $("#distance").text(obj.distance.text);
-  $("#current-time").text("Current time : " + getTime());
->>>>>>> d7f5031bfd520ae7698487f13f577394dfa3cf5e
 };
 
 $(document).ready(function(){
