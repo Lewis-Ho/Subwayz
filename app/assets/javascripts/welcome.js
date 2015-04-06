@@ -10,6 +10,8 @@ var markers = [];
 var currentAddress = 'placeholder';
 var sidebool = false;
 
+var tabCount = 1;
+
 // If content 
 function showTransit(transit_obj, content){
   // Retrieve route from array
@@ -53,7 +55,7 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
-  $('#changeMe').click(newTab);
+  $('#make').click(makeNewTab);
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -108,8 +110,6 @@ $(document).ready(function(){
               break;
           }
         }
-        $('#tabs a[href="#tab2"]').show();
-      	$('#tabs a[href="#tab2"]').tab('show');
       }
     }
   });
@@ -202,6 +202,7 @@ function calcRoute() {
   var request = {
     origin: start,
     destination: end,
+    provideRouteAlternatives: true,
     travelMode: google.maps.TravelMode.TRANSIT
   };
 
@@ -339,12 +340,16 @@ function pushMessage (messageType, message) {
   $('#message-container').show (1000);
 };
 
-function newTab() {
-	console.log ('New Tab');
-	$('div.tab-content #tab2').after('<div class="tab-pane" id="tab3">NEW STUFF</div>');
-	$('#changeMe').attr('href', '#tab3');
-	$('#tabs a[href="#tab3"]').show();
-  $('#tabs a[href="#tab3"]').tab('show');
+function makeNewTab() {
+
+	var prevTab = 'tab' + tabCount;
+	tabCount++;
+	var newTab = 'tab' + tabCount;
+	console.log ('New Tab.');
+
+	$('#placeholder').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'">NEW TAB CONTENT</div>');
+	$('#'+newTab).addClass("tab-pane");
 };
 
 
