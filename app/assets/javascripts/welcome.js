@@ -56,6 +56,7 @@ $(document).ready(function(){
 
   $('#sidebar').click(toggleSidebar);
   $('#make').click(makeNewTab);
+  $('#deletes').click(deleteTabs);
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -347,9 +348,25 @@ function makeNewTab() {
 	var newTab = 'tab' + tabCount;
 	console.log ('New Tab.');
 
-	$('#placeholder').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	$('#endOfTabs').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
 	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'">NEW TAB CONTENT</div>');
 	$('#'+newTab).addClass("tab-pane");
+};
+
+function deleteTabs() {
+
+	var thisTab;
+
+	while (tabCount >= 2) {
+		thisTab = 'tab' + tabCount;
+		//Remove tab from nav bar
+		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
+		//Remove contents of tab
+		$('#'+thisTab).remove();
+		tabCount--;
+	}
+
+	tabCount = 1;
 };
 
 
