@@ -53,6 +53,7 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
+  $('#changeMe').click(newTab);
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -337,6 +338,15 @@ function pushMessage (messageType, message) {
 
   $('#message-container').show (1000);
 };
+
+function newTab() {
+	console.log ('New Tab');
+	$('div.tab-content #tab2').after('<div class="tab-pane" id="tab3">NEW STUFF</div>');
+	$('#changeMe').attr('href', '#tab3');
+	$('#tabs a[href="#tab3"]').show();
+  $('#tabs a[href="#tab3"]').tab('show');
+};
+
 
 /*
 $(document).ready(function(){
