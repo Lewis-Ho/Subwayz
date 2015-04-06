@@ -172,8 +172,8 @@ function calcRoute() {
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
     start='';
-    end='';
-    return;
+    end=''
+;    return;
   }
   else if (start == '') {
     pushMessage ('error', "Please fill in your current location.");

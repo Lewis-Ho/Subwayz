@@ -22,11 +22,11 @@
 
         <div class="item active">
           <div class="col-xs-12">
-            <img id="logo" src="logo.png" class="img-responsive" alt="Logo">
+            <img id="logo" src="logo.png" class="img-responsive centered" alt="Logo">
             <form id="pointAB" role="form">
 
               <div class="row">
-                <div class="form-group searchBar"> 
+                <div class="form-group searchBar centered "> 
                   <label for="pointA">Start:</label>
                     <div class="input-group">
                       <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
@@ -40,7 +40,7 @@
                 </div>
 
               <div class="row">
-                <div class="form-group searchBar">
+                <div class="form-group searchBar centered">
                     <label for="pointB">End:</label>
                     <div class="input-group">
                       <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
@@ -72,20 +72,20 @@
             </div>
             <div class="row">
             	<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-            		<li class="active"><a href="#tab1" data-toggle="tab">Bleh</a></li>
-            		<li><a href="#tab2" data-toggle="tab">Blah</a></li>
+            		<li class="active"><a href="#tab1" data-toggle="tab">Directions</a></li>
+            		<li><a href="#tab2" data-toggle="tab">Station Info</a></li>
             	</ul>
 
             	<div class="tab-content">
 	            	<div class="tab-pane active" id="tab1">
-  	          		<div id="directions-panel" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
+  	          		<div id="directions-panel" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">
               			<div id="init-message">
               				<p>Select point A and B</p>
               			</div>	
 									</div>	
 								</div>
       	      	<div class="tab-pane fade" id="tab2">
-        	    		<div id="station-info" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
+        	    		<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">
 			              <p>Station Info:</p>
 			              <p id="train"></p>
 			              <p id="train-stop-depart"></p>

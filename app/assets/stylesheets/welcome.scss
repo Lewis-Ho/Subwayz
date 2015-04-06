@@ -1,12 +1,19 @@
-#html, #body {
+html {
   height: 100%;
+  width: 100%;
+}
+
+body {
+	height: 100%;
   width: 100%;
 }
 
 #carousel-container {
   padding-top: 30px;
+  padding-bottom: 80px;
+  margin-left: 40px;
   min-height: 300px;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 #panel {
@@ -23,8 +30,8 @@
 #map-canvas {
   min-width: 200px;
   min-height: 200px;
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 400px;
+  max-height: 400px;
   border-style: solid;
   border-color: red;
 }
@@ -32,7 +39,7 @@
 #directions-panel, #station-info {
   border-style:solid;
   border-color: gray;
-  min-width: 200px;
+  max-width: 400px;
   height: 400px;
   overflow-y: scroll;
 }
@@ -43,6 +50,11 @@
 
 #alt-routes-btn {
   overflow: visible;
+}
+
+.centered {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .something {
@@ -61,9 +73,8 @@
 }
 
 .form-group.searchBar {
-  margin-left: auto;
-  margin-right: auto;
   margin-bottom: 15px;
+  max-width: 400px;
 }
 
 .btn.gobtn {
@@ -107,7 +118,7 @@
 }
 
 .sidebar-hidden {
-  margin-left: -280px;
+  margin-left: -250px;
 }
 
 .sidebar-appear {
