@@ -27,7 +27,6 @@ function showTransit(transit_obj, content){
   getTransitDetail(current_route);
 };
 
-<<<<<<< HEAD
 function getTransitDetail(obj, tabNo){
 
 	var parent='';
