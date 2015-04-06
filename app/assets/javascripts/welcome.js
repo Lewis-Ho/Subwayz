@@ -369,6 +369,8 @@ function deleteTabs() {
 	}
 
 	tabCount = 1;
+
+	$('#tabs a:first').tab('show');
 };
 
 
