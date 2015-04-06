@@ -7,35 +7,42 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
   </head>
   <body>
+  
+  <div id="sidebar" class="sidebar-appear">
+      <button class="btn btn-default" type="button" onclick="toggleSidebar()">
+        <span class="glyphicon glyphicon-th-large"></span>
+      </button>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Messages</a></li>
+  </div>
 
-  <div id="carousel-container" class="container">
+  <div id="carousel-container" class="container-fluid">
   <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false">
 
       <div class="carousel-inner">
 
         <div class="item active">
-          <div class="col-xs-12 container">
+          <div class="col-xs-12">
+            <img id="logo" src="logo.png" class="img-responsive" alt="Logo">
             <form id="pointAB" role="form">
 
               <div class="row">
-                <div class="col-xs-11"> 
-                <div class="input-group searchBar"> 
+                <div class="form-group searchBar"> 
                   <label for="pointA">Start:</label>
                     <div class="input-group">
                       <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onClick="getAddress()">
+                        <button class="btn btn-default" type="button" onClick="getAddress(fillAddress)">
                           <span class="glyphicon glyphicon-map-marker redMarker"></span>
                         </button>
                       </span>
                     </div>
                     </div>
-                  </div>
                 </div>
 
               <div class="row">
-                <div class="col-xs-11">
-                  <div class="input-group searchBar">
+                <div class="form-group searchBar">
                     <label for="pointB">End:</label>
                     <div class="input-group">
                       <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
@@ -46,66 +53,59 @@
                       </span>
                   </div>
                 </div>
-              </div>
             </div>
           </form>
 
-<!--
-              <div class="row">
-                <div class="col-xs-11">
-                  <div class="input-group submitbtn">
-                    <button class="btn gobtn" data-slide="next" onclick="calcRoute(); hideMessage(); hideMarker();">Get Directions</button>
-                  </div>
-                </div>
-              </div>
-            </form>
--->        
             <div class "row">
-              <div id = "err-container" class="alert alert-danger">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <span id="err-message"></span>
+              <div id="message-container">
+                <span id="icon"></span>
+                <span id="message"></span>
               </div>
             </div>
           </div>
         </div>
       
       <div class="item">
-        <div class="col-xs-12 container">
+        <div class="col-xs-9">
           <div class="row row-same-height">
-            <div id="map-canvas" class="col-xs-6 col-xs-height"></div>
-            <div id="directions-panel" class="col-xs-3 col-xs-height">
+            <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
+            <div id="directions-panel" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
               <div id="init-message">
               <p>Select point A and B</p>
               </div>
             </div>
-            <div id="station-info" class="col-xs-2 col-xs-height">
+            <div id="station-info" class="col-xs-11 col-xs-height col-sm-2 col-sm-height">
               <p>Station Info:</p>
-              <p> 
               <p id="train"></p>
               <p id="train-stop-depart"></p>
               <p id="train-stop-end"></p>
               <p id="num-stop"></p>
-              <p id="arrival_time"></p>
-              <p id="departure_time"></p>
+              <p id="arrival-time"></p>
+              <p id="departure-time"></p>
               <p id="distance"></p>
               <p id="duration"></p>
-              <!-- <%= link_to "an article", @station%> -->
-              <!-- <div id="info"></div> -->
+              <p id="current-time"></p>
             </div>
           </div>
+          </div>
+          <!--
+          <div id="alt-routes-btn" class="col-xs-2">
+            <button class="btn btn-default btn-circle">1</button>
+            <button class="btn btn-default btn-circle">2</button>
+            <button class="btn btn-default btn-circle">3</button>  
+          </div>
+          -->
         </div>
       </div>
+    </div>  
+  </div>
 
-      </div>
-    </div>
-  
+  <nav class="navbar navbar-default navbar-fixed-bottom">
     <ol class="carousel-indicators">
       <li data-target="#navCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#navCarousel" data-slide-to="1" class="active"></li>
     </ol>
-  
-  </div>
-  </div>
+  </nav>
 
   </body>
 </html>

@@ -7,7 +7,8 @@ var geocoder;
 var transit_obj = [];
 // Markers for current locaiton
 var markers = [];
-
+var currentAddress = 'placeholder';
+var sidebool = false;
 
 // If content 
 function showTransit(transit_obj, content){
@@ -24,20 +25,33 @@ function showTransit(transit_obj, content){
   getTransitDetail(current_route);
 };
 
+// Get current time from device
+function getTime(){
+  var currentdate = new Date(); 
+  var datetime = currentdate.getDate() + "/"
+              + (currentdate.getMonth()+1)  + "/" 
+              + currentdate.getFullYear() + " @ "  
+              + currentdate.getHours() + ":"  
+              + currentdate.getMinutes() + ":" 
+              + currentdate.getSeconds();
+  return datetime;
+};
+
 function getTransitDetail(obj){
   $("#train").text(obj.transit.line.short_name + " Train");
   $("#train-stop-depart").text(obj.transit.departure_stop.name);
   $("#train-stop-end").text(obj.transit.arrival_stop.name);
   $("#num-stop").text(obj.transit.num_stops + " Stops");
-  $("#arrival_time").text(obj.transit.arrival_time.text);
-  $("#departure_time").text(obj.transit.departure_time.text);
+  $("#arrival-time").text(obj.transit.arrival_time.text);
+  $("#departure-time").text(obj.transit.departure_time.text);
   $("#distance").text(obj.distance.text);
-  $("#duration").text(obj.duration.text);
+  $("#current-time").text("Current time : " + getTime());
 };
 
 $(document).ready(function(){
 
-  $('#err-container').hide (0);
+  $('#message-container').hide (0);
+  document.getElementById('sidebar').className = 'sidebar-hidden';
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function() { return false; } );
@@ -103,83 +117,53 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   
+  // Google Autocomplete
+  var start_input = document.getElementById('start');
+  var end_input = document.getElementById('end');
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(40.532980, -74.118551),
+    new google.maps.LatLng(40.895218, -73.735403)
+  );
+  
+  // Bounds right now only restrict country
+  var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  start_autocomplete.setBounds(bounds);
+  end_autocomplete.setBounds(bounds);
+  
   // Initial map 
   function initialize() {
+    
     var map;
     var pos;
+    
+    // Default pos for map will be center of Manhattan
+    if(!pos){
+      pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
+    }
     
     var mapOptions = {
       zoom: 13
     };
-
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        var marker = new google.maps.Marker({
-          position: pos,
-          map: map,
-          title: 'Current Location'
-        });
-        markers.push(marker);
-        
-      }, function() {
-        handleNoGeolocation(false);
-      }); 
-    } 
-    else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(true);
-    }
-    
-    // Non-supporting geolocaiton handling
-    function handleNoGeolocation(errorFlag) {
-      if (!errorFlag) {
-        $('#err-message').text('Geolocation services failed.');
-        $('#err-container').show(1000);
-      }
-      else {
-        $('#err-message').text('Your browser doesn\'t support geolocation.');
-        $('#err-container').show(1000);
-      }
-      
-      var options = {
-        map: map,
-        // Hard code nyc lat lng
-        position: new google.maps.LatLng(40.714728,-73.998672),
-        content: content
-      };
-    }
+  
+    getAddress();
 
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
-
-    // Google Autocomplete
-    var start_input = document.getElementById('start');
-    var end_input = document.getElementById('end');
-    var bounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(40.532980, -74.118551),
-      new google.maps.LatLng(40.895218, -73.735403)
-    );
-    
-    // Bounds right now only restrict country
-    var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    start_autocomplete.setBounds(bounds);
-    end_autocomplete.setBounds(bounds);
     
     // Google Direction text route
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
-    
+
     //Needed to resize maps 
     google.maps.event.addDomListener (map, 'idle', function(){
       google.maps.event.trigger (map, 'resize');
@@ -193,34 +177,30 @@ $(document).ready(function(){
 
 // Set route and request direction result 
 function calcRoute() {
-  $('#err-container').hide (1000);
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
 
   if (start == '' && end == '') {
-    $('#err-message').text('Please fill out "Start" and "End".');
-    $('#err-container').show (1000);
+    pushMessage ('error', "Please fill in your current location and destination.");
     start='';
     end='';
     return;
   }
   else if (start == '') {
-    $('#err-message').text('Please fill out "Start".');  
-    $('#err-container').show (1000);
+    pushMessage ('error', "Please fill in your current location.");
     start='';
     end='';
     return;
   }
   else if (end == '') {
-    $('#err-message').text('Please fill out "End".');
-    $('#err-container').show (1000);
+    pushMessage ('error', "Please fill in your destination.");
     start='';
     end='';
     return;
   }
   else {
-    start += 'new york city';
-    end += 'new york city';
+    start += ' new york city';
+    end += ' new york city';
   }
 
   var request = {
@@ -230,9 +210,11 @@ function calcRoute() {
   };
 
   directionsService.route(request, function(response, status) {
+    console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       console.log(response);
+      console.log("There are " + response.routes.length + " routes available.");
       // Get route object
       var route = response.routes[0].legs[0];
       for (var i = 0; i < route.steps.length; i++) {
@@ -249,7 +231,9 @@ function calcRoute() {
       //$('#loadingIcon').hide(300);
     }
     else {
-      $('#err-message').text('No search results.');
+      //If DirectionsStatus.NOT_FOUND 
+      //or DirectionsStatus.ZERO_RESULTS
+      pushMessage ('error', 'No directions found.');
     }
   });
 };
@@ -262,15 +246,26 @@ function nextSlide() {
   $('#navCarousel').carousel('next');
 };
 
-function prevSlide (){
+function prevSlide(){
   $('#navCarousel').carousel('prev');
 };
 
-function homeSlide (){
+function homeSlide(){
   $('#navCarousel').carousel(0);
 };
 
-// Hide current locaiton marker on google map 
+function toggleSidebar() {
+  if (sidebool == false) {  
+    document.getElementById('sidebar').className = "sidebar-appear";
+    sidebool = true;
+  }
+  else {
+    document.getElementById('sidebar').className = "sidebar-hidden";
+    sidebool = false;
+  }
+};
+
+// Hide current location marker on google map 
 function hideMarker(){
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
@@ -278,33 +273,80 @@ function hideMarker(){
 };
 
 // Get current location button function
-function getAddress(){
+function getAddress(callback){
   geocoder = new google.maps.Geocoder();
-  
-  // If geolocation avaliable
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-      //Reverse geocoding for starting location
-      geocoder.geocode({'latLng': pos}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (results.length != 0) {
-            // Change input box value
-            $('#start').val (results[0].formatted_address);
-          } else {
-            alert('No results found');
-          }
-        } else {
-          alert('Geocoder failed due to: ' + status);
-        }
-      });
-    })
+  // If geolocation available, get position
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
   }
-  // Browser doesn't support geolocaiton
+  //Else, browser doesn't support geolocaiton
   else {
+    pushMessage ('error', 'Your browser doesn\'t support geolocation.');
     console.log("Browser doesn't support geolocaiton");
   }
+  // Optional callback
+  if (callback){
+    callback();
+  }
+};
+
+function successCallback(position){
+  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+  //Reverse geocoding for current location
+  geocoder.geocode({'latLng': pos}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results.length != 0) {
+        currentAddress = results[0].formatted_address;
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+};
+
+function errorCallback(){
+  
+};
+
+
+fillAddress = function() {
+  if (currentAddress != 'placeholder') {
+    $('#start').val (currentAddress);  
+    pushMessage ('success', "Got your current location!");
+  }
+  else {
+    pushMessage ('warn', 'Please share your location to use this feature.');
+    console.error ('User hasn\'t shared location')  
+  }
+};
+
+function pushMessage (messageType, message) {
+  $('#message-container').hide (0);
+
+  if (messageType == 'error') {
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+  }
+  else if (messageType == 'success') {
+     document.getElementById('message-container').className = "alert alert-success";
+     document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
+  }
+  else if (messageType == 'warn') {
+      document.getElementById('message-container').className = "alert alert-warning";
+      document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
+  }
+  else {
+    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
+    console.error ("Please check your messageType.")
+  }
+
+  $('#message').text(message);
+
+  $('#message-container').show (1000);
 };
 
 /*

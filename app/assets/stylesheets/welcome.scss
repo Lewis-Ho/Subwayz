@@ -1,11 +1,11 @@
-html {
+#html, #body {
   height: 100%;
+  width: 100%;
 }
 
-body {
-  height: 100%;
-  padding: 10%;
-  margin: 1%
+#carousel-container {
+  min-height: 300px;
+  max-width: 800px;
 }
 
 #panel {
@@ -19,34 +19,49 @@ body {
   border: 1px solid #999;
 }
 
-#directions-panel, #station-info {
-  border-style:solid;
-  border-color: gray;
-  overflow-y: scroll;
-  height: 400px;
+#logo {
+  margin-top: 30px;
 }
 
 #map-canvas {
-  height: 400px;
-  width: 400px;
+  min-width: 200px;
+  max-width: 300px;
+  min-height: 200px;
+  max-height: 300px;
   border-style: solid;
   border-color: red;
 }
 
-#map-canvas img {
-  max-width: none;
+#directions-panel, #station-info {
+  border-style:solid;
+  border-color: gray;
+  min-width: 200px;
+  height: 400px;
+  overflow-y: scroll;
 }
 
-#init-message, #err-container, #station-info {
+#init-message, #message-container, #station-info {
   text-align: center;
 }
 
-.carousel-indicators {
-  background: red;
+#alt-routes-btn {
+  overflow: visible;
 }
 
-.input-group.searchBar, .input-group.submitbtn {
-  width: 50%;
+.something {
+  background-color: white;
+  border-color: red;
+}
+
+.carousel-indicators > .active {
+  background-color: orange;
+}
+
+.carousel-indicators {
+  background-color: blue;
+}
+
+.form-group.searchBar {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 15px;
@@ -60,6 +75,56 @@ body {
   margin-bottom: 15px;
 }
 
+.btn-default.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.42;
+  border-radius: 50%;
+  background: #EE352E;
+  margin-bottom: 15px;
+  color: white;
+}
+
 .glyphicon-map-marker.redMarker {
   color: #EE352E;
+}
+
+.container-fluid {
+  max-width: 800px;
+  overflow-y: hidden;
+}
+
+#sidebar {
+  width: 300px;
+  max-width: 300px;
+  height: 100%;
+  position: fixed;
+  z-index: 2000;
+  background-color: #2850AD;
+  list-style-type: none;
+}
+
+.sidebar-hidden {
+  margin-left: -250px;
+}
+
+.sidebar-appear {
+  margin-left: 0px;
+}
+
+#sidebar > li > a {
+  color: orange;
+  margin: 20px;
+}
+
+#sidebar > button, #sidebar > button:active {
+  float: right;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+
 }
