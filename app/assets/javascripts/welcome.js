@@ -42,7 +42,9 @@ $(document).ready(function(){
   document.getElementById('sidebar').className = 'sidebar-hidden';
   $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
-  $('#pointAB').on('submit', function() { return false; } );
+  $('#pointAB').on('submit', function (e) { 
+  	e.preventDefault(); 
+  });
 
   $('#tabs').tab();
   $('#tabs a').click( function (e) { 
@@ -50,15 +52,7 @@ $(document).ready(function(){
   	$(this).tab('show');
   });
 
-  $('#sidebar').swiperight(function() {
-  	document.getElementById('sidebar').className = "sidebar-appear";
-    sidebool = true;
-  });
-  $('#sidebar').swipeleft(function() {
- 	document.getElementById('sidebar').className = "sidebar-hidden";
-    sidebool = false;
-  });
-
+  $('#sidebar').click(toggleSidebar);
 
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
@@ -113,6 +107,8 @@ $(document).ready(function(){
               break;
           }
         }
+        //$('#tabs a[href="#tab2"]').show();
+      	//$('#tabs a[href="#tab2"]').tab('show');
       }
     }
   });
