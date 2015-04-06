@@ -27,6 +27,7 @@ function showTransit(transit_obj, content){
   getTransitDetail(current_route);
 };
 
+<<<<<<< HEAD
 function getTransitDetail(obj, tabNo){
 
 	var parent='';
@@ -42,6 +43,29 @@ function getTransitDetail(obj, tabNo){
   $(parent+'#departure_time').text(obj.transit.departure_time.text);
   $(parent+'#distance').text(obj.distance.text);
   $(parent+'#duration').text(obj.duration.text);
+=======
+// Get current time from device
+function getTime(){
+  var currentdate = new Date(); 
+  var datetime = currentdate.getDate() + "/"
+              + (currentdate.getMonth()+1)  + "/" 
+              + currentdate.getFullYear() + " @ "  
+              + currentdate.getHours() + ":"  
+              + currentdate.getMinutes() + ":" 
+              + currentdate.getSeconds();
+  return datetime;
+};
+
+function getTransitDetail(obj){
+  $("#train").text(obj.transit.line.short_name + " Train");
+  $("#train-stop-depart").text(obj.transit.departure_stop.name);
+  $("#train-stop-end").text(obj.transit.arrival_stop.name);
+  $("#num-stop").text(obj.transit.num_stops + " Stops");
+  $("#arrival-time").text(obj.transit.arrival_time.text);
+  $("#departure-time").text(obj.transit.departure_time.text);
+  $("#distance").text(obj.distance.text);
+  $("#current-time").text("Current time : " + getTime());
+>>>>>>> d7f5031bfd520ae7698487f13f577394dfa3cf5e
 };
 
 $(document).ready(function(){
@@ -125,11 +149,38 @@ $(document).ready(function(){
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   
+  // Google Autocomplete
+  var start_input = document.getElementById('start');
+  var end_input = document.getElementById('end');
+  var bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(40.532980, -74.118551),
+    new google.maps.LatLng(40.895218, -73.735403)
+  );
+  
+  // Bounds right now only restrict country
+  var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
+      // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
+      componentRestrictions: {country: 'us'}
+    }
+  );
+  start_autocomplete.setBounds(bounds);
+  end_autocomplete.setBounds(bounds);
+  
   // Initial map 
   function initialize() {
     
     var map;
     var pos;
+    
+    // Default pos for map will be center of Manhattan
+    if(!pos){
+      pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
+    }
     
     var mapOptions = {
       zoom: 13
@@ -140,28 +191,6 @@ $(document).ready(function(){
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(pos);
-
-    // Google Autocomplete
-    var start_input = document.getElementById('start');
-    var end_input = document.getElementById('end');
-    var bounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(40.532980, -74.118551),
-      new google.maps.LatLng(40.895218, -73.735403)
-    );
-    
-    // Bounds right now only restrict country
-    var start_autocomplete = new google.maps.places.Autocomplete((start_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    var end_autocomplete = new google.maps.places.Autocomplete((end_input),{
-        // bounds: {sw:new google.maps.LatLng(40.895218, -73.735403), ne:new google.maps.LatLng(40.532980, -74.118551)},
-        componentRestrictions: {country: 'us'}
-      }
-    );
-    start_autocomplete.setBounds(bounds);
-    end_autocomplete.setBounds(bounds);
     
     // Google Direction text route
     directionsDisplay.setMap(map);
@@ -278,39 +307,47 @@ function hideMarker(){
 };
 
 // Get current location button function
-function getAddress(){
-  
+function getAddress(callback){
   geocoder = new google.maps.Geocoder();
 
   // If geolocation available, get position
   if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      //console.log(pos);
-
-      //Reverse geocoding for current location
-      geocoder.geocode({'latLng': pos}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (results.length != 0) {
-            currentAddress = results[0].formatted_address;
-          } else {
-            alert('No results found');
-          }
-        } else {
-          alert('Geocoder failed due to: ' + status);
-        }
-      });
-    })
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
   }
   //Else, browser doesn't support geolocaiton
   else {
     pushMessage ('error', 'Your browser doesn\'t support geolocation.');
     console.log("Browser doesn't support geolocaiton");
   }
+  // Optional callback
+  if (callback){
+    callback();
+  }
 };
 
-function fillAddress() {
-  getAddress();
+function successCallback(position){
+  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+  //Reverse geocoding for current location
+  geocoder.geocode({'latLng': pos}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results.length != 0) {
+        currentAddress = results[0].formatted_address;
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+};
+
+function errorCallback(){
+  
+};
+
+
+fillAddress = function() {
   if (currentAddress != 'placeholder') {
     $('#start').val (currentAddress);  
     pushMessage ('success', "Got your current location!");
