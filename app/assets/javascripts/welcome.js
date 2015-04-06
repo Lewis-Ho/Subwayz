@@ -10,7 +10,7 @@ var markers = [];
 var currentAddress = 'placeholder';
 var sidebool = false;
 
-var tabCount = 1;
+var tabCount = 0;
 
 // If content 
 function showTransit(transit_obj, content){
@@ -24,7 +24,7 @@ function showTransit(transit_obj, content){
     }
   }
   // Print transit detail
-  getTransitDetail(current_route, tabCount);
+  getTransitDetail(current_route);
 };
 
 function getTransitDetail(obj, tabNo){
@@ -225,7 +225,7 @@ function calcRoute() {
         // Find all possible transit 
         if (route.steps[i].travel_mode == "TRANSIT") {
           console.log(route.steps[i].transit.line.short_name);
-          //#ADDHERE
+        	trainTab (route.steps[i]);
           // Push to transit_obj array
           transit_obj.push(route.steps[i]);
         }
@@ -319,8 +319,6 @@ function fillAddress() {
     pushMessage ('warn', 'Please share your location to use this feature.');
     console.error ('User hasn\'t shared location')  
   }
-
-
 };
 
 function pushMessage (messageType, message) {
@@ -362,9 +360,10 @@ function makeNewTab() {
 	$('#'+newTab).addClass("tab-pane");
 };
 
-function trainTab (transit_obj, content) {
+function trainTab (obj) {
 
 	makeNewTab();
+	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 	$('#tab'+tabCount).append (
 			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
 			  <p>Station Info:</p>\
@@ -378,14 +377,14 @@ function trainTab (transit_obj, content) {
 		    <p id="duration"></p>\
 		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
-	showTransit (transit_obj, content);
+	getTransitDetail (obj, tabCount);
 }
 
 function deleteTabs() {
 
 	var thisTab;
 
-	while (tabCount >= 2) {
+	while (tabCount >= 1) {
 		thisTab = 'tab' + tabCount;
 		//Remove tab from nav bar
 		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
