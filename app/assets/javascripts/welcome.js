@@ -58,7 +58,7 @@ $(document).ready(function(){
   $("#directions-panel").click(function(e) {
     var content = $(e.target).html();
     var theObj = $(e.target);
-    console.log(theObj);
+    console.log(e);
     if ( content != "" ) {
       // Click on route part that contain subway, get parent html tag for subway information
       if (content.toLowerCase().indexOf("subway") > -1) {
@@ -107,8 +107,8 @@ $(document).ready(function(){
               break;
           }
         }
-        //$('#tabs a[href="#tab2"]').show();
-      	//$('#tabs a[href="#tab2"]').tab('show');
+        $('#tabs a[href="#tab2"]').show();
+      	$('#tabs a[href="#tab2"]').tab('show');
       }
     }
   });
