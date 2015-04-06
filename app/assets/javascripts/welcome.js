@@ -50,6 +50,16 @@ $(document).ready(function(){
   	$(this).tab('show');
   });
 
+  $('#sidebar').swiperight(function() {
+  	document.getElementById('sidebar').className = "sidebar-appear";
+    sidebool = true;
+  });
+  $('#sidebar').swipeleft(function() {
+ 	document.getElementById('sidebar').className = "sidebar-hidden";
+    sidebool = false;
+  });
+
+
   // Change station info dynamically base on clicking on route section 
   $("#directions-panel").click(function(e) {
     var content = $(e.target).html();
