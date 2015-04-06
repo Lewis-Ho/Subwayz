@@ -222,12 +222,12 @@ function calcRoute() {
       // Get route object
       var route = response.routes[0].legs[0];
       for (var i = 0; i < route.steps.length; i++) {
-        // Find all possible transit 
-        if (route.steps[i].travel_mode == "TRANSIT") {
-          console.log(route.steps[i].transit.line.short_name);
-        	trainTab (route.steps[i]);
-          // Push to transit_obj array
-          transit_obj.push(route.steps[i]);
+        // Find all possible transit
+        if (typeof route.steps[i].transit != 'undefined' 
+        	&& route.steps[i].transit.line.vehicle.type == "SUBWAY") {
+          	trainTab (route.steps[i]);
+          	// Push to transit_obj array
+          	transit_obj.push(route.steps[i]);
         }
       }
       //Move to next slide when directions have been retrieved.
@@ -378,7 +378,7 @@ function trainTab (obj) {
 		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
 	getTransitDetail (obj, tabCount);
-}
+};
 
 function deleteTabs() {
 
