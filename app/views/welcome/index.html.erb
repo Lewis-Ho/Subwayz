@@ -45,7 +45,7 @@
                     <div class="input-group">
                       <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
                       <span class="input-group-btn">
-                        <button class="btn btn-default" data-slide="next" onclick="calcRoute(); hideMessage(); hideMarker();">
+                        <button class="btn btn-default" data-slide="next" onclick="calcRoute(); hideMessage();">
                           Go
                         </button>
                       </span>
@@ -68,13 +68,14 @@
           <div class="row">
             <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
             <!--
-            <button id="make" class="btn btn-default">Make</button>
+            <button id="make" class="btn btn-default">Make</button>-->
             <button id="deletes" class="btn btn-default">Delete</button>
-            -->
+            <button id="routebutt" class="btn btn-default" data-route="0">Route</button>
+
             </div>
 
             <div class="row">
-            	<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            	<ul id="tabs" class="nav nav-tabs col-xs-11" data-tabs="tabs">
             		<li class="active"><a href="#tab0" data-toggle="tab">Directions</a></li>
             		<span id="endOfTabs"></span>
             	</ul>

@@ -3,11 +3,11 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 var directionsDisplay;
 var directionsService;
 var geocoder;
-// Store all transit involved route 
-var transit_obj = [];
 var currentAddress = 'placeholder';
 var sidebool = false;
 var tabCount = 0;
+var altRouteCount = 0;
+var savedRoutes;
 
 $(document).ready(function(){
 
@@ -26,6 +26,15 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
+  $('#deletes').click(deleteTabs);
+	$('#routebutt').click(function () {
+		var index = $('#routebutt').data('route');
+		index= (index+1)%altRouteCount;
+		deleteTabs();
+		printRoute (savedRoutes, index);
+		$('#routebutt').data('route', index);
+	});
+
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
@@ -207,8 +216,8 @@ function calcRoute() {
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
     start='';
-    end=''
-;    return;
+    end='';
+    return;
   }
   else if (start == '') {
     pushMessage ('error', "Please fill in your current location.");
@@ -235,26 +244,22 @@ function calcRoute() {
   };
 
   directionsService.route(request, function(response, status) {
-    console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
-      console.log(response);
-      console.log("There are " + response.routes.length + " routes available.");
-      // Get route object
-      var route = response.routes[0].legs[0];
-      for (var i = 0; i < route.steps.length; i++) {
-        // Find all possible transit
-        if (typeof route.steps[i].transit != 'undefined' 
-        	&& route.steps[i].transit.line.vehicle.type == "SUBWAY") {
-          	trainTab (route.steps[i]);
-          	// Push to transit_obj array
-          	transit_obj.push(route.steps[i]);
-        }
+      //console.log(response);
+      altRouteCount = response.routes.length;
+      /*
+      for (var i = 0; i < altRouteCount; i++) {
+      	printRoute (response, i);
       }
+      */
+      printRoute (response, 0);
+      
       //Move to next slide when directions have been retrieved.
       $('#navCarousel').carousel('next');
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
+      savedRoutes = response;
     }
     else {
       //If DirectionsStatus.NOT_FOUND 
@@ -262,6 +267,18 @@ function calcRoute() {
       pushMessage ('error', 'No directions found.');
     }
   });
+};
+
+function printRoute (responseObj, routeNo) {
+    // Get route object
+    var thisRoute = responseObj.routes[routeNo].legs[0];
+    for (var i = 0; i < thisRoute.steps.length; i++) {
+      // Find all possible
+      if (typeof thisRoute.steps[i].transit != 'undefined' 
+        && thisRoute.steps[i].transit.line.vehicle.type == "SUBWAY") {
+          trainTab (thisRoute.steps[i]);
+    	}
+    }
 };
 
 //Get details from Maps API json object
@@ -318,7 +335,7 @@ function deleteTabs() {
 		tabCount--;
 	}
 
-	tabCount = 1;
+	tabCount = 0;
 
 	$('#tabs a:first').tab('show');
 };
