@@ -5,56 +5,9 @@ var directionsService;
 var geocoder;
 // Store all transit involved route 
 var transit_obj = [];
-// Markers for current locaiton
-var markers = [];
 var currentAddress = 'placeholder';
 var sidebool = false;
-
 var tabCount = 0;
-
-// If content 
-function showTransit(transit_obj, content){
-  // Retrieve route from array
-  var current_route;
-  for (var i = 0; i < transit_obj.length; i++) {
-    console.log(transit_obj[i].instructions + " + " + content);
-    if (transit_obj[i].instructions.indexOf(content) !=- 1){
-      current_route = transit_obj[i];
-      break;
-    }
-  }
-  // Print transit detail
-  getTransitDetail(current_route);
-};
-
-function getTransitDetail(obj, tabNo){
-
-	var parent='';
-	if (tabNo) {
-		parent='div#tab'+tabNo+' ';
-	}
-
-  $(parent+'#train').text(obj.transit.line.short_name + " Train");
-  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
-  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
-  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
-  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
-  $(parent+'#departure_time').text(obj.transit.departure_time.text);
-  $(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text(obj.duration.text);
-};
-
-// Get current time from device
-function getTime(){
-  var currentdate = new Date(); 
-  var datetime = currentdate.getDate() + "/"
-              + (currentdate.getMonth()+1)  + "/" 
-              + currentdate.getFullYear() + " @ "  
-              + currentdate.getHours() + ":"  
-              + currentdate.getMinutes() + ":" 
-              + currentdate.getSeconds();
-  return datetime;
-};
 
 $(document).ready(function(){
 
@@ -73,66 +26,7 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
-  $('#make').click(trainTab);
-  $('#deletes').click(deleteTabs);
 
-  // Change station info dynamically base on clicking on route section 
-  $("#directions-panel").click(function(e) {
-    var content = $(e.target).html();
-    var theObj = $(e.target);
-    console.log(e);
-    if ( content != "" ) {
-      // Click on route part that contain subway, get parent html tag for subway information
-      if (content.toLowerCase().indexOf("subway") > -1) {
-        // Current tag related to saved subway route
-        showTransit(transit_obj, content);
-      }
-      else {
-        // Check every element in transit_obj, if one of them exist then print the related subway route 
-        for (var i = 0; i < transit_obj.length; i++) {
-          console.log(transit_obj[i]);
-          switch (e.toElement.innerText) {
-            // Arrival Stop
-            case transit_obj[i].transit.arrival_stop.name:
-              console.log(1);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Arrival Time
-            case transit_obj[i].transit.arrival_time.text:
-              console.log(2);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Staion Stop
-            case transit_obj[i].transit.departure_stop.name:
-              console.log(3);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Departure Time
-            case transit_obj[i].transit.departure_time.text:
-              console.log(4);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Distance
-            case transit_obj[i].distance.text:
-              console.log(5);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Duration 
-            case transit_obj[i].duration.text:
-              console.log(6);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Number of stops
-            case transit_obj[i].transit.num_stops + " stops":
-              console.log(7);
-              getTransitDetail(transit_obj[i]);
-              break;
-          }
-        }
-      }
-    }
-  });
-  
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -194,6 +88,116 @@ $(document).ready(function(){
   google.maps.event.addDomListener(window, 'load', initialize);
 
 });
+
+/************************************************
+	Site Navigational Elements
+************************************************/
+
+function toggleSidebar() {
+  if (sidebool == false) {  
+    document.getElementById('sidebar').className = "sidebar-appear";
+    sidebool = true;
+  }
+  else {
+    document.getElementById('sidebar').className = "sidebar-hidden";
+    sidebool = false;
+  }
+};
+
+function nextSlide() {
+  $('#navCarousel').carousel('next');
+};
+
+function prevSlide(){
+  $('#navCarousel').carousel('prev');
+};
+
+/************************************************
+	UI Messages
+************************************************/
+
+function hideMessage(){
+  $('#init-message').hide(1000);
+};
+
+function pushMessage (messageType, message) {
+  $('#message-container').hide (0);
+
+  if (messageType == 'error') {
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+  }
+  else if (messageType == 'success') {
+     document.getElementById('message-container').className = "alert alert-success";
+     document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
+  }
+  else if (messageType == 'warn') {
+      document.getElementById('message-container').className = "alert alert-warning";
+      document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
+  }
+  else {
+    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
+    console.error ("Please check your messageType.")
+  }
+
+  $('#message').text(message);
+  $('#message-container').show (1000);
+};
+
+/************************************************
+	Information Retrieval
+************************************************/
+
+// Get current location button function
+function getAddress(callback){
+  geocoder = new google.maps.Geocoder();
+
+  // If geolocation available, get position
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
+  }
+  //Else, browser doesn't support geolocaiton
+  else {
+    pushMessage ('error', 'Your browser doesn\'t support geolocation.');
+    console.log("Browser doesn't support geolocaiton");
+  }
+  // Optional callback
+  if (callback){
+    callback();
+  }
+};
+
+function successCallback(position){
+  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+  //Reverse geocoding for current location
+  geocoder.geocode({'latLng': pos}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results.length != 0) {
+        currentAddress = results[0].formatted_address;
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+};
+
+function errorCallback(){
+  
+};
+
+fillAddress = function() {
+  if (currentAddress != 'placeholder') {
+    $('#start').val (currentAddress);  
+    pushMessage ('success', "Got your current location!");
+  }
+  else {
+    pushMessage ('warn', 'Please share your location to use this feature.');
+    console.error ('User hasn\'t shared location')  
+  }
+};
 
 // Set route and request direction result 
 function calcRoute() {
@@ -260,119 +264,36 @@ function calcRoute() {
   });
 };
 
-function hideMessage(){
-  $('#init-message').hide(1000);
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+	var parent='';
+	if (tabNo) {
+		parent='div#tab'+tabNo+' ';
+	}
+
+  $(parent+'#train').text(obj.transit.line.short_name + " Train");
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text(obj.transit.departure_time.text);
+  $(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
 };
 
-function nextSlide() {
-  $('#navCarousel').carousel('next');
-};
-
-function prevSlide(){
-  $('#navCarousel').carousel('prev');
-};
-
-function homeSlide(){
-  $('#navCarousel').carousel(0);
-};
-
-function toggleSidebar() {
-  if (sidebool == false) {  
-    document.getElementById('sidebar').className = "sidebar-appear";
-    sidebool = true;
-  }
-  else {
-    document.getElementById('sidebar').className = "sidebar-hidden";
-    sidebool = false;
-  }
-};
-
-// Hide current location marker on google map 
-function hideMarker(){
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-};
-
-// Get current location button function
-function getAddress(callback){
-  geocoder = new google.maps.Geocoder();
-
-  // If geolocation available, get position
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
-  }
-  //Else, browser doesn't support geolocaiton
-  else {
-    pushMessage ('error', 'Your browser doesn\'t support geolocation.');
-    console.log("Browser doesn't support geolocaiton");
-  }
-  // Optional callback
-  if (callback){
-    callback();
-  }
-};
-
-function successCallback(position){
-  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-  //Reverse geocoding for current location
-  geocoder.geocode({'latLng': pos}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      if (results.length != 0) {
-        currentAddress = results[0].formatted_address;
-      } else {
-        alert('No results found');
-      }
-    } else {
-      alert('Geocoder failed due to: ' + status);
-    }
-  });
-};
-
-function errorCallback(){
-  
-};
-
-
-fillAddress = function() {
-  if (currentAddress != 'placeholder') {
-    $('#start').val (currentAddress);  
-    pushMessage ('success', "Got your current location!");
-  }
-  else {
-    pushMessage ('warn', 'Please share your location to use this feature.');
-    console.error ('User hasn\'t shared location')  
-  }
-};
-
-function pushMessage (messageType, message) {
-  $('#message-container').hide (0);
-
-  if (messageType == 'error') {
-    document.getElementById('message-container').className = "alert alert-danger";
-    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
-  }
-  else if (messageType == 'success') {
-     document.getElementById('message-container').className = "alert alert-success";
-     document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
-  }
-  else if (messageType == 'warn') {
-      document.getElementById('message-container').className = "alert alert-warning";
-      document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
-  }
-  else {
-    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
-    console.error ("Please check your messageType.")
-  }
-
-  $('#message').text(message);
-
-  $('#message-container').show (1000);
+// Get current time from device
+function getTime(){
+  var currentdate = new Date(); 
+  var datetime = currentdate.getDate() + "/"
+              + (currentdate.getMonth()+1)  + "/" 
+              + currentdate.getFullYear() + " @ "  
+              + currentdate.getHours() + ":"  
+              + currentdate.getMinutes() + ":" 
+              + currentdate.getSeconds();
+  return datetime;
 };
 
 function makeNewTab() {
-
 	var prevTab = 'tab' + tabCount;
 	tabCount++;
 	var newTab = 'tab' + tabCount;
@@ -385,8 +306,24 @@ function makeNewTab() {
 	$('#'+newTab).addClass("tab-pane");
 };
 
-function trainTab (obj) {
+function deleteTabs() {
+	var thisTab;
 
+	while (tabCount >= 1) {
+		thisTab = 'tab' + tabCount;
+		//Remove tab from nav bar
+		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
+		//Remove contents of tab
+		$('#'+thisTab).remove();
+		tabCount--;
+	}
+
+	tabCount = 1;
+
+	$('#tabs a:first').tab('show');
+};
+
+function trainTab (obj) {
 	makeNewTab();
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 	$('#tab'+tabCount).append (
@@ -405,26 +342,11 @@ function trainTab (obj) {
 	getTransitDetail (obj, tabCount);
 };
 
-function deleteTabs() {
-
-	var thisTab;
-
-	while (tabCount >= 1) {
-		thisTab = 'tab' + tabCount;
-		//Remove tab from nav bar
-		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
-		//Remove contents of tab
-		$('#'+thisTab).remove();
-		tabCount--;
-	}
-
-	tabCount = 1;
-
-	$('#tabs a:first').tab('show');
-};
-
 
 /*
+// Markers for current locaiton
+var markers = [];
+
 $(document).ready(function(){
   var map;
   var directionsDisplay;
@@ -499,7 +421,62 @@ $(document).ready(function(){
   //var oceanBeach = new google.maps.LatLng(40.695076256618954, -73.9809462044349);
 
   
-  
+  // Change station info dynamically base on clicking on route section 
+  $("#directions-panel").click(function(e) {
+    var content = $(e.target).html();
+    var theObj = $(e.target);
+    console.log(e);
+    if ( content != "" ) {
+      // Click on route part that contain subway, get parent html tag for subway information
+      if (content.toLowerCase().indexOf("subway") > -1) {
+        // Current tag related to saved subway route
+        showTransit(transit_obj, content);
+      }
+      else {
+        // Check every element in transit_obj, if one of them exist then print the related subway route 
+        for (var i = 0; i < transit_obj.length; i++) {
+          console.log(transit_obj[i]);
+          switch (e.toElement.innerText) {
+            // Arrival Stop
+            case transit_obj[i].transit.arrival_stop.name:
+              console.log(1);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Arrival Time
+            case transit_obj[i].transit.arrival_time.text:
+              console.log(2);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Staion Stop
+            case transit_obj[i].transit.departure_stop.name:
+              console.log(3);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Departure Time
+            case transit_obj[i].transit.departure_time.text:
+              console.log(4);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Distance
+            case transit_obj[i].distance.text:
+              console.log(5);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Duration 
+            case transit_obj[i].duration.text:
+              console.log(6);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Number of stops
+            case transit_obj[i].transit.num_stops + " stops":
+              console.log(7);
+              getTransitDetail(transit_obj[i]);
+              break;
+          }
+        }
+      }
+    }
+  });
   
   /*
   // Query google map
@@ -587,4 +564,25 @@ $(document).ready(function(){
   });
 });
 
+// If content 
+function showTransit(transit_obj, content){
+  // Retrieve route from array
+  var current_route;
+  for (var i = 0; i < transit_obj.length; i++) {
+    console.log(transit_obj[i].instructions + " + " + content);
+    if (transit_obj[i].instructions.indexOf(content) !=- 1){
+      current_route = transit_obj[i];
+      break;
+    }
+  }
+  // Print transit detail
+  getTransitDetail(current_route);
+};
+
+// Hide current location marker on google map 
+function hideMarker(){
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+};
 */
