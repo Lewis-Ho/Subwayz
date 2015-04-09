@@ -29,7 +29,6 @@ $(document).ready(function(){
   $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
 	$('#routeChange').click(function () {
-		console.log('Click')
 		var index = $('#routeChange').data('route');
 		index = (index+1)%altRouteCount;
 		deleteTabs();
@@ -248,7 +247,6 @@ function calcRoute() {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
-      console.log(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
@@ -315,7 +313,7 @@ function makeNewTab() {
 	console.log ('New Tab.');
 
 	//Adds tab to nav bar
-	$('#endOfTabs').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	$('#routeChange').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
 	//Adds contents of tab
 	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'"></div>');
 	$('#'+newTab).addClass("tab-pane");
