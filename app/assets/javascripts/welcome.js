@@ -26,6 +26,18 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
+<<<<<<< Updated upstream
+=======
+  $('#deletes').click(deleteTabs);
+	$('#routeChange').click(function () {
+		var index = $('#routeChange').data('route');
+		index= (index+1)%altRouteCount;
+		deleteTabs();
+		printRoute (savedRoutes, index);
+		$('#routeChange').data('route', index);
+	});
+
+>>>>>>> Stashed changes
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
