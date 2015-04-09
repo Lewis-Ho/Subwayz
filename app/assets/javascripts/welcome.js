@@ -8,6 +8,7 @@ var transit_obj = [];
 var currentAddress = 'placeholder';
 var sidebool = false;
 var tabCount = 0;
+var savedRoutes;
 
 $(document).ready(function(){
 
@@ -26,18 +27,15 @@ $(document).ready(function(){
   });
 
   $('#sidebar').click(toggleSidebar);
-<<<<<<< Updated upstream
-=======
   $('#deletes').click(deleteTabs);
 	$('#routeChange').click(function () {
+		console.log('Click')
 		var index = $('#routeChange').data('route');
-		index= (index+1)%altRouteCount;
+		index = (index+1)%altRouteCount;
 		deleteTabs();
 		printRoute (savedRoutes, index);
 		$('#routeChange').data('route', index);
 	});
-
->>>>>>> Stashed changes
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
@@ -251,18 +249,10 @@ function calcRoute() {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       console.log(response);
-      console.log("There are " + response.routes.length + " routes available.");
-      // Get route object
-      var route = response.routes[0].legs[0];
-      for (var i = 0; i < route.steps.length; i++) {
-        // Find all possible transit
-        if (typeof route.steps[i].transit != 'undefined' 
-        	&& route.steps[i].transit.line.vehicle.type == "SUBWAY") {
-          	trainTab (route.steps[i]);
-          	// Push to transit_obj array
-          	transit_obj.push(route.steps[i]);
-        }
-      }
+			altRouteCount = response.routes.length;
+			savedRoutes = response;
+
+			printRoute (savedRoutes, 0);
       //Move to next slide when directions have been retrieved.
       $('#navCarousel').carousel('next');
       //Disable loading icon pseudocode.
@@ -275,6 +265,19 @@ function calcRoute() {
     }
   });
 };
+
+function printRoute (routeObj, routeNo) {
+	// Get route object
+  var thisRoute = routeObj.routes[routeNo].legs[0];
+  
+  for (var i = 0; i < thisRoute.steps.length; i++) {
+  	// Find all possible transit
+    if (typeof thisRoute.steps[i].transit != 'undefined' 
+     	&& thisRoute.steps[i].transit.line.vehicle.type == "SUBWAY") {
+      	trainTab (thisRoute.steps[i]);
+    }
+  }
+}
 
 //Get details from Maps API json object
 function getTransitDetail(obj, tabNo){
