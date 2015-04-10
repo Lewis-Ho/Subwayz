@@ -214,7 +214,7 @@ function calcRoute() {
     pushMessage ('error', "Please fill in your current location and destination.");
     start='';
     end=''
-;    return;
+;   return;
   }
   else if (start == '') {
     pushMessage ('error', "Please fill in your current location.");
