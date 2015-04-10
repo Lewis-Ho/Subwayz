@@ -5,6 +5,7 @@ var directionsService;
 var geocoder;
 var currentAddress = 'placeholder';
 var tabCount = 0;
+var altRouteCount = 0;
 var savedRoutes;
 
 $(document).ready(function(){
@@ -213,8 +214,8 @@ function calcRoute() {
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
     start='';
-    end=''
-;   return;
+    end='';
+    return;
   }
   else if (start == '') {
     pushMessage ('error', "Please fill in your current location.");
