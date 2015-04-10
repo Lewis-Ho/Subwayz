@@ -255,7 +255,6 @@ function calcRoute() {
       $('#navCarousel').carousel('next');
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
-      savedRoutes = response;
     }
     else {
       //If DirectionsStatus.NOT_FOUND 
