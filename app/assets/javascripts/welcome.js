@@ -4,7 +4,6 @@ var directionsDisplay;
 var directionsService;
 var geocoder;
 var currentAddress = 'placeholder';
-var sidebool = false;
 var tabCount = 0;
 var altRouteCount = 0;
 var savedRoutes;
@@ -13,7 +12,6 @@ $(document).ready(function(){
 
   $('#message-container').hide (0);
   document.getElementById('sidebar').className = 'sidebar-hidden';
-  $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
@@ -25,16 +23,15 @@ $(document).ready(function(){
   	$(this).tab('show');
   });
 
-  $('#sidebar').click(toggleSidebar);
+  $('#sidebar #togglebtn').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
-	$('#routebutt').click(function () {
-		var index = $('#routebutt').data('route');
-		index= (index+1)%altRouteCount;
+  $('#routeChange').click(function () {
+		var index = $('#routeChange').data('route');
+		index = (index+1)%altRouteCount;
 		deleteTabs();
 		printRoute (savedRoutes, index);
-		$('#routebutt').data('route', index);
+		$('#routeChange').data('route', index);
 	});
-
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
@@ -103,13 +100,15 @@ $(document).ready(function(){
 ************************************************/
 
 function toggleSidebar() {
-  if (sidebool == false) {  
-    document.getElementById('sidebar').className = "sidebar-appear";
-    sidebool = true;
-  }
-  else {
+	var state = $('#sidebar').data('toggle');
+
+	if (state == 'hidden') {
+  	document.getElementById('sidebar').className = "sidebar-appear";
+    $('#sidebar').data('toggle', 'shown');
+	}
+  else if (state == 'shown') {
     document.getElementById('sidebar').className = "sidebar-hidden";
-    sidebool = false;
+    $('#sidebar').data('toggle', 'hidden');
   }
 };
 
@@ -204,7 +203,6 @@ fillAddress = function() {
   }
   else {
     pushMessage ('warn', 'Please share your location to use this feature.');
-    console.error ('User hasn\'t shared location')  
   }
 };
 
@@ -243,18 +241,16 @@ function calcRoute() {
     travelMode: google.maps.TravelMode.TRANSIT
   };
 
+  deleteTabs();
+
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
-      //console.log(response);
-      altRouteCount = response.routes.length;
-      /*
-      for (var i = 0; i < altRouteCount; i++) {
-      	printRoute (response, i);
-      }
-      */
-      printRoute (response, 0);
-      
+			altRouteCount = response.routes.length;
+			savedRoutes = response;
+
+			printRoute (savedRoutes, 0);
+
       //Move to next slide when directions have been retrieved.
       $('#navCarousel').carousel('next');
       //Disable loading icon pseudocode.
@@ -269,17 +265,18 @@ function calcRoute() {
   });
 };
 
-function printRoute (responseObj, routeNo) {
-    // Get route object
-    var thisRoute = responseObj.routes[routeNo].legs[0];
-    for (var i = 0; i < thisRoute.steps.length; i++) {
-      // Find all possible
-      if (typeof thisRoute.steps[i].transit != 'undefined' 
-        && thisRoute.steps[i].transit.line.vehicle.type == "SUBWAY") {
-          trainTab (thisRoute.steps[i]);
-    	}
+function printRoute (routeObj, routeNo) {
+	// Get route object
+  var thisRoute = routeObj.routes[routeNo].legs[0];
+  
+  for (var i = 0; i < thisRoute.steps.length; i++) {
+  	// Find all possible transit
+    if (typeof thisRoute.steps[i].transit != 'undefined' 
+     	&& thisRoute.steps[i].transit.line.vehicle.type == "SUBWAY") {
+      	trainTab (thisRoute.steps[i]);
     }
-};
+  }
+}
 
 //Get details from Maps API json object
 function getTransitDetail(obj, tabNo){
@@ -317,7 +314,7 @@ function makeNewTab() {
 	console.log ('New Tab.');
 
 	//Adds tab to nav bar
-	$('#endOfTabs').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	$('#routeChange').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
 	//Adds contents of tab
 	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'"></div>');
 	$('#'+newTab).addClass("tab-pane");
@@ -363,6 +360,8 @@ function trainTab (obj) {
 /*
 // Markers for current locaiton
 var markers = [];
+// Store all transit involved route 
+var transit_obj = [];
 
 $(document).ready(function(){
   var map;

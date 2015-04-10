@@ -6,13 +6,15 @@
     <title>Displaying text directions with <code>setPanel()</code></title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
   </head>
-  <div id="sidebar">
-      <button class="btn btn-default" type="button" onclick="#">
-        <span class="glyphicon glyphicon-th-large"></span>
-      </button>
-      <li><a href="#" data-target="#navCarousel" data-slide-to="0">Home</a></li>
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Messages</a></li>
+  <div id="sidebar" data-toggle="hidden">
+    <button id="togglebtn" class="btn btn-default">
+      <span class="glyphicon glyphicon-th-large"></span>
+    </button>
+  	<div id="menu" class="btn-group-vertical">
+      <button class="btn btn-default"><a href="#" data-target="#navCarousel" data-slide-to="0">Home</a></button>
+      <button class="btn btn-default"><a href="#">About Us</a></button>
+      <button class="btn btn-default"><a href="https://github.com/Lewis-Ho/DA">Project Page</a></button>
+    </div>
   </div>
 
   <div id="carousel-container" class="container-fluid">
@@ -77,7 +79,9 @@
             <div class="row">
             	<ul id="tabs" class="nav nav-tabs col-xs-11" data-tabs="tabs">
             		<li class="active"><a href="#tab0" data-toggle="tab">Directions</a></li>
-            		<span id="endOfTabs"></span>
+            		<li id="routeChange" data-route="0"><a href="#">Alt. Route
+            			<span class="glyphicon glyphicon-triangle-right"></span>
+            		</a></li>
             	</ul>
 
             	<div class="tab-content">
