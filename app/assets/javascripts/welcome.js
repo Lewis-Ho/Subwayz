@@ -3,10 +3,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 var directionsDisplay;
 var directionsService;
 var geocoder;
-// Store all transit involved route 
-var transit_obj = [];
 var currentAddress = 'placeholder';
-var sidebool = false;
 var tabCount = 0;
 var savedRoutes;
 
@@ -14,7 +11,6 @@ $(document).ready(function(){
 
   $('#message-container').hide (0);
   document.getElementById('sidebar').className = 'sidebar-hidden';
-  $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
@@ -26,9 +22,9 @@ $(document).ready(function(){
   	$(this).tab('show');
   });
 
-  $('#sidebar').click(toggleSidebar);
+  $('#sidebar #togglebtn').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
-	$('#routeChange').click(function () {
+  $('#routeChange').click(function () {
 		var index = $('#routeChange').data('route');
 		index = (index+1)%altRouteCount;
 		deleteTabs();
@@ -103,13 +99,15 @@ $(document).ready(function(){
 ************************************************/
 
 function toggleSidebar() {
-  if (sidebool == false) {  
-    document.getElementById('sidebar').className = "sidebar-appear";
-    sidebool = true;
-  }
-  else {
+	var state = $('#sidebar').data('toggle');
+
+	if (state == 'hidden') {
+  	document.getElementById('sidebar').className = "sidebar-appear";
+    $('#sidebar').data('toggle', 'shown');
+	}
+  else if (state == 'shown') {
     document.getElementById('sidebar').className = "sidebar-hidden";
-    sidebool = false;
+    $('#sidebar').data('toggle', 'hidden');
   }
 };
 
@@ -204,7 +202,6 @@ fillAddress = function() {
   }
   else {
     pushMessage ('warn', 'Please share your location to use this feature.');
-    console.error ('User hasn\'t shared location')  
   }
 };
 
@@ -242,6 +239,8 @@ function calcRoute() {
     provideRouteAlternatives: true,
     travelMode: google.maps.TravelMode.TRANSIT
   };
+
+  deleteTabs();
 
   directionsService.route(request, function(response, status) {
     console.log(response);
@@ -359,6 +358,8 @@ function trainTab (obj) {
 /*
 // Markers for current locaiton
 var markers = [];
+// Store all transit involved route 
+var transit_obj = [];
 
 $(document).ready(function(){
   var map;

@@ -28,36 +28,56 @@ body {
 ************************************************/
 
 #sidebar {
-  width: 300px;
-  max-width: 300px;
+  width: 200px;
   height: 100%;
   position: fixed;
   z-index: 2000;
   background-color: #2850AD;
-  list-style-type: none;
+	text-align: right;
 }
 
 .sidebar-hidden {
-  margin-left: -250px;
+  margin-left: -150px;
 }
 
 .sidebar-appear {
-  margin-left: 0px;
+  animation: slideIn 1s;
 }
 
-#sidebar > li > a {
-  color: orange;
-  margin: 20px;
-}
-
-#sidebar > button,
-#sidebar > button:active {
-  float: right;
+#togglebtn {
   background: none;
   border: none;
   outline: none;
   color: white;
+	float: right;
+  width: 50px;
+  height: 100%;
+}
+
+#menu button {
+  background: none;
+  border: none;
+  outline: none;
+  text-align: left;
   margin: 10px;
+  border-radius: 10px;
+}
+
+#menu button:hover {
+  background: black;
+}
+
+#menu button > a {
+  color: white;
+}
+
+@keyframes slideIn {
+	0% {
+		margin-left: -150px;
+	}
+	100% {
+		margin-left: 0px;
+	}
 }
 
 /************************************************
@@ -67,7 +87,6 @@ body {
 #carousel-container {
   padding-top: 30px;
   padding-bottom: 80px;
-  margin-left: 40px;
   min-height: 300px;
   max-width: 1000px;
 }
@@ -84,6 +103,12 @@ body {
   overflow-y: hidden;
 }
 
+@media (max-width: 767px) {
+	#carousel-container {
+		margin-left: 50px;
+	}
+}
+
 /************************************************
 	2a. Form (Slide 1) Content
 ************************************************/
@@ -95,6 +120,12 @@ body {
 
 .glyphicon-map-marker.redMarker {
   color: #EE352E;
+}
+
+#message-container {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn.gobtn {
