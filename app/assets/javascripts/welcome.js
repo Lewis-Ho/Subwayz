@@ -332,7 +332,7 @@ function deleteTabs() {
 		tabCount--;
 	}
 
-	tabCount = 0;
+	tabCount = 1;
 
 	$('#tabs a:first').tab('show');
 };
