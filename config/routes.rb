@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
 
+  get 'calendars/new'
+
+  get 'votes/new'
+
+  get 'trips/new'
+
+  get 'stops/new'
+
+  get 'stop_times/new'
+
+  get 'routes/new'
+
   get 'poll'    => 'result#poll'
   get 'result'  => 'result#result'
 
