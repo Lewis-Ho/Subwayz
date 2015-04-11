@@ -21,13 +21,14 @@ brew install mysql (homebrew required!)
 
 To Write Database to mySQL:
 
-create a database called subwaz in MySQL
+create database subwaz; (this commend should be done in mysql)
+in the rails app write in the commend line the following: rake db:migrate
 
-download the file sql file
+only after the previous commend go to mysql and type use subwaz;
 
-Enter the following commend:
+source /"you need to specify the path"/subwaz.sql;
 
-mysql -u username -p subwaz < subwaz.sql  (specify your subwaz.sql location)
+you are done
 
 
 To Retrive From cmd:
