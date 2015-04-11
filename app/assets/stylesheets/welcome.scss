@@ -1,33 +1,149 @@
-#html, #body {
+/************************************************
+	0. HTML, Body, General Styles
+************************************************/
+
+html {
   height: 100%;
   width: 100%;
 }
 
+body {
+	height: 100%;
+  width: 100%;
+}
+
+.centered {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.something {
+  background-color: white;
+  border-color: red;
+}
+
+/************************************************
+	1. Sidebar
+************************************************/
+
+#sidebar {
+  width: 200px;
+  height: 100%;
+  position: fixed;
+  z-index: 2000;
+  background-color: #2850AD;
+	text-align: right;
+}
+
+.sidebar-hidden {
+  margin-left: -150px;
+}
+
+.sidebar-appear {
+  animation: slideIn 1s;
+}
+
+#togglebtn {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+	float: right;
+  width: 50px;
+  height: 100%;
+}
+
+#menu button {
+  background: none;
+  border: none;
+  outline: none;
+  text-align: left;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+#menu button:hover {
+  background: black;
+}
+
+#menu button > a {
+  color: white;
+}
+
+@keyframes slideIn {
+	0% {
+		margin-left: -150px;
+	}
+	100% {
+		margin-left: 0px;
+	}
+}
+
+/************************************************
+	2. Carousel
+************************************************/
+
 #carousel-container {
+  padding-top: 30px;
+  padding-bottom: 80px;
   min-height: 300px;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
-#panel {
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  margin-left: -180px;
-  z-index: 5;
-  background-color: #fff;
-  padding: 5px;
-  border: 1px solid #999;
+.carousel-indicators {
+  background-color: #2850AD;
 }
 
-#logo {
-  margin-top: 30px;
+.carousel-indicators > .active {
+	background-color: #6CBE45;
 }
+
+.container-fluid {
+  overflow-y: hidden;
+}
+
+@media (max-width: 767px) {
+	#carousel-container {
+		margin-left: 50px;
+	}
+}
+
+/************************************************
+	2a. Form (Slide 1) Content
+************************************************/
+
+.form-group.searchBar {
+  margin-bottom: 15px;
+  max-width: 400px;
+}
+
+.glyphicon-map-marker.redMarker {
+  color: #EE352E;
+}
+
+#message-container {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn.gobtn {
+  border-color: orange;
+  color: orange;
+  background: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/************************************************
+	2b. Info (Slide 2) Content
+************************************************/
 
 #map-canvas {
   min-width: 200px;
-  max-width: 300px;
   min-height: 200px;
-  max-height: 300px;
+  max-width: 400px;
+  max-height: 400px;
   border-style: solid;
   border-color: red;
 }
@@ -35,7 +151,7 @@
 #directions-panel, #station-info {
   border-style:solid;
   border-color: gray;
-  min-width: 200px;
+  max-width: 400px;
   height: 400px;
   overflow-y: scroll;
 }
@@ -46,33 +162,6 @@
 
 #alt-routes-btn {
   overflow: visible;
-}
-
-.something {
-  background-color: white;
-  border-color: red;
-}
-
-.carousel-indicators > .active {
-  background-color: orange;
-}
-
-.carousel-indicators {
-  background-color: blue;
-}
-
-.form-group.searchBar {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 15px;
-}
-
-.btn.gobtn {
-  border-color: orange;
-  color: orange;
-  background: none;
-  margin-top: 15px;
-  margin-bottom: 15px;
 }
 
 .btn-default.btn-circle {
@@ -88,43 +177,6 @@
   color: white;
 }
 
-.glyphicon-map-marker.redMarker {
-  color: #EE352E;
-}
-
-.container-fluid {
-  max-width: 800px;
-  overflow-y: hidden;
-}
-
-#sidebar {
-  width: 300px;
-  max-width: 300px;
-  height: 100%;
-  position: fixed;
-  z-index: 2000;
-  background-color: #2850AD;
-  list-style-type: none;
-}
-
-.sidebar-hidden {
-  margin-left: -250px;
-}
-
-.sidebar-appear {
-  margin-left: 0px;
-}
-
-#sidebar > li > a {
-  color: orange;
-  margin: 20px;
-}
-
-#sidebar > button, #sidebar > button:active {
-  float: right;
-  background: none;
-  border: none;
-  outline: none;
-  color: white;
-
-}
+/************************************************
+	2c. Survey (Slide 3) Content
+************************************************/

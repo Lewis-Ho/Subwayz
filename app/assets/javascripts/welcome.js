@@ -3,116 +3,36 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 var directionsDisplay;
 var directionsService;
 var geocoder;
-// Store all transit involved route 
-var transit_obj = [];
-// Markers for current locaiton
-var markers = [];
 var currentAddress = 'placeholder';
-var sidebool = false;
-
-// If content 
-function showTransit(transit_obj, content){
-  // Retrieve route from array
-  var current_route;
-  for (var i = 0; i < transit_obj.length; i++) {
-    console.log(transit_obj[i].instructions + " + " + content);
-    if (transit_obj[i].instructions.indexOf(content) !=- 1){
-      current_route = transit_obj[i];
-      break;
-    }
-  }
-  // Print transit detail
-  getTransitDetail(current_route);
-};
-
-// Get current time from device
-function getTime(){
-  var currentdate = new Date(); 
-  var datetime = currentdate.getDate() + "/"
-              + (currentdate.getMonth()+1)  + "/" 
-              + currentdate.getFullYear() + " @ "  
-              + currentdate.getHours() + ":"  
-              + currentdate.getMinutes() + ":" 
-              + currentdate.getSeconds();
-  return datetime;
-};
-
-function getTransitDetail(obj){
-  $("#train").text(obj.transit.line.short_name + " Train");
-  $("#train-stop-depart").text(obj.transit.departure_stop.name);
-  $("#train-stop-end").text(obj.transit.arrival_stop.name);
-  $("#num-stop").text(obj.transit.num_stops + " Stops");
-  $("#arrival-time").text(obj.transit.arrival_time.text);
-  $("#departure-time").text(obj.transit.departure_time.text);
-  $("#distance").text(obj.distance.text);
-  $("#current-time").text("Current time : " + getTime());
-};
+var tabCount = 0;
+var altRouteCount = 0;
+var savedRoutes;
 
 $(document).ready(function(){
 
   $('#message-container').hide (0);
   document.getElementById('sidebar').className = 'sidebar-hidden';
-  $('#navCarousel').off('keydown.bs.carousel');
   // Keeps form pointAB from refreshing the page.
-  $('#pointAB').on('submit', function() { return false; } );
-
-  // Change station info dynamically base on clicking on route section 
-  $("#directions-panel").click(function(e) {
-    var content = $(e.target).html();
-    var theObj = $(e.target);
-    console.log(theObj);
-    if ( content != "" ) {
-      // Click on route part that contain subway, get parent html tag for subway information
-      if (content.toLowerCase().indexOf("subway") > -1) {
-        // Current tag related to saved subway route
-        showTransit(transit_obj, content);
-      }
-      else {
-        // Check every element in transit_obj, if one of them exist then print the related subway route 
-        for (var i = 0; i < transit_obj.length; i++) {
-          console.log(transit_obj[i]);
-          switch (e.toElement.innerText) {
-            // Arrival Stop
-            case transit_obj[i].transit.arrival_stop.name:
-              console.log(1);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Arrival Time
-            case transit_obj[i].transit.arrival_time.text:
-              console.log(2);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Staion Stop
-            case transit_obj[i].transit.departure_stop.name:
-              console.log(3);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Departure Time
-            case transit_obj[i].transit.departure_time.text:
-              console.log(4);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Distance
-            case transit_obj[i].distance.text:
-              console.log(5);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Duration 
-            case transit_obj[i].duration.text:
-              console.log(6);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Number of stops
-            case transit_obj[i].transit.num_stops + " stops":
-              console.log(7);
-              getTransitDetail(transit_obj[i]);
-              break;
-          }
-        }
-      }
-    }
+  $('#pointAB').on('submit', function (e) { 
+  	e.preventDefault(); 
   });
-  
+
+  $('#tabs').tab();
+  $('#tabs a').click( function (e) { 
+  	e.preventDefault();
+  	$(this).tab('show');
+  });
+
+  $('#sidebar #togglebtn').click(toggleSidebar);
+  $('#deletes').click(deleteTabs);
+  $('#routeChange').click(function () {
+		var index = $('#routeChange').data('route');
+		index = (index+1)%altRouteCount;
+		deleteTabs();
+		printRoute (savedRoutes, index);
+		$('#routeChange').data('route', index);
+	});
+
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -175,71 +95,21 @@ $(document).ready(function(){
 
 });
 
-// Set route and request direction result 
-function calcRoute() {
-  var start = document.getElementById('start').value;
-  var end = document.getElementById('end').value;
+/************************************************
+	Site Navigational Elements
+************************************************/
 
-  if (start == '' && end == '') {
-    pushMessage ('error', "Please fill in your current location and destination.");
-    start='';
-    end='';
-    return;
-  }
-  else if (start == '') {
-    pushMessage ('error', "Please fill in your current location.");
-    start='';
-    end='';
-    return;
-  }
-  else if (end == '') {
-    pushMessage ('error', "Please fill in your destination.");
-    start='';
-    end='';
-    return;
-  }
-  else {
-    start += ' new york city';
-    end += ' new york city';
-  }
+function toggleSidebar() {
+	var state = $('#sidebar').data('toggle');
 
-  var request = {
-    origin: start,
-    destination: end,
-    travelMode: google.maps.TravelMode.TRANSIT
-  };
-
-  directionsService.route(request, function(response, status) {
-    console.log(response);
-    if (status == google.maps.DirectionsStatus.OK) {
-      directionsDisplay.setDirections(response);
-      console.log(response);
-      console.log("There are " + response.routes.length + " routes available.");
-      // Get route object
-      var route = response.routes[0].legs[0];
-      for (var i = 0; i < route.steps.length; i++) {
-        // Find all possible transit 
-        if (route.steps[i].travel_mode == "TRANSIT") {
-          console.log(route.steps[i].transit.line.short_name);
-          // Push to transit_obj array
-          transit_obj.push(route.steps[i]);
-        }
-      }
-      //Move to next slide when directions have been retrieved.
-      $('#navCarousel').carousel('next');
-      //Disable loading icon pseudocode.
-      //$('#loadingIcon').hide(300);
-    }
-    else {
-      //If DirectionsStatus.NOT_FOUND 
-      //or DirectionsStatus.ZERO_RESULTS
-      pushMessage ('error', 'No directions found.');
-    }
-  });
-};
-
-function hideMessage(){
-  $('#init-message').hide(1000);
+	if (state == 'hidden') {
+  	document.getElementById('sidebar').className = "sidebar-appear";
+    $('#sidebar').data('toggle', 'shown');
+	}
+  else if (state == 'shown') {
+    document.getElementById('sidebar').className = "sidebar-hidden";
+    $('#sidebar').data('toggle', 'hidden');
+  }
 };
 
 function nextSlide() {
@@ -250,27 +120,41 @@ function prevSlide(){
   $('#navCarousel').carousel('prev');
 };
 
-function homeSlide(){
-  $('#navCarousel').carousel(0);
+/************************************************
+	UI Messages
+************************************************/
+
+function hideMessage(){
+  $('#init-message').hide(1000);
 };
 
-function toggleSidebar() {
-  if (sidebool == false) {  
-    document.getElementById('sidebar').className = "sidebar-appear";
-    sidebool = true;
+function pushMessage (messageType, message) {
+  $('#message-container').hide (0);
+
+  if (messageType == 'error') {
+    document.getElementById('message-container').className = "alert alert-danger";
+    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+  }
+  else if (messageType == 'success') {
+     document.getElementById('message-container').className = "alert alert-success";
+     document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
+  }
+  else if (messageType == 'warn') {
+      document.getElementById('message-container').className = "alert alert-warning";
+      document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
   }
   else {
-    document.getElementById('sidebar').className = "sidebar-hidden";
-    sidebool = false;
+    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
+    console.error ("Please check your messageType.")
   }
+
+  $('#message').text(message);
+  $('#message-container').show (1000);
 };
 
-// Hide current location marker on google map 
-function hideMarker(){
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-};
+/************************************************
+	Information Retrieval
+************************************************/
 
 // Get current location button function
 function getAddress(callback){
@@ -312,7 +196,6 @@ function errorCallback(){
   
 };
 
-
 fillAddress = function() {
   if (currentAddress != 'placeholder') {
     $('#start').val (currentAddress);  
@@ -320,36 +203,166 @@ fillAddress = function() {
   }
   else {
     pushMessage ('warn', 'Please share your location to use this feature.');
-    console.error ('User hasn\'t shared location')  
   }
 };
 
-function pushMessage (messageType, message) {
-  $('#message-container').hide (0);
+// Set route and request direction result 
+function calcRoute() {
+  var start = document.getElementById('start').value;
+  var end = document.getElementById('end').value;
 
-  if (messageType == 'error') {
-    document.getElementById('message-container').className = "alert alert-danger";
-    document.getElementById('icon').className = "glyphicon glyphicon-remove-sign";
+  if (start == '' && end == '') {
+    pushMessage ('error', "Please fill in your current location and destination.");
+    start='';
+    end='';
+    return;
   }
-  else if (messageType == 'success') {
-     document.getElementById('message-container').className = "alert alert-success";
-     document.getElementById('icon').className = "glyphicon glyphicon-ok-sign";
+  else if (start == '') {
+    pushMessage ('error', "Please fill in your current location.");
+    start='';
+    end='';
+    return;
   }
-  else if (messageType == 'warn') {
-      document.getElementById('message-container').className = "alert alert-warning";
-      document.getElementById('icon').className = "glyphicon glyphicon-exclaimation-sign";
+  else if (end == '') {
+    pushMessage ('error', "Please fill in your destination.");
+    start='';
+    end='';
+    return;
   }
   else {
-    //Congrats. Senpai has noticed your ability to break shit. Rejoice.
-    console.error ("Please check your messageType.")
+    start += ' new york city';
+    end += ' new york city';
   }
 
-  $('#message').text(message);
+  var request = {
+    origin: start,
+    destination: end,
+    provideRouteAlternatives: true,
+    travelMode: google.maps.TravelMode.TRANSIT
+  };
 
-  $('#message-container').show (1000);
+  deleteTabs();
+
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+			altRouteCount = response.routes.length;
+			savedRoutes = response;
+
+			printRoute (savedRoutes, 0);
+
+      //Move to next slide when directions have been retrieved.
+      $('#navCarousel').carousel('next');
+      //Disable loading icon pseudocode.
+      //$('#loadingIcon').hide(300);
+      savedRoutes = response;
+    }
+    else {
+      //If DirectionsStatus.NOT_FOUND 
+      //or DirectionsStatus.ZERO_RESULTS
+      pushMessage ('error', 'No directions found.');
+    }
+  });
 };
 
+function printRoute (routeObj, routeNo) {
+	// Get route object
+  var thisRoute = routeObj.routes[routeNo].legs[0];
+  
+  for (var i = 0; i < thisRoute.steps.length; i++) {
+  	// Find all possible transit
+    if (typeof thisRoute.steps[i].transit != 'undefined' 
+     	&& thisRoute.steps[i].transit.line.vehicle.type == "SUBWAY") {
+      	trainTab (thisRoute.steps[i]);
+    }
+  }
+}
+
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+	var parent='';
+	if (tabNo) {
+		parent='div#tab'+tabNo+' ';
+	}
+
+  $(parent+'#train').text(obj.transit.line.short_name + " Train");
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text(obj.transit.departure_time.text);
+  $(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
+};
+
+// Get current time from device
+function getTime(){
+  var currentdate = new Date(); 
+  var datetime = currentdate.getDate() + "/"
+              + (currentdate.getMonth()+1)  + "/" 
+              + currentdate.getFullYear() + " @ "  
+              + currentdate.getHours() + ":"  
+              + currentdate.getMinutes() + ":" 
+              + currentdate.getSeconds();
+  return datetime;
+};
+
+function makeNewTab() {
+	var prevTab = 'tab' + tabCount;
+	tabCount++;
+	var newTab = 'tab' + tabCount;
+	console.log ('New Tab.');
+
+	//Adds tab to nav bar
+	$('#routeChange').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');
+	//Adds contents of tab
+	$('div.tab-content #'+prevTab).after('<div id="'+newTab+'"></div>');
+	$('#'+newTab).addClass("tab-pane");
+};
+
+function deleteTabs() {
+	var thisTab;
+
+	while (tabCount >= 1) {
+		thisTab = 'tab' + tabCount;
+		//Remove tab from nav bar
+		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
+		//Remove contents of tab
+		$('#'+thisTab).remove();
+		tabCount--;
+	}
+
+	tabCount = 1;
+
+	$('#tabs a:first').tab('show');
+};
+
+function trainTab (obj) {
+	makeNewTab();
+	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
+	$('#tab'+tabCount).append (
+			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
+			  <p>Station Info:</p>\
+			  <p id="train"></p>\
+		    <p id="train-stop-depart"></p>\
+		    <p id="train-stop-end"></p>\
+		    <p id="num-stop"></p>\
+		    <p id="arrival_time"></p>\
+		    <p id="departure_time"></p>\
+		    <p id="distance"></p>\
+		    <p id="duration"></p>\
+		    <!-- <%= link_to "an article", @station%> -->\
+		  </div>');
+	getTransitDetail (obj, tabCount);
+};
+
+
 /*
+// Markers for current locaiton
+var markers = [];
+// Store all transit involved route 
+var transit_obj = [];
+
 $(document).ready(function(){
   var map;
   var directionsDisplay;
@@ -424,7 +437,62 @@ $(document).ready(function(){
   //var oceanBeach = new google.maps.LatLng(40.695076256618954, -73.9809462044349);
 
   
-  
+  // Change station info dynamically base on clicking on route section 
+  $("#directions-panel").click(function(e) {
+    var content = $(e.target).html();
+    var theObj = $(e.target);
+    console.log(e);
+    if ( content != "" ) {
+      // Click on route part that contain subway, get parent html tag for subway information
+      if (content.toLowerCase().indexOf("subway") > -1) {
+        // Current tag related to saved subway route
+        showTransit(transit_obj, content);
+      }
+      else {
+        // Check every element in transit_obj, if one of them exist then print the related subway route 
+        for (var i = 0; i < transit_obj.length; i++) {
+          console.log(transit_obj[i]);
+          switch (e.toElement.innerText) {
+            // Arrival Stop
+            case transit_obj[i].transit.arrival_stop.name:
+              console.log(1);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Arrival Time
+            case transit_obj[i].transit.arrival_time.text:
+              console.log(2);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Staion Stop
+            case transit_obj[i].transit.departure_stop.name:
+              console.log(3);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Departure Time
+            case transit_obj[i].transit.departure_time.text:
+              console.log(4);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Distance
+            case transit_obj[i].distance.text:
+              console.log(5);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Duration 
+            case transit_obj[i].duration.text:
+              console.log(6);
+              getTransitDetail(transit_obj[i]);
+              break;
+            // Number of stops
+            case transit_obj[i].transit.num_stops + " stops":
+              console.log(7);
+              getTransitDetail(transit_obj[i]);
+              break;
+          }
+        }
+      }
+    }
+  });
   
   /*
   // Query google map
@@ -512,4 +580,25 @@ $(document).ready(function(){
   });
 });
 
+// If content 
+function showTransit(transit_obj, content){
+  // Retrieve route from array
+  var current_route;
+  for (var i = 0; i < transit_obj.length; i++) {
+    console.log(transit_obj[i].instructions + " + " + content);
+    if (transit_obj[i].instructions.indexOf(content) !=- 1){
+      current_route = transit_obj[i];
+      break;
+    }
+  }
+  // Print transit detail
+  getTransitDetail(current_route);
+};
+
+// Hide current location marker on google map 
+function hideMarker(){
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+};
 */

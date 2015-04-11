@@ -12,7 +12,7 @@ gem 'geocoder', '~> 1.2.7'
 gem 'google_places'
 
 # Adds Bootstrap CSS assets.
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass', '~> 3.3.4.1'
 # Adds proper vendor prefixes to CSS code when compiled.
 gem 'autoprefixer-rails'
 # Bootstrap guide here: 
@@ -34,6 +34,9 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+# Use jquery-ui for tabbing functionality. jquery version must be >3.0.
+# gem 'jquery-ui-rails'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

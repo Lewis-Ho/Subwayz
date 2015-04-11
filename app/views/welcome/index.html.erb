@@ -6,32 +6,32 @@
     <title>Displaying text directions with <code>setPanel()</code></title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
   </head>
-  <body>
-  
-  <div id="sidebar" class="sidebar-appear">
-      <button class="btn btn-default" type="button" onclick="toggleSidebar()">
-        <span class="glyphicon glyphicon-th-large"></span>
-      </button>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Messages</a></li>
+  <div id="sidebar" data-toggle="hidden">
+    <button id="togglebtn" class="btn btn-default">
+      <span class="glyphicon glyphicon-th-large"></span>
+    </button>
+  	<div id="menu" class="btn-group-vertical">
+      <button class="btn btn-default"><a href="#" data-target="#navCarousel" data-slide-to="0">Home</a></button>
+      <button class="btn btn-default"><a href="#">About Us</a></button>
+      <button class="btn btn-default"><a href="https://github.com/Lewis-Ho/DA">Project Page</a></button>
+    </div>
   </div>
 
   <div id="carousel-container" class="container-fluid">
-  <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false">
+  <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false">
 
       <div class="carousel-inner">
 
         <div class="item active">
           <div class="col-xs-12">
-            <img id="logo" src="logo.png" class="img-responsive" alt="Logo">
+            <img id="logo" src="logo.png" class="img-responsive centered" alt="Logo">
             <form id="pointAB" role="form">
 
               <div class="row">
-                <div class="form-group searchBar"> 
+                <div class="form-group searchBar centered "> 
                   <label for="pointA">Start:</label>
                     <div class="input-group">
-                      <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
+                      <input id="start" type="tetx" class="form-control" data-bind="value:start" placeholder="Current Location"/>
                       <span class="input-group-btn">
                         <button class="btn btn-default" type="button" onClick="getAddress(fillAddress)">
                           <span class="glyphicon glyphicon-map-marker redMarker"></span>
@@ -42,12 +42,12 @@
                 </div>
 
               <div class="row">
-                <div class="form-group searchBar">
+                <div class="form-group searchBar centered">
                     <label for="pointB">End:</label>
                     <div class="input-group">
                       <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
                       <span class="input-group-btn">
-                        <button class="btn btn-default" data-slide="next" onclick="calcRoute(); hideMessage(); hideMarker();">
+                        <button class="btn btn-default" data-slide="next" onclick="calcRoute(); hideMessage();">
                           Go
                         </button>
                       </span>
@@ -66,44 +66,53 @@
         </div>
       
       <div class="item">
-        <div class="col-xs-9">
-          <div class="row row-same-height">
+        <div class="col-xs-12">
+          <div class="row">
             <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
-            <div id="directions-panel" class="col-xs-11 col-xs-height col-sm-3 col-sm-height">
-              <div id="init-message">
-              <p>Select point A and B</p>
-              </div>
             </div>
-            <div id="station-info" class="col-xs-11 col-xs-height col-sm-2 col-sm-height">
-              <p>Station Info:</p>
-              <p id="train"></p>
-              <p id="train-stop-depart"></p>
-              <p id="train-stop-end"></p>
-              <p id="num-stop"></p>
-              <p id="arrival-time"></p>
-              <p id="departure-time"></p>
-              <p id="distance"></p>
-              <p id="duration"></p>
-              <p id="current-time"></p>
+
+            <div class="row">
+            	<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            		<li class="active"><a href="#tab0" data-toggle="tab">Directions</a></li>
+            		<li id="routeChange" data-route="0"><a href="#">Alt. Route
+            			<span class="glyphicon glyphicon-triangle-right"></span>
+            		</a></li>
+            	</ul>
+
+            	<div class="tab-content">
+	            	<div id="tab0" class="tab-pane active">
+  	          		<div id="directions-panel" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">
+              			<div id="init-message">
+              				<p>Select point A and B</p>
+              			</div>	
+					</div>	
+					</div>
+            	</div>
             </div>
-          </div>
-          </div>
-          <!--
-          <div id="alt-routes-btn" class="col-xs-2">
-            <button class="btn btn-default btn-circle">1</button>
-            <button class="btn btn-default btn-circle">2</button>
-            <button class="btn btn-default btn-circle">3</button>  
-          </div>
-          -->
+        	</div>
         </div>
-      </div>
-    </div>  
+    
+    	<div class="item">
+    		<div class="col-xs-12">
+    			<div class="row row-same-height jumbotron" style="background: black; border-radius: 30px; margin-top:30px; text-align: center; color: white;">
+    				<p>Does the information seem correct?</p>
+    			</div>
+    			<div class="btn-group-vertical" style="margin-left: auto; margin-right: auto;">
+    				<button class="btn btn-default">Yes</button>
+    				<button class="btn btn-default">No</button>
+    			</div>
+    		</div>
+    	</div>
+
+    </div>
+  </div>  
   </div>
 
   <nav class="navbar navbar-default navbar-fixed-bottom">
     <ol class="carousel-indicators">
-      <li data-target="#navCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#navCarousel" data-slide-to="1" class="active"></li>
+      <li id="marker1" data-target="#navCarousel" data-slide-to="0" class="active"></li>
+      <li id="marker2" data-target="#navCarousel" data-slide-to="1"></li>
+      <li id="marker3" data-target="#navCarousel" data-slide-to="2"></li>
     </ol>
   </nav>
 
