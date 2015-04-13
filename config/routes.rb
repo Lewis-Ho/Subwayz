@@ -1,6 +1,16 @@
 Rails.application.routes.draw do
 
+  resource :calendars
+  resource :routes
+  resource :stop_times
+  resource :stops
+  resource :trips
+  resource :votes
+
+
   get 'calendars/new'
+
+  get 'welcome/show'
 
   get 'votes/new'
 
@@ -12,7 +22,7 @@ Rails.application.routes.draw do
 
   get 'routes/new'
 
-  get 'poll'    => 'result#poll'
+  get 'poll'    => 'votes#new'
   get 'result'  => 'result#result'
 
   get 'index'   => 'welcome#index'

@@ -31,6 +31,18 @@ class WelcomeController < ApplicationController
   def station
   end
   
+  def show
+   # @route_number = Route.find_by(params[5])
+   # @ser_tri_headsign = Trip.find_by(params[:@route_number])
+   # @st_times = StopTime.find_by(params[:@ser_tri_headsign])
+   # @stopz = Stop.find_by(params[:@st_times])
+
+   @test = 5;
+
+   @cal = Route.find_by_sql("select * from routes join trips on '#{@test}' =routes.route_id join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")
+  end
+
+  
   def create
     @lng_lat = [params[:lng].to_f, params[:lat].to_f]
     @alt = params[:alt].to_f

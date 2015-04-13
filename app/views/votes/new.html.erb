@@ -1,2 +1,10 @@
-<h1>Votes#new</h1>
-<p>Find me in app/views/votes/new.html.erb</p>
+<% provide(:title, 'Vote!') %> <h1>Vote</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+<%= form_for(@vote) do |f| %> <%= f.label :yes %>
+<%= f.text_field :yes %>
+<%= f.label :no %>
+<%= f.email_field :no %>
+<% end %>
+  </div>
+</div>
