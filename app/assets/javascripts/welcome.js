@@ -244,18 +244,17 @@ function calcRoute() {
   deleteTabs();
 
   directionsService.route(request, function(response, status) {
+    console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
 			printRoute (savedRoutes, 0);
-
       //Move to next slide when directions have been retrieved.
       $('#navCarousel').carousel('next');
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
-      savedRoutes = response;
     }
     else {
       //If DirectionsStatus.NOT_FOUND 
