@@ -331,7 +331,7 @@ function deleteTabs() {
 		tabCount--;
 	}
 
-	tabCount = 1;
+	tabCount = 0;
 
 	$('#tabs a:first').tab('show');
 };
