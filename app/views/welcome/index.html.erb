@@ -13,7 +13,7 @@
   	<div id="menu" class="btn-group-vertical">
       <button class="btn btn-default" data-target="#navCarousel" data-slide-to="0">Home</button>
       <button class="btn btn-default"><a href="#">About Us</a></button>
-      <button class="btn btn-default"><a href="https://github.com/Lewis-Ho/DA">Project Page</a></button>
+      <button class="btn btn-default"><a href="https://github.com/Lewis-Ho/DA">Github</a></button>
       <button class="btn btn-default" data-target="#navCarousel" data-slide-to="3">Feedback</button>
     </div>
   </div>
@@ -29,10 +29,10 @@
             <form id="pointAB" role="form">
 
               <div class="row">
-                <div class="form-group searchBar centered "> 
+                <div class="form-group searchBar centered"> 
                   <label for="pointA">Start:</label>
                     <div class="input-group">
-                      <input id="start" type="tetx" class="form-control" data-bind="value:start" placeholder="Current Location"/>
+                      <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
                       <span class="input-group-btn">
                         <button class="btn btn-default" type="button" onClick="getAddress(fillAddress)">
                           <span class="glyphicon glyphicon-map-marker redMarker"></span>
@@ -108,6 +108,16 @@
     	<div class="item">
     		<div class="col-xs-12">
     			<div class="row">
+    				<div class="form-group centered">
+    					<label for="feedback">Please let us know your thoughts below. Thanks!</label>
+		    				<div class="input-group centered">
+		    					<input id="feedback" class="form-control">
+		    				</div>
+		    		</div>
+    			</div>
+
+    			<div class="row">
+    				<button class="btn btn-default"></button>
     			</div>
     		</div>
     	</div>
