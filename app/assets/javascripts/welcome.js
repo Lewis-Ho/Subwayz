@@ -239,7 +239,7 @@ function calcRoute() {
     end += ' new york city';
   }
 
-  //Add "Directions" button to sidebar after initial search.
+  //Add "Directions" button to #sidebar #menu after initial search.
   if ($('#goBtn').data('initial') == true) {
     $('#goBtn').data('initial', false);
     $('#menu button[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1">Directions</button>');
