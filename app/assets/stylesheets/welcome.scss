@@ -43,28 +43,32 @@ body {
   animation: slideIn 1s;
 }
 
-.sidebar-hidden #togglebtn {
+#togglebtn {
   background: none;
   border: none;
+  border-left: 1px solid white;
+  border-radius: 0px;
   outline: none;
-  color: white;
-  float: right;
   width: 50px;
   height: 100%;
+  float: right;
+}
+
+.sidebar-hidden #togglebtn {
+  color: white;
 }
 
 .sidebar-appear #togglebtn {
-  background: none;
-  border: none;
-  outline: none;
   color: red;
-  float: right;
-  width: 50px;
-  height: 100%;
 }
 
-#toggle {
-  display: inline-block;
+#togglebtn #label {
+  position: absolute;
+  top: 30px;
+  transform: rotate(90deg) translate(30px, 35px);
+  transform-origin: top, right;
+  font-weight: bold;
+  font-size: 125%
 }
 
 #menu button {
@@ -77,8 +81,9 @@ body {
   color: white;
 }
 
-#menu button:hover {
+#menu button:hover, #menu button:active {
   background: black;
+  font-weight: bold;
 }
 
 #menu button > a {
