@@ -239,6 +239,12 @@ function calcRoute() {
     end += ' new york city';
   }
 
+  //Add "Directions" button to sidebar after initial search.
+  if ($('#goBtn').data('initial') == true) {
+    $('#goBtn').data('initial', false);
+    $('#menu button[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1">Directions</button>');
+  }
+
   var request = {
     origin: start,
     destination: end,
@@ -315,7 +321,6 @@ function makeNewTab() {
 	var prevTab = 'tab' + tabCount;
 	tabCount++;
 	var newTab = 'tab' + tabCount;
-	console.log ('New Tab.');
 
 	//Adds tab to nav bar
 	$('#routeChange').before('<li><a href="#'+newTab+'" data-toggle="tab">TAG LABEL</a></li>');

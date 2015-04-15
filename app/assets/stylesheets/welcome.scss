@@ -84,6 +84,10 @@ body {
   font-size: 125%
 }
 
+#menu {
+  float: left;
+}
+
 #menu button, #menu a {
   background: none;
   border: none;
@@ -120,8 +124,12 @@ body {
   max-width: 1000px;
 }
 
-.carousel-indicators .active {
-	background-color: $mta-lime;
+.carousel-indicators {
+	background-color: $mta-blue;
+}
+
+.carousel-indicators li .active {
+  background-color: $mta-red;
 }
 
 .container-fluid {
@@ -162,6 +170,8 @@ body {
   min-height: 200px;
   max-width: 400px;
   max-height: 400px;
+  border-style: solid;
+  border-color: $mta-blue;
 }
 
 #directions-panel, #station-info {
