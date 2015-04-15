@@ -23,7 +23,7 @@ $(document).ready(function(){
   	$(this).tab('show');
   });
 
-  $('#sidebar #togglebtn').click(toggleSidebar);
+  $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
   $('#routeChange').click(function () {
 		var index = $('#routeChange').data('route');

@@ -43,11 +43,21 @@ body {
   animation: slideIn 1s;
 }
 
-#togglebtn {
+.sidebar-hidden #togglebtn {
   background: none;
   border: none;
   outline: none;
   color: white;
+  float: right;
+  width: 50px;
+  height: 100%;
+}
+
+.sidebar-appear #togglebtn {
+  background: none;
+  border: none;
+  outline: none;
+  color: orange;
   float: right;
   width: 50px;
   height: 100%;
