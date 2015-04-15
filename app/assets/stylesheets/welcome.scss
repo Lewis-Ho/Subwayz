@@ -71,7 +71,7 @@ body {
   font-size: 125%
 }
 
-#menu button {
+#menu button, #menu a {
   background: none;
   border: none;
   outline: none;
@@ -81,13 +81,10 @@ body {
   color: white;
 }
 
-#menu button:hover, #menu button:active {
+#menu button:hover, #menu button:active,
+#menu a:hover, #menu a:active {
   background: black;
   font-weight: bold;
-}
-
-#menu button > a {
-  color: white;
 }
 
 @keyframes slideIn {
