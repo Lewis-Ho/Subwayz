@@ -7,6 +7,8 @@ var currentAddress = 'placeholder';
 var tabCount = 0;
 var altRouteCount = 0;
 var savedRoutes;
+// Store all transit involved route 
+var transit_obj = [];
 
 $(document).ready(function(){
 
@@ -244,6 +246,8 @@ function calcRoute() {
   deleteTabs();
 
   directionsService.route(request, function(response, status) {
+    console.log(response);
+    transit_obj = response.routes.legs;
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
@@ -354,6 +358,33 @@ function trainTab (obj) {
 		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
 	getTransitDetail (obj, tabCount);
+};
+
+// Delay Voting Button send requirnment to vote, temporary return nearest schedule
+// Hardcode Data for database query function
+function voteButton(id){
+  console.log(id);
+  currentVote = id;
+  // station name  -  transit: departure_stop: name: "DeKalb Av"
+  // train  -  transit: line: short_name: "Q"
+  // headsign  -  transit: headsign: "Astoria - Ditmars Blvd"
+  // Current time
+  var currentDate = new Date(); 
+  var dateTime = currentDate.getHours() + ":"  
+               + currentDate.getMinutes() + ":" 
+               + currentDate.getSeconds();
+               
+  $.ajax({
+    type:'GET',
+    url:'/welcome/show',
+    data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
+    success:function(data){
+      //I assume you want to do something on controller action execution success?
+      //$(this).addClass('done');
+      console.log(data);
+      console.log(data[0]);
+    }
+  });
 };
 
 
