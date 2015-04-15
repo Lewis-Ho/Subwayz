@@ -17,6 +17,11 @@ $(document).ready(function(){
   	e.preventDefault(); 
   });
 
+  $('#feedback').on('submit', function (e) {
+    e.preventDefault();
+    $('#feedback-content').attr('disabled', 'true');
+  });
+
   $('#tabs').tab();
   $('#tabs a').click( function (e) { 
   	e.preventDefault();
