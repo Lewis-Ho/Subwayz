@@ -41,5 +41,13 @@ Rails.application.configure do
 
   # Log level changed to warn. 
   # Comment out line to change log level back to :debug
-  config.log_level = :warn
+  config.log_level = :debug
+
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  # Change to true to allow email to be sent during development.
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
 end

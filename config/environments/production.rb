@@ -77,12 +77,20 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { :host => 'subwayz.herokuapp.com' }
+  # ActionMailer Config
+  # Setup for production - deliveries, no errors raised
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default :charset => "utf-8"
+
   # Login to Mandrill is set through local environment variables.
-  # config.action_mailer.smtp_settings = {
-  #   :address    => "smtp.mandrillapp.com",
-  #   :port       => 587,
-  #   :user_name  => ENV["MANDRILL_USER"],
-  #   :password   => ENV["MANDRILL_PASS"]
-  # }
+  config.action_mailer.smtp_settings = {
+   :address    => "smtp.mandrillapp.com",
+   :port       => 587,
+   :user_name  => ENV["MANDRILL_USER"],
+   :password   => ENV["MANDRILL_PASS"]
+  }
 
 end
