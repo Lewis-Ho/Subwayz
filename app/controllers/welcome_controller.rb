@@ -41,8 +41,11 @@ class WelcomeController < ApplicationController
     /@type = params[:topic]/
     @mail_body = params[:textarea]
 
-    Feedback.send_feedback(@user_email, @mail_body)
-    render none: true
+    Feedback.send_feedback(@user_email, @mail_body).deliver_now
+
+    render :json => @mail_body
   end
-  
+
 end
+
+  

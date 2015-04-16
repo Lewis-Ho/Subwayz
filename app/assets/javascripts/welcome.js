@@ -372,9 +372,11 @@ function emailSend () {
     data: { 
       replyTo: $('#user-email').val(), 
       //topic: null, 
-      textarea: $('#feedback-content').val() 
+      textarea: $('#feedback-content').val()
     }
-    //success:
+    /*success: function(data){
+      console.log ("Success");
+    }*/
   });
 };
 /*
