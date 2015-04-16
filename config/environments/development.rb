@@ -41,7 +41,7 @@ Rails.application.configure do
 
   # Log level changed to warn. 
   # Comment out line to change log level back to :debug
-  config.log_level = :warn
+  config.log_level = :debug
 
   # ActionMailer Config
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }

@@ -44,6 +44,5 @@ class WelcomeController < ApplicationController
     Feedback.send_feedback(@user_email, @mail_body)
     render none: true
   end
-
-
+  
 end
