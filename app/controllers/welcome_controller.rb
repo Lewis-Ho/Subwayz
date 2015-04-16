@@ -35,4 +35,14 @@ class WelcomeController < ApplicationController
     @lng_lat = [params[:lng].to_f, params[:lat].to_f]
     @alt = params[:alt].to_f
   end
+
+  def submit_feedback
+    @user_email = params[:replyTo]
+    /@type = params[:topic]/
+    @contents = params[:textarea]
+
+    Feedback.email_feedback (user_email, contents)
+  end
+
+
 end

@@ -367,12 +367,12 @@ function trainTab (obj) {
 
 function emailSend () {
   $.ajax({
-    type: 'GET',
-    url: 'feedback/sendFeedback',
+    type: 'POST',
+    url: 'welcome/submit_feedback',
     data: { 
       replyTo: null, 
-      topic: null, 
-      contents: $('#feedback-content').val() 
+      //topic: null, 
+      textarea: $('#feedback-content').val() 
     }
     //success:
   });
