@@ -6,8 +6,10 @@ Rails.application.routes.draw do
   get 'index'   => 'welcome#index'
   get 'station' => 'welcome#station'
 
+  get 'feedback/sendFeedback'
+
   # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  # See ho# w all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

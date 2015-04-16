@@ -76,4 +76,13 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Login to Mandrill is set through local environment variables.
+  # config.action_mailer.smtp_settings = {
+  #   :address    => "smtp.mandrillapp.com",
+  #   :port       => 587,
+  #   :user_name  => ENV["MANDRILL_USER"],
+  #   :password   => ENV["MANDRILL_PASS"]
+  # }
+
 end

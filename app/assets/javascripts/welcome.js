@@ -1,4 +1,4 @@
-src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
 var directionsDisplay;
 var directionsService;
@@ -365,7 +365,18 @@ function trainTab (obj) {
 	getTransitDetail (obj, tabCount);
 };
 
-
+function emailSend () {
+  $.ajax({
+    type: 'GET',
+    url: 'feedback/sendFeedback',
+    data: { 
+      replyTo: null, 
+      topic: null, 
+      contents: $('#feedback-content').val() 
+    }
+    //success:
+  });
+};
 /*
 // Markers for current locaiton
 var markers = [];
