@@ -370,7 +370,7 @@ function emailSend () {
     type: 'POST',
     url: 'welcome/submit_feedback',
     data: { 
-      replyTo: null, 
+      replyTo: $('#user-email').val(),
       //topic: null, 
       textarea: $('#feedback-content').val() 
     }

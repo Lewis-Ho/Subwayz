@@ -41,7 +41,11 @@ class WelcomeController < ApplicationController
     /@type = params[:topic]/
     @contents = params[:textarea]
 
-    Feedback.email_feedback (user_email, contents)
+
+    /Feedback.email_feedback (@user_email, @contents)/
+    Feedback.send_feedback (@contents)
+
+    render nothing: true
   end
 
 

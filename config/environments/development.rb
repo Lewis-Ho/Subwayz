@@ -42,4 +42,8 @@ Rails.application.configure do
   # Log level changed to warn. 
   # Comment out line to change log level back to :debug
   config.log_level = :warn
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  
 end
