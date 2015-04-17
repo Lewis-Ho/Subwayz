@@ -1,4 +1,4 @@
-  src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
 var directionsDisplay;
 var directionsService;
@@ -19,8 +19,11 @@ $(document).ready(function(){
 
   $('#feedback').on('submit', function (e) {
     e.preventDefault();
-    $('#user-email').attr('disabled', 'true');
-    $('#feedback-content').attr('disabled', 'true');
+    if ($('#feedback-content').val() != '') {
+      $('#user-email').attr('disabled', 'true');
+      $('#feedback-content').attr('disabled', 'true');
+      $('#navCarousel').carousel(0);
+    }
   });
 
   $('#tabs').tab();
@@ -366,19 +369,22 @@ function trainTab (obj) {
 	getTransitDetail (obj, tabCount);
 };
 
-function emailSend () {  
-  $.ajax({
-    type: 'POST',
-    url: 'welcome/submit_feedback',
-    data: { 
-      replyTo: $('#user-email').val(), 
-      //topic: null, 
-      textarea: $('#feedback-content').val()
-    }
-    /*success: function(data){
-      console.log ("Success");
-    }*/
-  });
+function emailSend () {
+  if ($('#feedback-content').val() != '') {
+    $.ajax({
+      type: 'POST',
+      url: 'welcome/submit_feedback',
+      data: { 
+        replyTo: $('#user-email').val(),
+        textarea: $('#feedback-content').val()
+      }
+    });
+    pushMessage ('success', 'Message sent! Thank you!')
+  }
+  else {
+    $('#navCarousel').carousel(0);
+    pushMessage ('error', 'Empty Message not sent!');
+  }
 };
 /*
 // Markers for current locaiton

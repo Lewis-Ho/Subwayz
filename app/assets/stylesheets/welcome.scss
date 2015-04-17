@@ -53,7 +53,7 @@ body {
 }
 
 .sidebar-appear {
-  animation: slideIn 1s ease-out;
+  animation: slideIn 0.5s linear;
 }
 
 @keyframes slideIn {
@@ -157,7 +157,7 @@ body {
   margin-right: auto;
 }
 
-#start:focus, #end:focus {
+input.form-control:focus, textarea.form-control:focus {
   border-color: $mta-blue;
 }
 
@@ -189,12 +189,29 @@ body {
 	2c. Survey (Slide 2) Content
 ************************************************/
 
+.voting.jumbotron {
+  background: black;
+  border-radius: 30px;
+  margin-top: 30px;
+  max-width: 800px;
+  color: white;
+  text-align: center;
+}
+
+#vote-yes, #vote-no {
+  min-width: 400px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /************************************************
 	2c. Feedback (Slide 3) Content
 ************************************************/
+
 .form-group.centered {
   margin-bottom: 15px;
-  max-width: 800px;
+  max-width: 400px;
 }
 
 #feedback button {
