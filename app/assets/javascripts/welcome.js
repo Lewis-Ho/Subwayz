@@ -19,6 +19,7 @@ $(document).ready(function(){
 
   $('#feedback').on('submit', function (e) {
     e.preventDefault();
+    $('#user-email').attr('disabled', 'true');
     $('#feedback-content').attr('disabled', 'true');
   });
 
@@ -365,7 +366,7 @@ function trainTab (obj) {
 	getTransitDetail (obj, tabCount);
 };
 
-function emailSend () {
+function emailSend () {  
   $.ajax({
     type: 'POST',
     url: 'welcome/submit_feedback',
