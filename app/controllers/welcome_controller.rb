@@ -38,7 +38,6 @@ class WelcomeController < ApplicationController
 
   def submit_feedback
     @user_email = params[:replyTo]
-    @type = params[:topic]
     @mail_body = params[:textarea]
 
     Feedback.send_feedback(@user_email, @mail_body).deliver_now
