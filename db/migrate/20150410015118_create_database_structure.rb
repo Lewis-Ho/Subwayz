@@ -73,20 +73,10 @@ ActiveRecord::Schema.define(version: 0) do
 
 
   create_table "votes", force: :cascade do |t|
-    t.integer "monday_d",     limit: 4
-    t.integer "monday_nd",    limit: 4
-    t.integer "tuesday_d",    limit: 4
-    t.integer "tuesday_nd",   limit: 4
-    t.integer "wednesday_d",  limit: 4
-    t.integer "wednesday_nd", limit: 4
-    t.integer "thursday_d",   limit: 4
-    t.integer "thursday_nd",  limit: 4
-    t.integer "friday_d",     limit: 4
-    t.integer "friday_nd",    limit: 4
-    t.integer "saturday_d",   limit: 4
-    t.integer "saturday_nd",  limit: 4
-    t.integer "sunday_d",     limit: 4
-    t.integer "sunday_nd",    limit: 4
+    t.integer "stop_time_id", limit: 11
+    t.datetime "d_t",         limit: 6
+    t.string  "day",          limit: 40
+    t.integer "vote",         limit: 5
   end
 
 
@@ -101,11 +91,11 @@ ActiveRecord::Schema.define(version: 0) do
   add_index "trips", ["service_id"], name: "service_id", using: :btree
 
 
- # add_foreign_key :stop_times, :stops, column: :stop_id, primary_key: "stop_id"
- # add_foreign_key :stop_times, :trips, column: :trip_id, primary_key: "trip_id"
- # add_foreign_key :trips, :calendars, column: :service_id, primary_key: "service_id"
- # add_foreign_key :trips, :routes, column: :route_id, primary_key: "route_id"
- # add_foreign_key :votes, :stop_times, column: :id, primary_key: "id" 
+ add_foreign_key :stop_times, :stops, column: :stop_id, primary_key: "stop_id"
+  add_foreign_key :stop_times, :trips, column: :trip_id, primary_key: "trip_id"
+  add_foreign_key :trips, :calendars, column: :service_id, primary_key: "service_id"
+ add_foreign_key :trips, :routes, column: :route_id, primary_key: "route_id"
+ add_foreign_key :votes, :stop_times, column: :id, primary_key: "id" 
 
 
 end
