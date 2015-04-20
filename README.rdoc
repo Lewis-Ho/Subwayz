@@ -1,58 +1,38 @@
-== README
+== Subwayz
 
-SubwA-Z
+Subwayz is an application for the average New Yorker who may want to retrieve the status of the subway train they intend to take as a part of their daily commute. 
+Unsatisfied with the unreliability of the current information available about train arrivals, our group has decided to provide the average commuter with supplementary information. 
+This will be done by gathering information via crowdsourcing, as we believe that other fellow commuters will be a more reliable source of information.
 
-Requirement:
+For detail info, please read the requirement statement from the following link: 
+https://docs.google.com/document/d/1DrKZiFVwtXI6AxkrDDBm9jEn-lAT-_vL_0pCDnTTxx4/edit
 
-Ruby version 2.2.0
+== Our Team
 
-mySQL (under db folder)
+This is a team project which build by the following members:
+- Lewis Ho
+- Luther Ling
+- Mo Alamin
+- Ruth Hauptman
+- Ameya Pednekar
 
+== Installation
 
+require Ruby version 2.2.0, MySQL, HTML5 supported browser
 
-To Check if you have mySQL install:
+== Usage
 
-/usr/local/bin
+1. Fork it!
+2. On the directory, run `rails server` on your terminal
 
-if there is no mysql, run this:
+== Contributing
 
-brew install mysql (homebrew required!)
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
 
+== Credits
 
-To Write Database to mySQL:
-
-create database subwaz; (this commend should be done in mysql)
-in the rails app write in the commend line the following: rake db:migrate
-
-only after the previous commend go to mysql and type use subwaz;
-
-source /"you need to specify the path"/subwaz.sql;
-
-you are done
-
-
-To Retrive From cmd:
-
-USE subwaz;
-
-SHOW TABLES;
-
-
-
-
-
-Things To Add:
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
+Special thanks to professor Brizan and all classmate from Spring 2015 capstone class for all the suggestions!
