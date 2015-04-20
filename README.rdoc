@@ -1,13 +1,10 @@
-== README
-
-SubwA-Z
+SubwAyZ
 
 Requirement:
 
 Ruby version 2.2.0
 
 mySQL (under db folder)
-
 
 
 To Check if you have mySQL install:

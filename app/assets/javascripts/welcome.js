@@ -10,8 +10,6 @@ var savedRoutes;
 
 $(document).ready(function(){
 
-  $('#message-container').hide (0);
-  document.getElementById('sidebar').className = 'sidebar-hidden';
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 

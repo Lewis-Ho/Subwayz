@@ -46,14 +46,18 @@ body {
   z-index: 2000;
   background-color: $mta-blue;
   text-align: right;
+  margin-left: -150px;
 }
 
 .sidebar-hidden {
-  margin-left: -150px;
+  animation: slideIn 0.5s linear;
+  animation-fill-mode: forwards;
+  animation-direction: reverse;
 }
 
 .sidebar-appear {
   animation: slideIn 0.5s linear;
+  animation-fill-mode: forwards;
 }
 
 @keyframes slideIn {
@@ -62,6 +66,15 @@ body {
   }
   100% {
     margin-left: 0px;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: -150px;
   }
 }
 
@@ -74,14 +87,15 @@ body {
   width: 50px;
   height: 100%;
   float: right;
-}
-
-.sidebar-hidden #togglebtn {
   color: white;
 }
 
-.sidebar-appear #togglebtn {
-  color: black;
+#sidebar.sidebar-hidden #togglebtn {
+  color: white;
+}
+
+#sidebar.sidebar-appear #togglebtn {
+  color: #6B89CD;
 }
 
 #togglebtn #menu-label {
@@ -109,7 +123,7 @@ body {
 
 #menu button:hover, #menu button:active,
 #menu a:hover, #menu a:active {
-  background: black;
+  background: #6B89CD;
   font-weight: bold;
 }
 
