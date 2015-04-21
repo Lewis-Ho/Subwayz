@@ -96,6 +96,8 @@ ActiveRecord::Schema.define(version: 20150410015118) do
     t.integer  "vote",         limit: 8
   end
 
+  add_index "votes", ["stop_time_id"], name: "index_votes_on_stop_time_id", using: :btree
+
   add_foreign_key "stop_times", "stops", primary_key: "stop_id"
   add_foreign_key "stop_times", "trips", primary_key: "trip_id"
   add_foreign_key "trips", "calendars", column: "service_id", primary_key: "service_id"

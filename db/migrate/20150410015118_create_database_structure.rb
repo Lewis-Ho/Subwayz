@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 0) do
 
 
   create_table "votes", force: :cascade do |t|
-    t.integer "stop_time_id", limit: 11
+    t.belongs_to :stop_time, index: true
     t.datetime "d_t",         limit: 6
     t.string  "day",          limit: 40
     t.integer "vote",         limit: 5
