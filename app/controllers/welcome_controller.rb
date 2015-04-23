@@ -3,9 +3,25 @@ class WelcomeController < ApplicationController
   require 'rubygems'
   require 'open-uri'
   require 'json'
+  include  StopTimesHelper
   
   def index
+  
   end
+
+
+  def try
+    v = StopTime.try
+    @test = {}
+    #@test = v.pluck(:id)
+    keys = [:id, :stop_sequence]
+    values = [v.pluck(:id),v.pluck(:stop_sequence)]
+    #@test = Hash[*values]
+    @test = Hash[*keys.zip(values).flatten]
+    Vote.create(stop_time_id: @test[:id],d_t: Time.now, day: "sunday", vote: 1)
+
+  end  
+
   
   def show
     @test = 5;
@@ -21,11 +37,17 @@ class WelcomeController < ApplicationController
     @transit_name = params[:transit_name];
     #puts @transit_name;
     
+  
+
+   
+
+
     # Current Vote
     @vote = params[:vote];
     # puts @vote;
     
     ## Modify query to get nearest schedule
+    
     #@my_test=Route.find_by_sql("select trips.trip_headsign from routes join trips on routes.route_id='#{@test}' join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")
     @tripid = Route.find_by_sql("select trips.trip_id, routes.route_id from routes join trips on routes.route_id='#{@test}' join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")
     @stop_arrivingAt= Route.find_by_sql("select stop_times.stop_id from routes join trips on '#{@test}' =routes.route_id join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")

@@ -8,4 +8,8 @@ class Calendar < ActiveRecord::Base
     @test=Calendar.first.trips
   end
 
+   def self.try
+    @test=Calendar.joins(:trips)
+  end
+
 end
