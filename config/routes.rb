@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   get 'welcome/show'
 
+  get 'welcome/insert' => 'welcome#insert'
+
   get 'votes/new'
 
   get 'trips/new'

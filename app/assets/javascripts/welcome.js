@@ -376,10 +376,23 @@ function voteButton(id){
 
   // transit_name - transit_obj: transit: line: name: "Boardway Express"
                
-  $.ajax({
+  // $.ajax({
+  //   type:'GET',
+  //   url:'/welcome/show',
+  //   data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
+  //   success:function(data){
+  //     //I assume you want to do something on controller action execution success?
+  //     //$(this).addClass('done');
+  //     console.log(data);
+  //     console.log(data[0]);
+  //   }
+  // });
+
+
+$.ajax({
     type:'GET',
-    url:'/welcome/show',
-    data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote, transit_name: "Broadway Express"},
+    url:'/welcome/insert',
+    data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
@@ -387,6 +400,9 @@ function voteButton(id){
       console.log(data[0]);
     }
   });
+
+
+
 };
 
 
