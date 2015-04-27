@@ -58,7 +58,9 @@ class WelcomeController < ApplicationController
 
     ## Insert vote to vote table
    
-   render :json => @stop_arrivingAt
+    #@v = Route.pluck (:trip_id)
+
+   render :json => @tripid
    
   
     # respond_to do |format|
@@ -87,9 +89,13 @@ class WelcomeController < ApplicationController
     @stop_time=Route.find_by_sql("select stop_times.arrival_time from routes join trips on '#{@test}' =routes.route_id join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")
     @stp_time_id=Route.find_by_sql("select stop_times.id from routes join trips on '#{@test}'=routes.route_id join stop_times on trips.trip_id = stop_times.trip_id join stops on stop_times.stop_id = stops.stop_id limit 1")
 
-  
+
   Vote.create(stop_time_id:'' , d_t: Time.now, day: @stop_arrivingAt ,vote:'' )
+
+
   end
+
+
 
   def create
     @lng_lat = [params[:lng].to_f, params[:lat].to_f]
