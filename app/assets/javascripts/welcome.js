@@ -7,6 +7,8 @@ var currentAddress = 'placeholder';
 var tabCount = 0;
 var altRouteCount = 0;
 var savedRoutes;
+var map;
+var pos;
 
 $(document).ready(function(){
 
@@ -61,39 +63,57 @@ $(document).ready(function(){
   
   // Initial map 
   function initialize() {
-    
-    var map;
-    var pos;
-    
     // Default pos for map will be center of Manhattan
     if(!pos){
       pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
     }
     
     var mapOptions = {
+      center: pos,
       zoom: 13
     };
   
+    // Get geolocation, output error if geolcation API not support
     getAddress();
 
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    map.setCenter(pos);
     
     // Google Direction text route
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
     //Needed to resize maps 
-    google.maps.event.addDomListener (map, 'idle', function(){
-      google.maps.event.trigger (map, 'resize');
-    });
-
+    // google.maps.event.addDomListener (map, 'idle', function(){
+    //   google.maps.event.trigger (map, 'resize');
+    // });
   }
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
-
+  //google.maps.event.trigger(map, 'resize'); 
+  
+  $('.carousel-indicators li').click(function() {
+    // Get/Set map-canvas class using off-left technique
+    if(this.id == 'marker2'){
+      document.getElementById('map-canvas').className = "show-canvas";
+      // Center map to prevent 
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);
+    } else {
+      document.getElementById('map-canvas').className = "off-left_hide";
+    }
+  });	
 });
+
+// function showMapCanvas() {
+//   var mapClass = document.getElementById('map-canvas').className;
+//   if ( mapClass == "off-left_hide") {
+//     document.getElementById('map-canvas').className = "show-canvas";
+//   } else {
+//     document.getElementById('map-canvas').className = "off-left_hide";
+//   }
+// };
 
 /************************************************
 	Site Navigational Elements
@@ -175,6 +195,7 @@ function getAddress(callback){
   }
 };
 
+// Browser Supported Geolocation API, Get Current Location
 function successCallback(position){
   var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -192,10 +213,12 @@ function successCallback(position){
   });
 };
 
+// Error Message for Geolocation API
 function errorCallback(){
-  
+  alert('Geocoder failed');
 };
 
+// Callback Function Used From the Front
 fillAddress = function() {
   if (currentAddress != 'placeholder') {
     $('#start').val (currentAddress);  
@@ -206,7 +229,7 @@ fillAddress = function() {
   }
 };
 
-// Set route and request direction result 
+// Take inputs from user and set route. Function get request direction result 
 function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
@@ -253,6 +276,10 @@ function calcRoute() {
 
       //Move to next slide when directions have been retrieved.
       $('#navCarousel').carousel('next');
+      document.getElementById('map-canvas').className = "show-canvas";
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
       savedRoutes = response;
@@ -276,7 +303,7 @@ function printRoute (routeObj, routeNo) {
       	trainTab (thisRoute.steps[i]);
     }
   }
-}
+};
 
 //Get details from Maps API json object
 function getTransitDetail(obj, tabNo){
