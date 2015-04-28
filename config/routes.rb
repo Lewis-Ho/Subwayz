@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   get 'welcome/show'
 
-  get 'welcome/insert' => 'welcome#insert'
+  get 'welcome/insert'
   
   get 'welcome/try'
 
