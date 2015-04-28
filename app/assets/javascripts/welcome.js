@@ -272,6 +272,7 @@ function calcRoute() {
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
+      diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
 
       //Move to next slide when directions have been retrieved.
@@ -291,6 +292,37 @@ function calcRoute() {
     }
   });
 };
+
+// Differentiate Transit Type for SavedRoute Object
+function diffRoute (routeObj){
+  for (i = 0; i < routeObj.routes.length; i++){
+  	// Get route object
+    var thisRoute = routeObj.routes[i].legs[0];
+    for (var j = 0; j < thisRoute.steps.length; j++) {
+      // Only check obj which is related to transit
+      if (thisRoute.steps[j].hasOwnProperty('transit') ) {
+        // Switch case for vehicle type
+        switch(thisRoute.steps[j].transit.line.vehicle.type) {
+            case "RAIL":
+                console.log(thisRoute.steps[j].instructions + ' ' + "RAIL");
+                break;
+            case "SUBWAY":
+                console.log(thisRoute.steps[j].instructions + ' ' + "SUBWAY");
+                break;
+            case "BUS":
+                console.log(thisRoute.steps[j].instructions + ' ' + "BUS");
+                break;
+            case "FERRY":
+                console.log(thisRoute.steps[j].instructions + ' ' + "FERRY");
+                break;
+            default:
+                console.log(thisRoute.steps[j].instructions + ' ' + "OTHER");
+        }
+      }
+    } // End Steps Loop
+  } // End Routes Loop
+}
+    
 
 function printRoute (routeObj, routeNo) {
 	// Get route object
