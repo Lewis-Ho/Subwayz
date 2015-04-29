@@ -204,6 +204,9 @@ function successCallback(position){
     if (status == google.maps.GeocoderStatus.OK) {
       if (results.length != 0) {
         currentAddress = results[0].formatted_address;
+        // Write into start textbox
+        var start = document.getElementById('start');
+        start.value = currentAddress;
       } else {
         alert('No results found');
       }
@@ -233,6 +236,8 @@ fillAddress = function() {
 function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
+
+  
 
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
@@ -272,11 +277,19 @@ function calcRoute() {
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
+      // Differentiate transit type
       diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
 
       //Move to next slide when directions have been retrieved.
-      $('#navCarousel').carousel('next');
+      console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 40){
+        $('#navCarousel').carousel('prev');
+      } else {
+        $('#navCarousel').carousel('next');
+      }
+      
+      //$('#navCarousel').carousel('next');
       document.getElementById('map-canvas').className = "show-canvas";
       var center = map.getCenter();
       google.maps.event.trigger(map, "resize");
@@ -293,14 +306,25 @@ function calcRoute() {
   });
 };
 
+// Compare the first train step station location with user geolocation
+function getVotePage (){
+  console.log()
+}
+
 // Differentiate Transit Type for SavedRoute Object
 function diffRoute (routeObj){
+  console.log(routeObj);
+  //console.log(routeObj.routes.legs[].steps[1]);
+  //console.log(routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.D + " " + routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.k);
+  
   for (i = 0; i < routeObj.routes.length; i++){
   	// Get route object
     var thisRoute = routeObj.routes[i].legs[0];
     for (var j = 0; j < thisRoute.steps.length; j++) {
       // Only check obj which is related to transit
       if (thisRoute.steps[j].hasOwnProperty('transit') ) {
+        console.log(thisRoute.steps[j].transit.arrival_stop.location.D + " " + thisRoute.steps[j].transit.arrival_stop.location.k)
+        
         // Switch case for vehicle type
         switch(thisRoute.steps[j].transit.line.vehicle.type) {
             case "RAIL":
