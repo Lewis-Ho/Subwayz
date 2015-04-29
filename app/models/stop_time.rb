@@ -14,16 +14,16 @@ class StopTime < ActiveRecord::Base
 
 
     if @day_of_week=="saturday"
-      test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {saturday: day}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
+      test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {saturday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
       
 
       else if @day_of_week=="sunday"
-        test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {saturday: day}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
+        test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {sunday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
        
 
        else
-      #pluck the time and subtract from when 
-            test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {saturday: day}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
+      
+            test = StopTime.joins(:stop,trip: [:calendar, :route]).where(stops:{stop_name: sname}).where(calendars: {monday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
   
     end
   end
