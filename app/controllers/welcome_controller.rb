@@ -70,38 +70,38 @@ end
 
 
 
-  # def try
+  def try
 
-    
-  #   @current_time_convert=Time.parse(params[:time]); #with date and time
-    
-  #   @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
-    
-  #   @time_now_ET=DateTime.now.strftime("%H:%M:%S");
 
-  #       @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
-        
-  #       puts @current_time_final;
-  #       puts @time_now_ET;
-  #       puts @answer;
+    @current_time_convert=Time.parse(params[:time]); #with date and time
 
-  #   #transit_name
-  #   @transit_name = params[:transit_name];
+    @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
 
-  #   @curr_time= params[:time]
+    @time_now_ET=DateTime.now.strftime("%H:%M:%S");
 
-  #   v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
-    
-  
+        @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
 
-  #   keys = [:id, :stop_sequence]
-  #   values = [v.pluck(:id),v.pluck(:stop_sequence)]
-    
-  #   @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
-  #   puts @test;
-  #   Vote.create(stop_time_id: @test[:id],d_t: @time_now_ET, day: params[:day], vote: @answer) #time is in UTC (make it ot EST)
+        puts @current_time_final;
+        puts @time_now_ET;
+        puts @answer;
 
-  # end  
+    #transit_name
+    @transit_name = params[:transit_name];
+
+    @curr_time= params[:time]
+
+    v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
+
+
+
+    keys = [:id, :stop_sequence]
+    values = [v.pluck(:id),v.pluck(:stop_sequence)]
+
+    @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
+    puts @test;
+    Vote.create(stop_time_id: @test[:id],d_t: @time_now_ET, day: params[:day], vote: @answer) #time is in UTC (make it ot EST)
+
+  end 
 
   
   
