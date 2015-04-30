@@ -14,51 +14,53 @@ class WelcomeController < ApplicationController
 
 
 def prediction_alg
-  @station_name = params[:station_name];
-
-    #"Q"
-    @train = params[:train];
-
-    #"Astoria - Ditmars Blvd"
-    @headsign = params[:headsign];
-
-    #dataTime
-    @current_time = params[:time]; 
-    @current_time_convert=Time.parse(@current_time); #with date and time
     
 
-    @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
+    @day=params[:day];
     
-    @time_now_ET=DateTime.now.strftime("%H:%M:%S");
+    @dateNow = DateTime.now.strftime("%Y-%m-%d");
+    @dateTom=DateTime.tomorrow.strftime("%Y-%m-%d");
+    v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
+    
+    keys = [:stop_sequence, :trip_id, :arrival_time, :id]
+    values = [v.pluck("stop_times.stop_sequence"),v.pluck(:trip_id),v.pluck("stop_times.arrival_time"), v.pluck("stop_times.id")]
+    
+    @temp = Hash[*keys.zip(values).flatten] #creates things from array to a hash
+    
+    
+    @sumxy=Vote.sum_xy(@temp[:trip_id],@dateTom,@dateNow);
+    @sumXX=Vote.sum_xx(@temp[:trip_id],@dateTom,@dateNow);
+    @sumX=Vote.sum_x(@temp[:trip_id],@dateTom,@dateNow);
+    @sumY=Vote.sum_y(@temp[:trip_id],@dateTom,@dateNow);
+    @xyCount =Vote.XY_rowCount(@temp[:trip_id],@dateTom,@dateNow);
 
-        @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
-        # x = [answer.pluck(:minutes)]
-        #@answer= ((@current_time_final-@time_now_ET)/60);
-       
-       
-        puts @current_time_final;
-        puts @time_now_ET;
-        puts @answer;
-       
+    @slope = ((@xyCount*@sumxy)-((@sumX)*(@sumY)))/((@xyCount*@sumXX)-(@sumX*@sumX)).to_f;
 
-    #transit_name
-    @transit_name = params[:transit_name];
+    @intercept = (((@sumY)-(@slope*@sumX))/@xyCount).to_f;
 
-    @dayOfWeek= params[:day];
 
-    @curr_time= params[:time]
+    @rEquation = @intercept +(@slope*@temp[:stop_sequence]).to_f
 
-  
 
-    v = StopTime.try(@dayOfWeek,@station_name,@train, @curr_time)
-  
-    #@test = v.pluck(:id)
+    @temp_one = (@temp[:id]-@temp[:stop_sequence]+1).to_i;
 
-    keys = [:id, :stop_sequence]
-    values = [v.pluck(:id),v.pluck(:stop_sequence)]
-    #puts values;
-    #@test = Hash[*values]
-    @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
+     g=StopTime.where(id: @temp_one)
+    @b=g.pluck(:id,:stop_sequence,:arrival_time,:trip_id)
+    # @j=b;
+
+    puts @temp_one;
+    puts @b;
+
+
+   # puts @j;
+   #  puts @sumxy;
+   #  puts @sumXX;
+   #  puts @sumX;
+   #  puts @sumY;
+   #  puts @xyCount;
+   # puts @slope;
+   # puts @intercept;
+   # puts @rEquation;
 
 end
 
@@ -68,54 +70,38 @@ end
 
 
 
-  def try
+  # def try
 
-@headsign=(params[:headsign]);
-    @current_time_convert=Time.parse(params[:time]); #with date and time
     
-
-    @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
+  #   @current_time_convert=Time.parse(params[:time]); #with date and time
     
-    @time_now_ET=DateTime.now.strftime("%H:%M:%S");
+  #   @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
+    
+  #   @time_now_ET=DateTime.now.strftime("%H:%M:%S");
 
-        @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
-        # x = [answer.pluck(:minutes)]
-        #@answer= ((@current_time_final-@time_now_ET)/60);
-       
-       
-        puts @current_time_final;
-        puts @time_now_ET;
-        puts @answer;
-       
-       
-
-
-
-puts @headsign;
+  #       @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
         
+  #       puts @current_time_final;
+  #       puts @time_now_ET;
+  #       puts @answer;
 
-    #transit_name
-    @transit_name = params[:transit_name];
+  #   #transit_name
+  #   @transit_name = params[:transit_name];
 
+  #   @curr_time= params[:time]
+
+  #   v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
     
-
-    @curr_time= params[:time]
-
   
 
-    v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], @headsign)
+  #   keys = [:id, :stop_sequence]
+  #   values = [v.pluck(:id),v.pluck(:stop_sequence)]
     
-    #@test = v.pluck(:id)
+  #   @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
+  #   puts @test;
+  #   Vote.create(stop_time_id: @test[:id],d_t: @time_now_ET, day: params[:day], vote: @answer) #time is in UTC (make it ot EST)
 
-    keys = [:id, :stop_sequence]
-    values = [v.pluck(:id),v.pluck(:stop_sequence)]
-    #puts values;
-    #@test = Hash[*values]
-    @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
-    puts @test;
-    Vote.create(stop_time_id: @test[:id],d_t: @time_now_ET, day: params[:day], vote: @answer) #time is in UTC (make it ot EST)
-
-  end  
+  # end  
 
   
   

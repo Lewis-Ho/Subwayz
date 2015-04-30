@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   
   get 'welcome/try'
 
+  get 'welcome/prediction_alg'
+
   get 'votes/new'
 
   get 'trips/new'
