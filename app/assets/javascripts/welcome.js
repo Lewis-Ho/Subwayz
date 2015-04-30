@@ -374,6 +374,7 @@ function voteButton(id){
                + currentDate.getMinutes() + ":" 
                + currentDate.getSeconds();
 
+
   // transit_name - transit_obj: transit: line: name: "Boardway Express"
                
   // $.ajax({
@@ -392,7 +393,7 @@ function voteButton(id){
 $.ajax({
     type:'GET',
     url:'/welcome/try',
-    data: { station_name : "Canal St", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:10:00"},
+    data: { station_name : "Canal St", train : "Q", headsign : "ASTORIA - DITMARS BLVD", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:10:00"},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
