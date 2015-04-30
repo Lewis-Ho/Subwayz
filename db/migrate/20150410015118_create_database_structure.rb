@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "arrival_time",        limit: 40
     t.string "departure_time",      limit: 40
     t.string "stop_id",             limit: 20, null: false
-    t.string "stop_sequence",       limit: 20
+    t.integer "stop_sequence" 
     t.string "pickup_type",         limit: 40
     t.string "drop_off_type",       limit: 40
     t.string "shape_dist_traveled", limit: 20
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.belongs_to :stop_time, index: true
     t.datetime "d_t",         limit: 6
     t.string  "day",          limit: 40
-    t.integer "vote",         limit: 5
+    t.integer "vote"
   end
 
 
