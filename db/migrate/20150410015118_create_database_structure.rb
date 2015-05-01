@@ -38,18 +38,6 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "shape_dist_traveled", limit: 40
   end
 
-  create_table "stop_times", force: :cascade do |t|
-    t.string "trip_id",             limit: 40, null: false
-    t.string "arrival_time",        limit: 40
-    t.string "departure_time",      limit: 40
-    t.string "stop_id",             limit: 20, null: false
-    t.integer "stop_sequence" 
-    t.string "pickup_type",         limit: 40
-    t.string "drop_off_type",       limit: 40
-    t.string "shape_dist_traveled", limit: 20
-  end
-
-
   create_table :stops, id: false, force: :cascade do |t|
     t.string :stop_id, limit: 20, null: false
     t.string "stop_code",      limit: 20
@@ -69,6 +57,18 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "direction_id",  limit: 40
     t.string "block_id",      limit: 40
     t.string "shape_id",      limit: 40
+  end
+
+
+  create_table "stop_times", force: :cascade do |t|
+    t.string "trip_id",             limit: 40, null: false
+    t.string "arrival_time",        limit: 40
+    t.string "departure_time",      limit: 40
+    t.string "stop_id",             limit: 20, null: false
+    t.integer "stop_sequence" 
+    t.string "pickup_type",         limit: 40
+    t.string "drop_off_type",       limit: 40
+    t.integer "arrival_time_min"
   end
 
 
