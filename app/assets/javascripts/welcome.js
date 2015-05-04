@@ -339,7 +339,7 @@ function deleteTabs() {
 	while (tabCount >= 1) {
 		thisTab = 'tab' + tabCount;
 		//Remove tab from nav bar
-		$('ul#tabs li a[href="#'+thisTab+'"]').remove();
+		$('ul#tabs li:not(#directionsTab, #routeChange)').remove();
 		//Remove contents of tab
 		$('#'+thisTab).remove();
 		tabCount--;
@@ -403,6 +403,7 @@ function renderDir (routeObj, routeNum){
   
   var tab = document.getElementById ("tab0");
   tab.innerHTML = "";
+  var trainNum = 1;
 
   var thisRoute = routeObj.routes[routeNum].legs[0];
 
@@ -421,19 +422,24 @@ function renderDir (routeObj, routeNum){
       // Switch case for vehicle type
       switch(thisRoute.steps[i].transit.line.vehicle.type) {
           case "RAIL":
-              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "RAIL </p>\n";
+              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </p>\n";
               tab.innerHTML += newInstr;
               break;
           case "SUBWAY":
-              newInstr =  "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "SUBWAY </p>\n";
+              newInstr =  '<p><a href="#tab'+trainNum+'" data-toggle=tab>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "</a></p>\n";
               tab.innerHTML += newInstr;
+              trainNum++;
               break;
           case "BUS":
-              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "BUS </p>\n";
+              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "</p>\n";
               tab.innerHTML += newInstr;
               break;
           case "FERRY":
               newInstr =  "<p>" + thisRoute.steps[i].instructions + ' ' + "FERRY </p>\n";
+              tab.innerHTML += newInstr;
+              break;
+          case "HEAVY_RAIL":
+              newInstr = "<p>" + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + "</p>\n";
               tab.innerHTML += newInstr;
               break;
           default:
@@ -446,3 +452,10 @@ function renderDir (routeObj, routeNum){
   tab.innerHTML += "</p>" + routeObj.routes[routeNum].copyrights + "</p>\n";
 
 };
+
+/*
+$('#tab0 a').on('click', updateActiveTab(tabNum)) {
+  $('#tabs tab-pane').removeClass('active');
+  $('#tab')
+
+}*/
