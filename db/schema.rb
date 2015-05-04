@@ -49,14 +49,14 @@ ActiveRecord::Schema.define(version: 20150410015118) do
   end
 
   create_table "stop_times", force: :cascade do |t|
-    t.string  "trip_id",             limit: 40, null: false
-    t.string  "arrival_time",        limit: 40
-    t.string  "departure_time",      limit: 40
-    t.string  "stop_id",             limit: 20, null: false
-    t.integer "stop_sequence",       limit: 4
-    t.string  "pickup_type",         limit: 40
-    t.string  "drop_off_type",       limit: 40
-    t.string  "shape_dist_traveled", limit: 20
+    t.string  "trip_id",          limit: 40, null: false
+    t.string  "arrival_time",     limit: 40
+    t.string  "departure_time",   limit: 40
+    t.string  "stop_id",          limit: 20, null: false
+    t.integer "stop_sequence",    limit: 4
+    t.string  "pickup_type",      limit: 40
+    t.string  "drop_off_type",    limit: 40
+    t.integer "arrival_time_min", limit: 4
   end
 
   add_index "stop_times", ["stop_id"], name: "stop_id", using: :btree

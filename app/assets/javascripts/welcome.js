@@ -9,6 +9,7 @@ var altRouteCount = 0;
 var savedRoutes;
 var map;
 var pos;
+
 // Store all transit involved route 
 var transit_obj = [];
 
