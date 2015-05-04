@@ -288,7 +288,7 @@ function calcRoute() {
 
       //Move to next slide when directions have been retrieved.
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 40){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
         $('#navCarousel').carousel('prev');
       } else {
         $('#navCarousel').carousel('next');
