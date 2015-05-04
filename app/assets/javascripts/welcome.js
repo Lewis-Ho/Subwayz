@@ -42,7 +42,7 @@ $(document).ready(function(){
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
-  directionsDisplay = new google.maps.DirectionsRenderer();
+  //directionsDisplay = new google.maps.DirectionsRenderer();
   
   // Google Autocomplete
   var start_input = document.getElementById('start');
@@ -88,8 +88,8 @@ $(document).ready(function(){
     map.setCenter(pos);
     
     // Google Direction text route
-    directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById('directions-panel'));
+    //directionsDisplay.setMap(map);
+    //directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
     //Needed to resize maps 
     google.maps.event.addDomListener (map, 'idle', function(){
@@ -259,7 +259,7 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
-      directionsDisplay.setDirections(response);
+      //directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
@@ -281,6 +281,8 @@ function printRoute (routeObj, routeNo) {
 	// Get route object
   var thisRoute = routeObj.routes[routeNo].legs[0];
   
+  renderDir (routeObj, routeNo);
+
   for (var i = 0; i < thisRoute.steps.length; i++) {
   	// Find all possible transit
     if (typeof thisRoute.steps[i].transit != 'undefined' 
@@ -384,248 +386,63 @@ function emailSend () {
     pushMessage ('error', 'Empty Message not sent!');
   }
 };
+
 /*
-// Markers for current locaiton
-var markers = [];
-// Store all transit involved route 
-var transit_obj = [];
+function renderDirections (directionsLeg) {
+  if (directionsLeg.) {
 
-$(document).ready(function(){
-  var map;
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  var lat;
-  var lon;
-  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
-
-  function initialize() {
-
-    // Try HTML5 geolocation
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude,
-                                         position.coords.longitude);
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        console.log(pos);
-
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapOptions = {
-          zoom: 11,
-          center: pos
-        };
-        // Draw map
-        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        directionsDisplay.setMap(map);
-        
-        var request = {
-            origin: pos,
-            destination: hunter,
-            travelMode: google.maps.TravelMode.TRANSIT
-        };
-        directionsService.route(request, function(response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-          }
-        });
-
-        map.setCenter(pos);
-      }, function() {
-        handleNoGeolocation(true);
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
-    }
   }
-
-  function handleNoGeolocation(errorFlag) {
-    if (errorFlag) {
-      var content = 'Error: The Geolocation service failed.';
-    } else {
-      var content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-
-    // Center map if geolocaiton not supported
-    var options = {
-      map: map,
-      position: new google.maps.LatLng(60, 105),
-      content: content
-    };
-
-    var infowindow = new google.maps.InfoWindow(options);
-    map.setCenter(options.position);
-  }
-
-  // Load Map
-  google.maps.event.addDomListener(window, 'load', initialize);
-
-  //var haight = new google.maps.LatLng(37.7699298, -122.4469157);
-  //var oceanBeach = new google.maps.LatLng(40.695076256618954, -73.9809462044349);
-
-  
-  // Change station info dynamically base on clicking on route section 
-  $("#directions-panel").click(function(e) {
-    var content = $(e.target).html();
-    var theObj = $(e.target);
-    console.log(e);
-    if ( content != "" ) {
-      // Click on route part that contain subway, get parent html tag for subway information
-      if (content.toLowerCase().indexOf("subway") > -1) {
-        // Current tag related to saved subway route
-        showTransit(transit_obj, content);
-      }
-      else {
-        // Check every element in transit_obj, if one of them exist then print the related subway route 
-        for (var i = 0; i < transit_obj.length; i++) {
-          console.log(transit_obj[i]);
-          switch (e.toElement.innerText) {
-            // Arrival Stop
-            case transit_obj[i].transit.arrival_stop.name:
-              console.log(1);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Arrival Time
-            case transit_obj[i].transit.arrival_time.text:
-              console.log(2);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Staion Stop
-            case transit_obj[i].transit.departure_stop.name:
-              console.log(3);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Departure Time
-            case transit_obj[i].transit.departure_time.text:
-              console.log(4);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Distance
-            case transit_obj[i].distance.text:
-              console.log(5);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Duration 
-            case transit_obj[i].duration.text:
-              console.log(6);
-              getTransitDetail(transit_obj[i]);
-              break;
-            // Number of stops
-            case transit_obj[i].transit.num_stops + " stops":
-              console.log(7);
-              getTransitDetail(transit_obj[i]);
-              break;
-          }
-        }
-      }
-    }
-  });
-  
-  /*
-  // Query google map
-  function initialize() {
-    var mapOptions = {
-      //center: { lat: -34.397, lng: 150.644},
-      zoom: 11
-    };
-    var map = new google.maps.Map(document.getElementById('map-canvas'),
-        mapOptions);
-        
-    // Try HTML5 geolocation
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var pos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-          console.log(position.coords.latitude,position.coords.longitude);
-          
-          // $.post('/',{lat: position.coords.latitude,
-          //                             lng: position.coords.longitude,
-          //                             alt:position.coords.altitude });
-          
-          var contentString = 'This is where you are right now.'
-
-          // // Send client geolocaiton to controller
-          // $.ajax({
-          //   type:'post',
-          //   url:'/',
-          //   data: { selectingCommand : JSON.stringify.pos},
-          //   success:function(){
-          //     //I assume you want to do something on controller action execution success?
-          //     //$(this).addClass('done');
-          //   }
-          // });
-
-          var infowindow = new google.maps.InfoWindow({
-            content: contentString
-          });
-
-          var marker =  new google.maps.Marker({
-            position: pos,
-            map: map,
-          });
-
-          google.maps.event.addListener(marker, 'click', function() {
-            infowindow.open(map,marker);
-          });
-
-          // Set marker
-          marker.setMap(map);
-          // Set geolocation as center
-          map.setCenter(pos);
-
-        }, function() {
-          handleNoGeolocation(true);
-        });
-
-      } else {
-        // Browser doesn't support Geolocation
-        handleNoGeolocation(false);
-      }
-  }
-  
-  // Output error message when fail to get geolocation
-  function handleNoGeolocation(errorFlag) {
-    if (errorFlag) {
-      var content = 'Error: The Geolocation service failed.';
-    } else {
-      var content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-
-    var infowindow = new google.maps.InfoWindow(options);
-    map.setCenter(options.position);
-  }
-  
-  // Load Map
-  google.maps.event.addDomListener(window, 'load', initialize);
-  */
-
-  /*
-  $('.sixth-train-link').click(function(e){
-    e.preventDefault();
-    $('.tag').fadeToggle('slow');
-    $('.tag').show();
-    //console.log(position.coords.latitude,position.coords.longitude);
-  });
-});
-
-// If content 
-function showTransit(transit_obj, content){
-  // Retrieve route from array
-  var current_route;
-  for (var i = 0; i < transit_obj.length; i++) {
-    console.log(transit_obj[i].instructions + " + " + content);
-    if (transit_obj[i].instructions.indexOf(content) !=- 1){
-      current_route = transit_obj[i];
-      break;
-    }
-  }
-  // Print transit detail
-  getTransitDetail(current_route);
-};
-
-// Hide current location marker on google map 
-function hideMarker(){
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-};
+}
 */
+
+// Differentiate Transit Type for SavedRoute Object
+function renderDir (routeObj, routeNum){
+  //console.log(routeObj);
+  //console.log(routeObj.routes.legs[].steps[1]);
+  //console.log(routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.D + " " + routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.k);
+  
+  var tab = document.getElementById ("tab0");
+  tab.innerHTML = "";
+
+  var thisRoute = routeObj.routes[routeNum].legs[0];
+
+  var newInstr = "";     
+
+  for (var i = 0; i < thisRoute.steps.length; i++) {
+
+    if (thisRoute.steps[i].travel_mode == 'WALKING'){
+      newInstr = "<p>" + thisRoute.steps[i].instructions + ' ' + "WALKING </p>\n";
+      tab.innerHTML = tab.innerHTML + newInstr;       
+    }
+    // Only check obj which is related to transit
+    else if (thisRoute.steps[i].hasOwnProperty('transit') ) {
+      //console.log(thisRoute.steps[j].transit.arrival_stop.location.D + " " + thisRoute.steps[j].transit.arrival_stop.location.k)
+      
+      // Switch case for vehicle type
+      switch(thisRoute.steps[i].transit.line.vehicle.type) {
+          case "RAIL":
+              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "RAIL </p>\n";
+              tab.innerHTML += newInstr;
+              break;
+          case "SUBWAY":
+              newInstr =  "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "SUBWAY </p>\n";
+              tab.innerHTML += newInstr;
+              break;
+          case "BUS":
+              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + ' ' + "BUS </p>\n";
+              tab.innerHTML += newInstr;
+              break;
+          case "FERRY":
+              newInstr =  "<p>" + thisRoute.steps[i].instructions + ' ' + "FERRY </p>\n";
+              tab.innerHTML += newInstr;
+              break;
+          default:
+              console.log(thisRoute.steps[i].instructions + ' ' + "OTHER");
+              break;
+      }
+    }
+  } // End Steps Loop
+
+  tab.innerHTML += "</p>" + routeObj.routes[routeNum].copyrights + "</p>\n";
+
+};
