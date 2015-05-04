@@ -38,18 +38,6 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "shape_dist_traveled", limit: 40
   end
 
-  create_table "stop_times", force: :cascade do |t|
-    t.string "trip_id",             limit: 40, null: false
-    t.string "arrival_time",        limit: 40
-    t.string "departure_time",      limit: 40
-    t.string "stop_id",             limit: 20, null: false
-    t.string "stop_sequence",       limit: 20
-    t.string "pickup_type",         limit: 40
-    t.string "drop_off_type",       limit: 40
-    t.string "shape_dist_traveled", limit: 20
-  end
-
-
   create_table :stops, id: false, force: :cascade do |t|
     t.string :stop_id, limit: 20, null: false
     t.string "stop_code",      limit: 20
@@ -72,21 +60,23 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
 
+  create_table "stop_times", force: :cascade do |t|
+    t.string "trip_id",             limit: 40, null: false
+    t.string "arrival_time",        limit: 40
+    t.string "departure_time",      limit: 40
+    t.string "stop_id",             limit: 20, null: false
+    t.integer "stop_sequence" 
+    t.string "pickup_type",         limit: 40
+    t.string "drop_off_type",       limit: 40
+    t.integer "arrival_time_min"
+  end
+
+
   create_table "votes", force: :cascade do |t|
-    t.integer "monday_d",     limit: 4
-    t.integer "monday_nd",    limit: 4
-    t.integer "tuesday_d",    limit: 4
-    t.integer "tuesday_nd",   limit: 4
-    t.integer "wednesday_d",  limit: 4
-    t.integer "wednesday_nd", limit: 4
-    t.integer "thursday_d",   limit: 4
-    t.integer "thursday_nd",  limit: 4
-    t.integer "friday_d",     limit: 4
-    t.integer "friday_nd",    limit: 4
-    t.integer "saturday_d",   limit: 4
-    t.integer "saturday_nd",  limit: 4
-    t.integer "sunday_d",     limit: 4
-    t.integer "sunday_nd",    limit: 4
+    t.belongs_to :stop_time, index: true
+    t.datetime "d_t",         limit: 6
+    t.string  "day",          limit: 40
+    t.integer "vote"
   end
 
 
@@ -101,11 +91,11 @@ ActiveRecord::Schema.define(version: 0) do
   add_index "trips", ["service_id"], name: "service_id", using: :btree
 
 
- # add_foreign_key :stop_times, :stops, column: :stop_id, primary_key: "stop_id"
- # add_foreign_key :stop_times, :trips, column: :trip_id, primary_key: "trip_id"
- # add_foreign_key :trips, :calendars, column: :service_id, primary_key: "service_id"
- # add_foreign_key :trips, :routes, column: :route_id, primary_key: "route_id"
- # add_foreign_key :votes, :stop_times, column: :id, primary_key: "id" 
+ add_foreign_key :stop_times, :stops, column: :stop_id, primary_key: "stop_id"
+  add_foreign_key :stop_times, :trips, column: :trip_id, primary_key: "trip_id"
+  add_foreign_key :trips, :calendars, column: :service_id, primary_key: "service_id"
+ add_foreign_key :trips, :routes, column: :route_id, primary_key: "route_id"
+ add_foreign_key :votes, :stop_times, column: :id, primary_key: "id" 
 
 
 end

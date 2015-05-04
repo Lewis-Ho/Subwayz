@@ -36,3 +36,7 @@ require Ruby version 2.2.0, MySQL, HTML5 supported browser
 == Credits
 
 Special thanks to professor Brizan and all classmate from Spring 2015 capstone class for all the suggestions!
+
+== License
+
+© 2015 Subwayz.  All rights reserved.

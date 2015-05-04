@@ -7,6 +7,11 @@ var currentAddress = 'placeholder';
 var tabCount = 0;
 var altRouteCount = 0;
 var savedRoutes;
+var map;
+var pos;
+
+// Store all transit involved route 
+var transit_obj = [];
 
 $(document).ready(function(){
 
@@ -61,39 +66,57 @@ $(document).ready(function(){
   
   // Initial map 
   function initialize() {
-    
-    var map;
-    var pos;
-    
     // Default pos for map will be center of Manhattan
     if(!pos){
       pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
     }
     
     var mapOptions = {
+      center: pos,
       zoom: 13
     };
   
+    // Get geolocation, output error if geolcation API not support
     getAddress();
 
     // Draw Map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    map.setCenter(pos);
     
     // Google Direction text route
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
     //Needed to resize maps 
-    google.maps.event.addDomListener (map, 'idle', function(){
-      google.maps.event.trigger (map, 'resize');
-    });
-
+    // google.maps.event.addDomListener (map, 'idle', function(){
+    //   google.maps.event.trigger (map, 'resize');
+    // });
   }
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
-
+  //google.maps.event.trigger(map, 'resize'); 
+  
+  $('.carousel-indicators li').click(function() {
+    // Get/Set map-canvas class using off-left technique
+    if(this.id == 'marker2'){
+      document.getElementById('map-canvas').className = "show-canvas";
+      // Center map to prevent 
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);
+    } else {
+      document.getElementById('map-canvas').className = "off-left_hide";
+    }
+  });	
 });
+
+// function showMapCanvas() {
+//   var mapClass = document.getElementById('map-canvas').className;
+//   if ( mapClass == "off-left_hide") {
+//     document.getElementById('map-canvas').className = "show-canvas";
+//   } else {
+//     document.getElementById('map-canvas').className = "off-left_hide";
+//   }
+// };
 
 /************************************************
 	Site Navigational Elements
@@ -175,6 +198,7 @@ function getAddress(callback){
   }
 };
 
+// Browser Supported Geolocation API, Get Current Location
 function successCallback(position){
   var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -183,6 +207,9 @@ function successCallback(position){
     if (status == google.maps.GeocoderStatus.OK) {
       if (results.length != 0) {
         currentAddress = results[0].formatted_address;
+        // Write into start textbox
+        var start = document.getElementById('start');
+        start.value = currentAddress;
       } else {
         alert('No results found');
       }
@@ -192,10 +219,12 @@ function successCallback(position){
   });
 };
 
+// Error Message for Geolocation API
 function errorCallback(){
-  
+  alert('Geocoder failed');
 };
 
+// Callback Function Used From the Front
 fillAddress = function() {
   if (currentAddress != 'placeholder') {
     $('#start').val (currentAddress);  
@@ -206,10 +235,12 @@ fillAddress = function() {
   }
 };
 
-// Set route and request direction result 
+// Take inputs from user and set route. Function get request direction result 
 function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
+
+  
 
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
@@ -244,15 +275,30 @@ function calcRoute() {
   deleteTabs();
 
   directionsService.route(request, function(response, status) {
+    console.log(response);
+    transit_obj = response.routes.legs;
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
+      // Differentiate transit type
+      diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
 
       //Move to next slide when directions have been retrieved.
-      $('#navCarousel').carousel('next');
+      console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
+        $('#navCarousel').carousel('prev');
+      } else {
+        $('#navCarousel').carousel('next');
+      }
+      
+      //$('#navCarousel').carousel('next');
+      document.getElementById('map-canvas').className = "show-canvas";
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
     }
@@ -263,6 +309,48 @@ function calcRoute() {
     }
   });
 };
+
+// Compare the first train step station location with user geolocation
+function getVotePage (){
+  console.log()
+}
+
+// Differentiate Transit Type for SavedRoute Object
+function diffRoute (routeObj){
+  console.log(routeObj);
+  //console.log(routeObj.routes.legs[].steps[1]);
+  //console.log(routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.D + " " + routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.k);
+  
+  for (i = 0; i < routeObj.routes.length; i++){
+  	// Get route object
+    var thisRoute = routeObj.routes[i].legs[0];
+    for (var j = 0; j < thisRoute.steps.length; j++) {
+      // Only check obj which is related to transit
+      if (thisRoute.steps[j].hasOwnProperty('transit') ) {
+        console.log(thisRoute.steps[j].transit.arrival_stop.location.D + " " + thisRoute.steps[j].transit.arrival_stop.location.k)
+        
+        // Switch case for vehicle type
+        switch(thisRoute.steps[j].transit.line.vehicle.type) {
+            case "RAIL":
+                console.log(thisRoute.steps[j].instructions + ' ' + "RAIL");
+                break;
+            case "SUBWAY":
+                console.log(thisRoute.steps[j].instructions + ' ' + "SUBWAY");
+                break;
+            case "BUS":
+                console.log(thisRoute.steps[j].instructions + ' ' + "BUS");
+                break;
+            case "FERRY":
+                console.log(thisRoute.steps[j].instructions + ' ' + "FERRY");
+                break;
+            default:
+                console.log(thisRoute.steps[j].instructions + ' ' + "OTHER");
+        }
+      }
+    } // End Steps Loop
+  } // End Routes Loop
+}
+    
 
 function printRoute (routeObj, routeNo) {
 	// Get route object
@@ -275,7 +363,7 @@ function printRoute (routeObj, routeNo) {
       	trainTab (thisRoute.steps[i]);
     }
   }
-}
+};
 
 //Get details from Maps API json object
 function getTransitDetail(obj, tabNo){
@@ -353,6 +441,63 @@ function trainTab (obj) {
 		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
 	getTransitDetail (obj, tabCount);
+};
+
+// Delay Voting Button send requirnment to vote, temporary return nearest schedule
+// Hardcode Data for database query function
+function voteButton(id){
+  console.log(id);
+  currentVote = id;
+  // station name  -  transit: departure_stop: name: "DeKalb Av"
+  // train  -  transit: line: short_name: "Q"
+  // headsign  -  transit: headsign: "Astoria - Ditmars Blvd"
+  // Current time
+  var currentDate = new Date(); 
+  var dateTime = currentDate.getHours() + ":"  
+               + currentDate.getMinutes() + ":" 
+               + currentDate.getSeconds();
+
+
+  // transit_name - transit_obj: transit: line: name: "Boardway Express"
+               
+  // $.ajax({
+  //   type:'GET',
+  //   url:'/welcome/show',
+  //   data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
+  //   success:function(data){
+  //     //I assume you want to do something on controller action execution success?
+  //     //$(this).addClass('done');
+  //     console.log(data);
+  //     console.log(data[0]);
+  //   }
+  // });
+
+
+$.ajax({
+    type:'GET',
+    url:'/welcome/try',
+    data: { station_name : "Canal St", train : "Q", headsign : "ASTORIA - DITMARS BLVD", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:04:30"},
+    success:function(data){
+      //I assume you want to do something on controller action execution success?
+      //$(this).addClass('done');
+      console.log(data);
+      console.log(data[0]);
+    }
+  });
+
+$.ajax({
+    type:'GET',
+    url:'/welcome/prediction_alg',
+    data: { station_name : "Canal St", train : "Q", headsign : "ASTORIA - DITMARS BLVD", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:04:30"},
+    success:function(data){
+      //I assume you want to do something on controller action execution success?
+      //$(this).addClass('done');
+      console.log(data);
+      console.log(data[0]);
+    }
+  });
+
+
 };
 
 

@@ -49,14 +49,14 @@ ActiveRecord::Schema.define(version: 20150410015118) do
   end
 
   create_table "stop_times", force: :cascade do |t|
-    t.string "trip_id",             limit: 40, null: false
-    t.string "arrival_time",        limit: 40
-    t.string "departure_time",      limit: 40
-    t.string "stop_id",             limit: 20, null: false
-    t.string "stop_sequence",       limit: 20
-    t.string "pickup_type",         limit: 40
-    t.string "drop_off_type",       limit: 40
-    t.string "shape_dist_traveled", limit: 20
+    t.string  "trip_id",          limit: 40, null: false
+    t.string  "arrival_time",     limit: 40
+    t.string  "departure_time",   limit: 40
+    t.string  "stop_id",          limit: 20, null: false
+    t.integer "stop_sequence",    limit: 4
+    t.string  "pickup_type",      limit: 40
+    t.string  "drop_off_type",    limit: 40
+    t.integer "arrival_time_min", limit: 4
   end
 
   add_index "stop_times", ["stop_id"], name: "stop_id", using: :btree
@@ -90,20 +90,17 @@ ActiveRecord::Schema.define(version: 20150410015118) do
   add_index "trips", ["trip_id"], name: "index_trips_on_trip_id", unique: true, using: :btree
 
   create_table "votes", force: :cascade do |t|
-    t.integer "monday_d",     limit: 4
-    t.integer "monday_nd",    limit: 4
-    t.integer "tuesday_d",    limit: 4
-    t.integer "tuesday_nd",   limit: 4
-    t.integer "wednesday_d",  limit: 4
-    t.integer "wednesday_nd", limit: 4
-    t.integer "thursday_d",   limit: 4
-    t.integer "thursday_nd",  limit: 4
-    t.integer "friday_d",     limit: 4
-    t.integer "friday_nd",    limit: 4
-    t.integer "saturday_d",   limit: 4
-    t.integer "saturday_nd",  limit: 4
-    t.integer "sunday_d",     limit: 4
-    t.integer "sunday_nd",    limit: 4
+    t.integer  "stop_time_id", limit: 4
+    t.datetime "d_t",          limit: 6
+    t.string   "day",          limit: 40
+    t.integer  "vote",         limit: 4
   end
 
+  add_index "votes", ["stop_time_id"], name: "index_votes_on_stop_time_id", using: :btree
+
+  add_foreign_key "stop_times", "stops", primary_key: "stop_id"
+  add_foreign_key "stop_times", "trips", primary_key: "trip_id"
+  add_foreign_key "trips", "calendars", column: "service_id", primary_key: "service_id"
+  add_foreign_key "trips", "routes", primary_key: "route_id"
+  add_foreign_key "votes", "stop_times", column: "id"
 end

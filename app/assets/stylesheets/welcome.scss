@@ -148,6 +148,19 @@ body {
   border-color: red;
 }
 
+.show-canvas {
+  position: relative;
+  left: 12% !important;
+  top: 0px !important;
+}
+
+.off-left_hide {
+  display: block !important;
+  position: absolute !important;
+  left: -10000px !important;
+  top: -10000px !important;
+}
+
 #directions-panel, #station-info {
   border-style:solid;
   border-color: gray;

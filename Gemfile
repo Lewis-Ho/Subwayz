@@ -6,6 +6,9 @@ ruby '2.2.0'
 # Added jSon
 gem 'json', '~> 1.8.2'
 
+#to calculate time difference
+gem 'time_difference'
+
 # GIS relevant gems (Google API)
 gem 'gmaps4rails'
 gem 'geocoder', '~> 1.2.7'
