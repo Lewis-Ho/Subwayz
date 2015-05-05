@@ -477,7 +477,7 @@ function voteButton(id){
 $.ajax({
     type:'GET',
     url:'/welcome/try',
-    data: { station_name : "Canal St", train : "Q", headsign : "ASTORIA - DITMARS BLVD", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:04:30"},
+    data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEG", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
@@ -489,7 +489,7 @@ $.ajax({
 $.ajax({
     type:'GET',
     url:'/welcome/prediction_alg',
-    data: { station_name : "Canal St", train : "Q", headsign : "ASTORIA - DITMARS BLVD", current_time : dateTime, vote :  currentVote, day:"monday", time:"10:04:30"},
+    data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEGE", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');

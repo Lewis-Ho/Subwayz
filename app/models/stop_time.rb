@@ -11,23 +11,25 @@ class StopTime < ActiveRecord::Base
 
   def self.try (day,sname,rid,time_google,headsign)
     #make function for different days of the week (weekday/weekend) using the variables that lewis passes
+      
+
+      if day == "saturday"
+         test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {saturday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
+         
+  
+
+      elsif day == "sunday"
+         test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {sunday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
+         
 
 
-    if @day_of_week=="saturday"
-      test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {saturday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
-    
-
-    elsif @day_of_week=="sunday"
-        test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {sunday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
-    
-
-    else
+      else
 
             test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {monday: "1"}).where(routes: {route_id: rid}).where(stop_times: {arrival_time: time_google})
-    end
-
+          
+       end
   end
-    
+      
   
   
 
