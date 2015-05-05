@@ -191,6 +191,19 @@ input.form-control:focus, textarea.form-control:focus {
   margin-bottom: 10px;
 }
 
+.show-canvas {
+  position: relative;
+  left: 12% !important;
+  top: 0px !important;
+}
+
+.off-left_hide {
+  display: block !important;
+  position: absolute !important;
+  left: -10000px !important;
+  top: -10000px !important;
+}
+
 #directions-panel, #station-info {
   max-width: 400px;
   height: 400px;

@@ -1,6 +1,34 @@
 Rails.application.routes.draw do
 
-  get 'poll'    => 'result#poll'
+  resource :calendars
+  resource :routes
+  resource :stop_times
+  resource :stops
+  resource :trips
+  resource :votes
+
+
+  get 'calendars/new'
+
+  get 'welcome/show'
+
+  get 'welcome/insert'
+  
+  get 'welcome/try'
+
+  get 'welcome/prediction_alg'
+
+  get 'votes/new'
+
+  get 'trips/new'
+
+  get 'stops/new'
+
+  get 'stop_times/new'
+
+  get 'routes/new'
+
+  get 'poll'    => 'votes#new'
   get 'result'  => 'result#result'
 
   get 'index'   => 'welcome#index'

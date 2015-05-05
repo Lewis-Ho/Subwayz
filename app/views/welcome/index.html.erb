@@ -14,8 +14,10 @@
   </div>
 </div>
 
-<div id="carousel-container" class="container-fluid">
-<div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false">
+  <div id="map-canvas" class="off-left_hide"></div>
+
+  <div id="carousel-container" class="container-fluid">
+  <div id="navCarousel" class="col-xs-12 carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false">
 
     <div class="carousel-inner">
 
@@ -64,10 +66,6 @@
     
     <div class="item">
       <div class="col-xs-12">
-        <div class="row">
-          <div id="map-canvas" class="col-xs-11 col-xs-height col-sm-6 col-sm-height"></div>
-          </div>
-
           <div class="row">
           	<ul id="tabs" class="nav nav-tabs custom" data-tabs="tabs">
           		<li id="directionsTab" class="active"><a href="#tab0" data-toggle="tab">Directions</a></li>
@@ -87,13 +85,13 @@
   	<div class="item">
   		<div class="col-xs-12">
   			<div class="row">
-          <div class="voting jumbotron">
-  				  <p>Does the information seem correct?</p>
-          </div>
-          <div class="voting btn-group-vertical centered">
-              <button class="btn btn-default">Yes</button>
-              <button class="btn btn-default">No</button>
-          </div>
+				<div class="row row-same-height jumbotron" style="background: black; border-radius: 30px; margin-top:30px; text-align: center; color: white;">
+    				<p>Does the information seem correct?</p>
+    			</div>
+    			<div class="btn-group-vertical" style="margin-left: auto; margin-right: auto;">
+    				<button id="yes" class="btn btn-default" onclick="voteButton(this.id)">Yes</button>
+    				<button id="no" class="btn btn-default" onclick="voteButton(this.id)">No</button>
+    			</div>
   		  </div>
   	 </div>
     </div>
