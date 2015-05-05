@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   get 'index'   => 'welcome#index'
   get 'station' => 'welcome#station'
 
+  post 'welcome/submit_feedback'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

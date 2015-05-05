@@ -2,6 +2,27 @@
 	0. HTML, Body, General Styles
 ************************************************/
 
+/*MTA Color Palette
+! SCSS or SASS needed for variables.
+! Silver is for S train (S for Silver).
+! Platinum is for L train.
+! Lime is for G train.
+! Green is for 4,5,6 trains.*/
+
+$mta-blue:      #2850AD;
+$mta-orange:    #FF6319;
+$mta-lime:      #6CBE45;
+$mta-brown:     #996633;
+$mta-platinum:  #A7A9AC;
+$mta-yellow:    #FCCC0A;
+$mta-silver:    #808183;
+$mta-red:       #EE352E;
+$mta-green:     #00933C;
+$mta-purple:    #B933AD;
+
+$light-blue:    #6B89CD;
+$dark-blue:     #0B2B74;
+
 html {
   height: 100%;
   width: 100%;
@@ -17,11 +38,6 @@ body {
 	margin-right: auto;
 }
 
-.something {
-  background-color: white;
-  border-color: red;
-}
-
 /************************************************
 	1. Sidebar
 ************************************************/
@@ -31,52 +47,86 @@ body {
   height: 100%;
   position: fixed;
   z-index: 2000;
-  background-color: #2850AD;
-	text-align: right;
-}
-
-.sidebar-hidden {
+  background-color: $mta-blue;
+  text-align: right;
   margin-left: -150px;
 }
 
+.sidebar-hidden {
+  animation: slideOut 0.5s linear;
+  animation-fill-mode: forwards;
+}
+
 .sidebar-appear {
-  animation: slideIn 1s;
+  animation: slideIn 0.5s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    margin-left: -150px;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: -150px;
+  }
 }
 
 #togglebtn {
   background: none;
   border: none;
+  border-left: 1px solid white;
+  border-radius: 0px;
   outline: none;
-  color: white;
-	float: right;
   width: 50px;
   height: 100%;
+  float: right;
+  color: white;
 }
 
-#menu button {
+#sidebar.sidebar-hidden #togglebtn {
+  color: white;
+}
+
+#sidebar.sidebar-appear #togglebtn {
+  color: $dark-blue;
+}
+
+#togglebtn #menu-label {
+  position: absolute;
+  top: 30px;
+  transform: rotate(90deg) translate(30px, 35px);
+  transform-origin: top, right;
+  font-weight: bold;
+  font-size: 125%
+}
+
+#menu {
+  float: left;
+}
+
+#menu button, #menu a {
   background: none;
   border: none;
   outline: none;
   text-align: left;
   margin: 10px;
   border-radius: 10px;
-}
-
-#menu button:hover {
-  background: black;
-}
-
-#menu button > a {
   color: white;
 }
 
-@keyframes slideIn {
-	0% {
-		margin-left: -150px;
-	}
-	100% {
-		margin-left: 0px;
-	}
+#menu button:hover, #menu button:active,
+#menu a:hover, #menu a:active {
+  background: #6B89CD;
+  font-weight: bold;
 }
 
 /************************************************
@@ -90,12 +140,8 @@ body {
   max-width: 1000px;
 }
 
-.carousel-indicators {
-  background-color: #2850AD;
-}
-
-.carousel-indicators > .active {
-	background-color: #6CBE45;
+.carousel-indicators.custom {
+	background-color: $mta-blue;
 }
 
 .container-fluid {
@@ -103,13 +149,13 @@ body {
 }
 
 @media (max-width: 767px) {
-	#carousel-container {
-		margin-left: 50px;
-	}
+  #carousel-container {
+    margin-left: 50px;
+  }
 }
 
 /************************************************
-	2a. Form (Slide 1) Content
+	2a. Form (Slide 0) Content
 ************************************************/
 
 .form-group.searchBar {
@@ -118,7 +164,7 @@ body {
 }
 
 .glyphicon-map-marker.redMarker {
-  color: #EE352E;
+  color: $mta-red;
 }
 
 #message-container {
@@ -127,16 +173,12 @@ body {
   margin-right: auto;
 }
 
-.btn.gobtn {
-  border-color: orange;
-  color: orange;
-  background: none;
-  margin-top: 15px;
-  margin-bottom: 15px;
+input.form-control:focus, textarea.form-control:focus {
+  border-color: $mta-blue;
 }
 
 /************************************************
-	2b. Info (Slide 2) Content
+	2b. Info (Slide 1) Content
 ************************************************/
 
 #map-canvas {
@@ -145,7 +187,8 @@ body {
   max-width: 400px;
   max-height: 400px;
   border-style: solid;
-  border-color: red;
+  border-color: $mta-blue;
+  margin-bottom: 10px;
 }
 
 .show-canvas {
@@ -162,8 +205,6 @@ body {
 }
 
 #directions-panel, #station-info {
-  border-style:solid;
-  border-color: gray;
   max-width: 400px;
   height: 400px;
   overflow-y: scroll;
@@ -173,23 +214,63 @@ body {
   text-align: center;
 }
 
-#alt-routes-btn {
-  overflow: visible;
+.nav-tabs.custom > li > a {
+  color: $light-blue;
 }
 
-.btn-default.btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.42;
-  border-radius: 50%;
-  background: #EE352E;
-  margin-bottom: 15px;
-  color: white;
+#tab0 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#tab0 .instr {
+  border-style: none;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid $mta-platinum;
+}
+
+#tab0 .instr a {
+  color: $dark-blue;
+}
+
+.subtext {
+  margin-top: -5px;
+  font-size: small;
 }
 
 /************************************************
-	2c. Survey (Slide 3) Content
+	2c. Survey (Slide 2) Content
 ************************************************/
+
+.voting.jumbotron {
+  background: black;
+  border-radius: 30px;
+  margin-top: 30px;
+  max-width: 800px;
+  color: white;
+  text-align: center;
+}
+
+#vote-yes, #vote-no {
+  min-width: 400px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/************************************************
+	2c. Feedback (Slide 3) Content
+************************************************/
+
+.form-group.centered {
+  margin-bottom: 15px;
+  max-width: 400px;
+}
+
+#feedback button {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

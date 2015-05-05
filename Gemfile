@@ -24,6 +24,9 @@ gem 'autoprefixer-rails'
 # Adds velocity.js for svg animation
 gem 'velocityjs-rails', '~> 2.0.0'
 
+# For setting environment variables
+gem 'figaro'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use SCSS for stylesheet

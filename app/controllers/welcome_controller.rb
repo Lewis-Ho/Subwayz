@@ -185,4 +185,16 @@ def prediction_alg
     @lng_lat = [params[:lng].to_f, params[:lat].to_f]
     @alt = params[:alt].to_f
   end
+
+  def submit_feedback
+    @user_email = params[:replyTo]
+    @mail_body = params[:textarea]
+
+    Feedback.send_feedback(@user_email, @mail_body).deliver_now
+  
+    render none: true;
+  end
+
 end
+
+  
