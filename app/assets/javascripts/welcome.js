@@ -45,7 +45,7 @@ $(document).ready(function(){
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
-  //directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsDisplay = new google.maps.DirectionsRenderer();
   
   // Google Autocomplete
   var start_input = document.getElementById('start');
@@ -91,7 +91,7 @@ $(document).ready(function(){
     map.setCenter(pos);
     
     // Google Direction text route
-    //directionsDisplay.setMap(map);
+    directionsDisplay.setMap(map);
     //directionsDisplay.setPanel(document.getElementById('directions-panel'));
 
     //Needed to resize maps 
@@ -262,7 +262,7 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
-      //directionsDisplay.setDirections(response);
+      directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
 
