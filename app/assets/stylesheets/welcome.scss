@@ -50,9 +50,8 @@ body {
 }
 
 .sidebar-hidden {
-  animation: slideIn 0.5s linear;
+  animation: slideOut 0.5s linear;
   animation-fill-mode: forwards;
-  animation-direction: reverse;
 }
 
 .sidebar-appear {
