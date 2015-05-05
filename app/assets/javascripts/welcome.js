@@ -392,7 +392,7 @@ function emailSend () {
 
 // Differentiate Transit Type for SavedRoute Object
 function renderDir (routeObj, routeNum){
-  //$('#tab0').empty();
+  $('#tab0').empty();
 
   var thisRoute = routeObj.routes[routeNum].legs[0];
   var newInstr = "";
