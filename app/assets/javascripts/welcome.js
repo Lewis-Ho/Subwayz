@@ -29,16 +29,9 @@ $(document).ready(function(){
   $('#tab0 > a').on('click', function (e) { 
   	e.preventDefault();
     //$(this).tab('show');
-    console.log ("TABS");
+    console.log ("A");
     //$('a [href="' + $(this).attr('href') + '"]').tab('show');
   });
-
-/*
-  $('#tab0 a').on('click', updateActiveTab(tabNum)) {
-    $('#tabs tab-pane').removeClass('active');
-    $('#tab')
-
-}*/
 
   $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
@@ -399,7 +392,7 @@ function emailSend () {
 
 // Differentiate Transit Type for SavedRoute Object
 function renderDir (routeObj, routeNum){
-  $('#tab0').empty();
+  //$('#tab0').empty();
 
   var thisRoute = routeObj.routes[routeNum].legs[0];
   var newInstr = "";
@@ -420,7 +413,7 @@ function renderDir (routeObj, routeNum){
               $('#tab0').append(newInstr);              
               break;
           case "SUBWAY":
-              newInstr =  '<p><a href="#tab'+trainNum+'" data-toggle=tab>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</a></p>\n';
+              newInstr =  '<p><a href="#tab'+trainNum+'">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</p></a>\n';
               $('#tab0').append(newInstr);
               trainNum++;
               break;
@@ -445,4 +438,10 @@ function renderDir (routeObj, routeNum){
   } // End Steps Loop
 
   $('#tab0').append ('</p>' + routeObj.routes[routeNum].copyrights + '</p>\n');
+
+  $('#tab0 > p > a').on('click', function (e) { 
+    e.preventDefault();
+    console.log ("P > A");
+    $('a[href="' + $(this).attr('href') + '"]').tab('show');
+  });
 };
