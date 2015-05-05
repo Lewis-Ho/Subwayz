@@ -24,6 +24,9 @@ gem 'autoprefixer-rails'
 # Adds velocity.js for svg animation
 gem 'velocityjs-rails', '~> 2.0.0'
 
+# For setting environment variables
+gem 'figaro'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use SCSS for stylesheet
@@ -63,6 +66,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
   gem 'yaml_db'
 
 group :development, :test do
+  
+  gem 'capistrano-rails', '~> 1.1.1'
   
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
