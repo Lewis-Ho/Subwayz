@@ -401,7 +401,7 @@ function renderDir (routeObj, routeNum){
   for (var i = 0; i < thisRoute.steps.length; i++) {
 
     if (thisRoute.steps[i].travel_mode == 'WALKING'){
-      newInstr = '<p>' + thisRoute.steps[i].instructions + '</p>\n';      
+      newInstr = '<div class="instr">' + thisRoute.steps[i].instructions + '</div>';      
       $('#tab0').append(newInstr);
     }
     // Only check obj which is related to transit
@@ -409,39 +409,39 @@ function renderDir (routeObj, routeNum){
       // Switch case for vehicle type
       switch(thisRoute.steps[i].transit.line.vehicle.type) {
           case "RAIL":
-              newInstr = '<p>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </p>\n";
+              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </div>";
               $('#tab0').append(newInstr);              
               break;
           case "SUBWAY":
-              newInstr =  '<p><a href="#tab'+trainNum+'">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</p></a>\n';
+              newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">' + thisRoute.steps[i].transit.line.short_name + ' train to ' + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">' + thisRoute.steps[i].instructions + '</span></div></a>';
               $('#tab0').append(newInstr);
               trainNum++;
               break;
           case "BUS":
-              newInstr = '<p>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</p>\n';
+              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</div>';
               $('#tab0').append(newInstr);
               break;
           case "FERRY":
-              newInstr =  '<p>' + thisRoute.steps[i].instructions + ' ' + 'FERRY </p>\n';
+              newInstr =  '<div class="instr">' + thisRoute.steps[i].instructions + ' ' + 'FERRY </div>';
               $('#tab0').append(newInstr);
               break;
           case "HEAVY_RAIL":
-              newInstr ='<p>' + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + '</p>\n';
+              newInstr ='<div class="instr">' + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + '</div>';
               $('#tab0').append(newInstr);
               break;
           default:
-              newInstr ='<p>' + thisRoute.steps[i].instructions + '</p>\n';
+              newInstr ='<div class="instr">' + thisRoute.steps[i].instructions + '</div>';
               $('#tab0').append(newInstr);
               break;
       }
     }
   } // End Steps Loop
 
-  $('#tab0').append ('</p>' + routeObj.routes[routeNum].copyrights + '</p>\n');
+  $('#tab0').append (routeObj.routes[routeNum].copyrights);
 
-  $('#tab0 > p > a').on('click', function (e) { 
+  $('#tab0 .instr a').on('click', function (e) { 
     e.preventDefault();
-    console.log ("P > A");
     $('a[href="' + $(this).attr('href') + '"]').tab('show');
   });
 };

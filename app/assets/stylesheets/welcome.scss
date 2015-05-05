@@ -20,6 +20,9 @@ $mta-red:       #EE352E;
 $mta-green:     #00933C;
 $mta-purple:    #B933AD;
 
+$light-blue:    #6B89CD;
+$dark-blue:     #0B2B74;
+
 html {
   height: 100%;
   width: 100%;
@@ -94,7 +97,7 @@ body {
 }
 
 #sidebar.sidebar-appear #togglebtn {
-  color: #0B2B74;
+  color: $dark-blue;
 }
 
 #togglebtn #menu-label {
@@ -196,6 +199,33 @@ input.form-control:focus, textarea.form-control:focus {
 
 #init-message, #message-container, #station-info {
   text-align: center;
+}
+
+.nav-tabs.custom > li > a {
+  color: $light-blue;
+}
+
+#tab0 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#tab0 .instr {
+  border-style: none;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid $mta-platinum;
+}
+
+#tab0 .instr a {
+  color: $dark-blue;
+}
+
+.subtext {
+  margin-top: -5px;
+  font-size: small;
 }
 
 /************************************************
