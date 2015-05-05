@@ -25,10 +25,20 @@ $(document).ready(function(){
   });
 
   $('#tabs').tab();
-  $('#tabs a').click( function (e) { 
+
+  $('#tab0 > a').on('click', function (e) { 
   	e.preventDefault();
-  	$(this).tab('show');
+    //$(this).tab('show');
+    console.log ("TABS");
+    //$('a [href="' + $(this).attr('href') + '"]').tab('show');
   });
+
+/*
+  $('#tab0 a').on('click', updateActiveTab(tabNum)) {
+    $('#tabs tab-pane').removeClass('active');
+    $('#tab')
+
+}*/
 
   $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
@@ -209,7 +219,7 @@ fillAddress = function() {
     pushMessage ('success', "Got your current location!");
   }
   else {
-    pushMessage ('warn', 'Please share your location to use this feature.');
+    pushMessage ('warn', 'Please share your location to use this feature, or try again.');
   }
 };
 
@@ -387,75 +397,52 @@ function emailSend () {
   }
 };
 
-/*
-function renderDirections (directionsLeg) {
-  if (directionsLeg.) {
-
-  }
-}
-*/
-
 // Differentiate Transit Type for SavedRoute Object
 function renderDir (routeObj, routeNum){
-  //console.log(routeObj);
-  //console.log(routeObj.routes.legs[].steps[1]);
-  //console.log(routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.D + " " + routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.k);
-  
-  var tab = document.getElementById ("tab0");
-  tab.innerHTML = "";
-  var trainNum = 1;
+  $('#tab0').empty();
 
   var thisRoute = routeObj.routes[routeNum].legs[0];
-
-  var newInstr = "";     
+  var newInstr = "";
+  var trainNum = 1;
 
   for (var i = 0; i < thisRoute.steps.length; i++) {
 
     if (thisRoute.steps[i].travel_mode == 'WALKING'){
-      newInstr = "<p>" + thisRoute.steps[i].instructions + ' ' + "WALKING </p>\n";
-      tab.innerHTML = tab.innerHTML + newInstr;       
+      newInstr = '<p>' + thisRoute.steps[i].instructions + '</p>\n';      
+      $('#tab0').append(newInstr);
     }
     // Only check obj which is related to transit
     else if (thisRoute.steps[i].hasOwnProperty('transit') ) {
-      //console.log(thisRoute.steps[j].transit.arrival_stop.location.D + " " + thisRoute.steps[j].transit.arrival_stop.location.k)
-      
       // Switch case for vehicle type
       switch(thisRoute.steps[i].transit.line.vehicle.type) {
           case "RAIL":
-              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </p>\n";
-              tab.innerHTML += newInstr;
+              newInstr = '<p>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </p>\n";
+              $('#tab0').append(newInstr);              
               break;
           case "SUBWAY":
-              newInstr =  '<p><a href="#tab'+trainNum+'" data-toggle=tab>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "</a></p>\n";
-              tab.innerHTML += newInstr;
+              newInstr =  '<p><a href="#tab'+trainNum+'" data-toggle=tab>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</a></p>\n';
+              $('#tab0').append(newInstr);
               trainNum++;
               break;
           case "BUS":
-              newInstr = "<p>" + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "</p>\n";
-              tab.innerHTML += newInstr;
+              newInstr = '<p>' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</p>\n';
+              $('#tab0').append(newInstr);
               break;
           case "FERRY":
-              newInstr =  "<p>" + thisRoute.steps[i].instructions + ' ' + "FERRY </p>\n";
-              tab.innerHTML += newInstr;
+              newInstr =  '<p>' + thisRoute.steps[i].instructions + ' ' + 'FERRY </p>\n';
+              $('#tab0').append(newInstr);
               break;
           case "HEAVY_RAIL":
-              newInstr = "<p>" + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + "</p>\n";
-              tab.innerHTML += newInstr;
+              newInstr ='<p>' + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + '</p>\n';
+              $('#tab0').append(newInstr);
               break;
           default:
-              console.log(thisRoute.steps[i].instructions + ' ' + "OTHER");
+              newInstr ='<p>' + thisRoute.steps[i].instructions + '</p>\n';
+              $('#tab0').append(newInstr);
               break;
       }
     }
   } // End Steps Loop
 
-  tab.innerHTML += "</p>" + routeObj.routes[routeNum].copyrights + "</p>\n";
-
+  $('#tab0').append ('</p>' + routeObj.routes[routeNum].copyrights + '</p>\n');
 };
-
-/*
-$('#tab0 a').on('click', updateActiveTab(tabNum)) {
-  $('#tabs tab-pane').removeClass('active');
-  $('#tab')
-
-}*/
