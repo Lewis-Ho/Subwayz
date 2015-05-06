@@ -642,7 +642,7 @@ function renderDir (routeObj, routeNum){
               + '<img src="'+ thisRoute.steps[i].transit.line.icon 
               + '" alt="' + thisRoute.steps[i].transit.line.short_name + '">' + ' Train to '
               + thisRoute.steps[i].transit.arrival_stop.name
-              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + '<br>'
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + ' for '
               + thisRoute.steps[i].transit.num_stops + ' stop';
               //If stop needs to be plural i.e. stops...
               if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
@@ -655,7 +655,7 @@ function renderDir (routeObj, routeNum){
               + '<span style="background-color: ' + thisRoute.steps[i].transit.line.color + '; '
               + 'color: white; padding-left: 5px; padding-right: 5px;">' + thisRoute.steps[i].transit.line.short_name + '</span>'
               + ' Bus to ' + thisRoute.steps[i].transit.arrival_stop.name
-              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + '<br>'
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + ' for '
               + thisRoute.steps[i].transit.num_stops + ' stop';
               //If stop needs to be plural i.e. stops...
               if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
@@ -686,64 +686,3 @@ function renderDir (routeObj, routeNum){
     $('a[href="' + $(this).attr('href') + '"]').tab('show');
   });
 };
-
-/*
-// Markers for current locaiton
-var markers = [];
-// Store all transit involved route 
-var transit_obj = [];
-
-$(document).ready(function(){
-  var map;
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  var lat;
-  var lon;
-  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
-
-  function initialize() {
-
-    // Try HTML5 geolocation
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude,
-                                         position.coords.longitude);
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        console.log(pos);
-
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapOptions = {
-          zoom: 11,
-          center: pos
-        };
-        // Draw map
-        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        directionsDisplay.setMap(map);
-        
-        var request = {
-            origin: pos,
-            destination: hunter,
-            travelMode: google.maps.TravelMode.TRANSIT
-        };
-        directionsService.route(request, function(response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-          }
-        });
-
-        map.setCenter(pos);
-      }, function() {
-        handleNoGeolocation(true);
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
-    }
-  }
-  else {
-    $('#navCarousel').carousel(0);
-    pushMessage ('error', 'Empty Message not sent!');
-  }
-};
-*/
