@@ -197,8 +197,11 @@ input.form-control:focus, textarea.form-control:focus {
   overflow-y: scroll;
 }
 
-#init-message, #message-container, #station-info {
+#message-container {
   text-align: center;
+}
+
+#station-info {
 }
 
 .nav-tabs.custom > li > a {
@@ -220,7 +223,14 @@ input.form-control:focus, textarea.form-control:focus {
 }
 
 #tab0 .instr a {
-  color: $dark-blue;
+  color: $light-blue;
+}
+
+#tab0 .instr img {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .subtext {

@@ -44,6 +44,7 @@ $(document).ready(function(){
   $('#routeChange').click(function () {
 		var index = $('#routeChange').data('route');
 		index = (index+1)%altRouteCount;
+    directionsDisplay.setRouteIndex(index);
 		deleteTabs();
 		printRoute (savedRoutes, index);
 		$('#routeChange').data('route', index);
@@ -126,7 +127,6 @@ function checkLocation(userLocation, transitObj) {
     //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
     //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
     //   // Redirect page to vote
-    //   document.getElementById('map-canvas').className = "canvas-hide";
     //   $('#navCarousel').carousel(2);
     // }
     
@@ -283,8 +283,8 @@ function calcRoute() {
     return;
   }
   else {
-    start += ' new york city';
-    end += ' new york city';
+    start += ' New York City';
+    end += ' New York City';
   }
 
   //Add "Directions" button to #sidebar #menu after initial search.
@@ -418,42 +418,6 @@ function printRoute (routeObj, routeNo) {
   }
 };
 
-//Get details from Maps API json object
-function getTransitDetail(obj, tabNo){
-	var parent='';
-	if (tabNo) {
-		parent='div#tab'+tabNo+' ';
-	}
-
-  $(parent+'#train').text(obj.transit.line.short_name + " Train");
-  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
-  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
-  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
-  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
-  $(parent+'#departure_time').text(obj.transit.departure_time.text);
-  $(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text(obj.duration.text);
-  
-  // Get weekday
-  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
-  
-  // Get route time
-  var theTime = obj.transit.departure_time.value.toJSON().substr(11, 8);
-  // Get prediction info
-  $.ajax({
-      type:'GET',
-      url:'/welcome/prediction_alg',
-      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
-      success:function(data){
-        //I assume you want to do something on controller action execution success?
-        //$(this).addClass('done');
-        console.log(data);
-        $(parent+'#predict-info').text(data);
-      }
-    });
-};
-
 // Get current time from device
 function getTime(){
   var currentdate = new Date(); 
@@ -498,24 +462,61 @@ function deleteTabs() {
 function trainTab (obj) {
 	makeNewTab();
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
-	$('#tab'+tabCount).append (
+
+  $('#tab'+tabCount).append (
 			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
-			  <p>Station Info:</p>\
 			  <p id="train"></p>\
 		    <p id="train-stop-depart"></p>\
-		    <p id="train-stop-end"></p>\
-		    <p id="num-stop"></p>\
-		    <p id="arrival_time"></p>\
 		    <p id="departure_time"></p>\
-		    <p id="distance"></p>\
 		    <p id="duration"></p>\
         <p id="predict-info"></p>\
-		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
+      //<p id="train-stop-end"></p>\
+      //<p id="num-stop"></p>\
+      //<p id="arrival_time"></p>\
+      //<p id="distance"></p>\
+        
 	getTransitDetail (obj, tabCount);
 };
 
-// Delay Voting Button send requirnment to vote
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+  var parent='';
+  if (tabNo) {
+    parent='div#tab'+tabNo+' ';
+  }
+
+  $(parent+'#train').text(obj.transit.line.short_name + ' Train');
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  //$(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  //$(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  //$(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text('Next train arrives at: ' + obj.transit.departure_time.text);
+  //$(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
+
+  // Get weekday
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
+  
+  // Get route time
+  var theTime = obj.transit.departure_time.value.toJSON().substr(11, 8);
+  // Get prediction info
+  $.ajax({
+      type:'GET',
+      url:'/welcome/prediction_alg',
+      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
+      success:function(data){
+        //I assume you want to do something on controller action execution success?
+        //$(this).addClass('done');
+        console.log(data);
+        $(parent+'#predict-info').text(data);
+      }
+    });
+};
+
+// Delay Voting Button send requirnment to vote, temporary return nearest schedule
+// Hardcode Data for database query function
 function voteButton(id){
   // console.log(id);
   // currentVote = id;
@@ -629,26 +630,37 @@ function renderDir (routeObj, routeNum){
     else if (thisRoute.steps[i].hasOwnProperty('transit') ) {
       // Switch case for vehicle type
       switch(thisRoute.steps[i].transit.line.vehicle.type) {
-          case "RAIL":
-              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </div>";
-              $('#tab0').append(newInstr);              
-              break;
           case "SUBWAY":
-              newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">' + thisRoute.steps[i].transit.line.short_name + ' train to ' + thisRoute.steps[i].transit.arrival_stop.name
-              + '<br><span class="subtext">' + thisRoute.steps[i].instructions + '</span></div></a>';
+              newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">'
+              + '<img src="'+ thisRoute.steps[i].transit.line.icon 
+              + '" alt="' + thisRoute.steps[i].transit.line.short_name + '">' + ' Train to '
+              + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + ' for '
+              + thisRoute.steps[i].transit.num_stops + ' stop';
+              //If stop needs to be plural i.e. stops...
+              if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
+              newInstr += '</span></div></a>';
               $('#tab0').append(newInstr);
               trainNum++;
               break;
           case "BUS":
-              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</div>';
+              newInstr = '<div class="instr">' 
+              + '<span style="background-color: ' + thisRoute.steps[i].transit.line.color + '; '
+              + 'color: white; padding-left: 5px; padding-right: 5px;">' + thisRoute.steps[i].transit.line.short_name + '</span>'
+              + ' Bus to ' + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + ' for '
+              + thisRoute.steps[i].transit.num_stops + ' stop';
+              //If stop needs to be plural i.e. stops...
+              if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
+              newInstr += '</span></div>';
               $('#tab0').append(newInstr);
               break;
           case "FERRY":
-              newInstr =  '<div class="instr">' + thisRoute.steps[i].instructions + ' ' + 'FERRY </div>';
-              $('#tab0').append(newInstr);
-              break;
-          case "HEAVY_RAIL":
-              newInstr ='<div class="instr">' + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + '</div>';
+              newInstr = '<div class="instr">' 
+              +'<img src="' + thisRoute.steps[i].transit.line.vehicle.icon + '">'
+              + 'Ferry to ' + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign
+              +  '</span></div>';
               $('#tab0').append(newInstr);
               break;
           default:
@@ -659,6 +671,7 @@ function renderDir (routeObj, routeNum){
     }
   } // End Steps Loop
 
+  $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
   $('#tab0').append (routeObj.routes[routeNum].copyrights);
 
   $('#tab0 .instr a').on('click', function (e) { 
@@ -666,64 +679,3 @@ function renderDir (routeObj, routeNum){
     $('a[href="' + $(this).attr('href') + '"]').tab('show');
   });
 };
-
-/*
-// Markers for current locaiton
-var markers = [];
-// Store all transit involved route 
-var transit_obj = [];
-
-$(document).ready(function(){
-  var map;
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  var lat;
-  var lon;
-  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
-
-  function initialize() {
-
-    // Try HTML5 geolocation
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude,
-                                         position.coords.longitude);
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        console.log(pos);
-
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapOptions = {
-          zoom: 11,
-          center: pos
-        };
-        // Draw map
-        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        directionsDisplay.setMap(map);
-        
-        var request = {
-            origin: pos,
-            destination: hunter,
-            travelMode: google.maps.TravelMode.TRANSIT
-        };
-        directionsService.route(request, function(response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-          }
-        });
-
-        map.setCenter(pos);
-      }, function() {
-        handleNoGeolocation(true);
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
-    }
-  }
-  else {
-    $('#navCarousel').carousel(0);
-    pushMessage ('error', 'Empty Message not sent!');
-  }
-};
-*/
