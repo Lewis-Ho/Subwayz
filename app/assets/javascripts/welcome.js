@@ -111,14 +111,22 @@ $(document).ready(function(){
   }); 
   
   // Constantly check user location with station location in every
-  window.setInterval(function(){checkLocation(pos, transitObj)},10000);
+  window.setInterval(function(){checkLocation(transitObj)},10000);
 });
 
 // Redirect to voting page if user is in one of the station they search
-function checkLocation(userLocation, transitObj) {
-  console.log(userLocation.A + " " + userLocation.F);
+function checkLocation(transitObj) {
+  // If geolocation available, get position
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
+  }
+  // Geolocation val
+  console.log(pos.j + " " + pos.C);
+  console.log(transitObj);
   for (var j = 0; j < transitObj.length; j++) {
-    console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
+    //console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
+    console.log(transitObj[j].transit.departure_stop.location.j + " " + transitObj[j].transit.departure_stop.location.C);
+    
     // // Check user location with each transit steps station location
     // if (userLocation.A == transitObj[j].transit.departure_stop.location.A & userLocation.F == transitObj[j].transit.departure_stop.location.F) {
     //   // Found match station
@@ -224,8 +232,8 @@ function getAddress(callback){
 
 // Browser Supported Geolocation API, Get Current Location
 function successCallback(position){
-  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+  pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  console.log(pos);
   //Reverse geocoding for current location
   geocoder.geocode({'latLng': pos}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
@@ -448,7 +456,7 @@ function getTransitDetail(obj, tabNo){
       success:function(data){
         //I assume you want to do something on controller action execution success?
         //$(this).addClass('done');
-        console.log(data);
+        //console.log(data);
         $(parent+'#predict-info').text(data);
       }
     });
