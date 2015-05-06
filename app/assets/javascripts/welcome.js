@@ -44,6 +44,7 @@ $(document).ready(function(){
   $('#routeChange').click(function () {
 		var index = $('#routeChange').data('route');
 		index = (index+1)%altRouteCount;
+    directionsDisplay.setRouteIndex(index);
 		deleteTabs();
 		printRoute (savedRoutes, index);
 		$('#routeChange').data('route', index);
@@ -129,7 +130,6 @@ function checkLocation(userLocation, transitObj) {
     //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
     //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
     //   // Redirect page to vote
-    //   document.getElementById('map-canvas').className = "canvas-hide";
     //   $('#navCarousel').carousel(2);
     // }
     
@@ -140,7 +140,6 @@ function checkLocation(userLocation, transitObj) {
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
-      //document.getElementById('map-canvas').className = "canvas-hide";
       $('#navCarousel').carousel(2);
     }
   }
@@ -444,23 +443,6 @@ function printRoute (routeObj, routeNo) {
   }
 };
 
-//Get details from Maps API json object
-function getTransitDetail(obj, tabNo){
-	var parent='';
-	if (tabNo) {
-		parent='div#tab'+tabNo+' ';
-	}
-
-  $(parent+'#train').text(obj.transit.line.short_name + " Train");
-  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
-  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
-  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
-  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
-  $(parent+'#departure_time').text(obj.transit.departure_time.text);
-  $(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text(obj.duration.text);
-};
-
 // Get current time from device
 function getTime(){
   var currentdate = new Date(); 
@@ -505,20 +487,37 @@ function deleteTabs() {
 function trainTab (obj) {
 	makeNewTab();
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
-	$('#tab'+tabCount).append (
+
+  $('#tab'+tabCount).append (
 			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
-			  <p>Station Info:</p>\
 			  <p id="train"></p>\
 		    <p id="train-stop-depart"></p>\
-		    <p id="train-stop-end"></p>\
-		    <p id="num-stop"></p>\
-		    <p id="arrival_time"></p>\
 		    <p id="departure_time"></p>\
-		    <p id="distance"></p>\
 		    <p id="duration"></p>\
-		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
+      //<p id="train-stop-end"></p>\
+      //<p id="num-stop"></p>\
+      //<p id="arrival_time"></p>\
+      //<p id="distance"></p>\
+        
 	getTransitDetail (obj, tabCount);
+};
+
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+  var parent='';
+  if (tabNo) {
+    parent='div#tab'+tabNo+' ';
+  }
+
+  $(parent+'#train').text(obj.transit.line.short_name + ' Train');
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  //$(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  //$(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  //$(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text('Next train arrives at: ' + obj.transit.departure_time.text);
+  //$(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
 };
 
 // Delay Voting Button send requirnment to vote, temporary return nearest schedule
@@ -599,7 +598,6 @@ $.ajax({
   // Clean up transitObj to prevent redirect to voting page
   transitObj = [];
   // Redirect to info page
-  toggleMapCanvas();  
   $('#navCarousel').carousel(1);
 };
 
@@ -644,8 +642,15 @@ function renderDir (routeObj, routeNum){
               $('#tab0').append(newInstr);              
               break;
           case "SUBWAY":
-              newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">' + thisRoute.steps[i].transit.line.short_name + ' train to ' + thisRoute.steps[i].transit.arrival_stop.name
-              + '<br><span class="subtext">' + thisRoute.steps[i].instructions + '</span></div></a>';
+              newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">'
+              + '<img src="'+ thisRoute.steps[i].transit.line.icon 
+              + '" alt="' + thisRoute.steps[i].transit.line.short_name + '">' +' train to '
+              + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">' + thisRoute.steps[i].instructions + '<br>'
+              + thisRoute.steps[i].transit.num_stops + ' stop';
+              //If stop needs to be plural i.e. stops...
+              if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
+              newInstr += '</span></div></a>';
               $('#tab0').append(newInstr);
               trainNum++;
               break;
