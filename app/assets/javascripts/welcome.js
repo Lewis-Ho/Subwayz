@@ -1,18 +1,18 @@
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
 
-var directionsDisplay;
-var directionsService;
-var geocoder;
-var currentAddress = 'placeholder';
-var tabCount = 0;
-var altRouteCount = 0;
-var savedRoutes;
-var map;
-var pos;
-var votingStation = [];
+var directionsDisplay;                  // Google Direction route display 
+var directionsService;                  // Google Direction route service
+var geocoder;                           // Reverse geocoding for current location
+var currentAddress = 'placeholder';     // Placeholder for current location
+var tabCount = 0;                       // Tabs count
+var altRouteCount = 0;                  // Alt route count
+var savedRoutes;                        // Returned direction result included all routes information
+var map;                                // Map object
+var pos;                                // Current user position
 
-// Store all transit involved route 
-var transitObj = [];
+var votingStation = [];     // Store transit information where matched user's current location 
+var transitObj = [];        // Store all transit involved route
+
 
 $(document).ready(function(){
 
@@ -81,7 +81,7 @@ $(document).ready(function(){
     if(!pos){
       pos = new google.maps.LatLng(40.784148400000000000, -73.966140699999980000);
     }
-    
+    // Set map option, detail see google map doc
     var mapOptions = {
       center: pos,
       zoom: 13
@@ -95,17 +95,14 @@ $(document).ready(function(){
     
     // Google Direction text route
     directionsDisplay.setMap(map);
-    //directionsDisplay.setPanel(document.getElementById('directions-panel'));
   }
 
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
-  //google.maps.event.trigger(map, 'resize'); 
 
   $('#navCarousel').on('slid', function() {
     // Get/Set map-canvas class using off-left technique
     if(this.id == 'marker2'){
-      document.getElementById('map-canvas').className = "show-canvas";
       // Center map to prevent 
       var center = map.getCenter();
       google.maps.event.trigger(map, "resize");
@@ -140,7 +137,6 @@ function checkLocation(userLocation, transitObj) {
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
-      //document.getElementById('map-canvas').className = "canvas-hide";
       $('#navCarousel').carousel(2);
     }
   }
@@ -268,8 +264,6 @@ function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
 
-  
-
   if (start == '' && end == '') {
     pushMessage ('error', "Please fill in your current location and destination.");
     start='';
@@ -308,6 +302,7 @@ function calcRoute() {
 
   deleteTabs();
 
+  // Getting result from Google Direction
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
@@ -329,9 +324,8 @@ function calcRoute() {
         // Redirect to vote page
         $('#navCarousel').carousel(2);
       } else {
-        // Redirect to map info page
+        // Redirect to map info page, make sure the map is centered
         $('#navCarousel').carousel(1);
-        document.getElementById('map-canvas').className = "show-canvas";
         var center = map.getCenter();
         google.maps.event.trigger(map, "resize");
         map.setCenter(center);
@@ -350,7 +344,6 @@ function calcRoute() {
 // Write info to cookies
 function writeCookies (routeObj){
   getAlltransit(routeObj);
-  console.log(transitObj);
   getFirstStep(transitObj);
 }
 
@@ -372,31 +365,12 @@ function getFirstStep (transitObj){
   // transitObj node name steps 
   if (transitObj.length > 0) {
     return transitObj[0];
-    // console.log(
-    //   // Station name
-    //   transitObj[0].transit.departure_stop.name + " " +
-    //   // Train short name
-    //   transitObj[0].transit.line.short_name + " " +
-    //   // Headsign
-    //   transitObj[0].transit.headsign + " " +
-    //   // Current time
-    //   getTime() + " " +
-    //   // Train time
-    //   transitObj[0].transit.departure_time.value + " "
-    // );
   }
-}
-
-// Compare the first train step station location with user geolocation
-function getVotePage (){
-  console.log()
 }
 
 // Differentiate Transit Type for SavedRoute Object
 function diffRoute (routeObj){
   console.log(routeObj);
-  //console.log(routeObj.routes.legs[].steps[1]);
-  //console.log(routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.D + " " + routeObj.routes.legs[0].steps[1].transit.arrival_stop.location.k);
   
   for (i = 0; i < routeObj.routes.length; i++){
   	// Get route object
@@ -541,19 +515,18 @@ function trainTab (obj) {
 	getTransitDetail (obj, tabCount);
 };
 
-// Delay Voting Button send requirnment to vote, temporary return nearest schedule
-// Hardcode Data for database query function
+// Delay Voting Button send requirnment to vote
 function voteButton(id){
-  console.log(id);
-  currentVote = id;
+  // console.log(id);
+  // currentVote = id;
   // station name  -  transit: departure_stop: name: "DeKalb Av"
   // train  -  transit: line: short_name: "Q"
   // headsign  -  transit: headsign: "Astoria - Ditmars Blvd"
   // Current time
-  var currentDate = new Date(); 
-  var dateTime = currentDate.getHours() + ":"  
-               + currentDate.getMinutes() + ":" 
-               + currentDate.getSeconds();
+  // var currentDate = new Date();
+  // var dateTime = currentDate.getHours() + ":"
+  //              + currentDate.getMinutes() + ":"
+  //              + currentDate.getSeconds();
 
 
   // transit_name - transit_obj: transit: line: name: "Boardway Express"
@@ -583,9 +556,6 @@ function voteButton(id){
   
   // Get route time
   var theTime = transitObj[0].transit.departure_time.value.toJSON().substr(11, 8);
-  console.log(theTime);
-  // console.log(theTime[1] + theTime[2]);
-  // theTime = theTime.substr(1, 4);
   
 $.ajax({
     type:'GET',
@@ -620,7 +590,6 @@ $.ajax({
   // Clean up transitObj to prevent redirect to voting page
   transitObj = [];
   // Redirect to info page
-  toggleMapCanvas();  
   $('#navCarousel').carousel(1);
 };
 
