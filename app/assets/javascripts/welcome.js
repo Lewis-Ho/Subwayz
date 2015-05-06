@@ -96,17 +96,13 @@ $(document).ready(function(){
     // Google Direction text route
     directionsDisplay.setMap(map);
     //directionsDisplay.setPanel(document.getElementById('directions-panel'));
-
-    //Needed to resize maps 
-    // google.maps.event.addDomListener (map, 'idle', function(){
-    //   google.maps.event.trigger (map, 'resize');
-    // });
   }
+
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
   //google.maps.event.trigger(map, 'resize'); 
-  
-  $('.carousel-indicators li').click(function() {
+
+  $('#navCarousel').on('slid', function() {
     // Get/Set map-canvas class using off-left technique
     if(this.id == 'marker2'){
       document.getElementById('map-canvas').className = "show-canvas";
@@ -114,10 +110,8 @@ $(document).ready(function(){
       var center = map.getCenter();
       google.maps.event.trigger(map, "resize");
       map.setCenter(center);
-    } else {
-      document.getElementById('map-canvas').className = "off-left-hide";
     }
-  });	
+  }); 
   
   // Constantly check user location with station location in every
   window.setInterval(function(){checkLocation(pos, transitObj)},10000);
@@ -135,7 +129,7 @@ function checkLocation(userLocation, transitObj) {
     //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
     //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
     //   // Redirect page to vote
-    //   document.getElementById('map-canvas').className = "off-left-hide";
+    //   document.getElementById('map-canvas').className = "canvas-hide";
     //   $('#navCarousel').carousel(2);
     // }
     
@@ -146,19 +140,9 @@ function checkLocation(userLocation, transitObj) {
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
-      document.getElementById('map-canvas').className = "off-left-hide";
+      //document.getElementById('map-canvas').className = "canvas-hide";
       $('#navCarousel').carousel(2);
     }
-  }
-};
-
-// Switching to display map
-function toggleMapCanvas() {
-  var mapClass = document.getElementById('map-canvas').className;
-  if ( mapClass == "off-left-hide") {
-    document.getElementById('map-canvas').className = "show-canvas";
-  } else {
-    document.getElementById('map-canvas').className = "off-left-hide";
   }
 };
 
@@ -332,7 +316,7 @@ function calcRoute() {
 			savedRoutes = response;
 
       // Differentiate transit type
-      diffRoute (savedRoutes);
+      //diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
       
       // Write to cookies
