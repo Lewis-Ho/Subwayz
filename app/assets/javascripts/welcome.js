@@ -9,9 +9,10 @@ var altRouteCount = 0;
 var savedRoutes;
 var map;
 var pos;
+var votingStation = [];
 
 // Store all transit involved route 
-var transit_obj = [];
+var transitObj = [];
 
 $(document).ready(function(){
 
@@ -114,19 +115,52 @@ $(document).ready(function(){
       google.maps.event.trigger(map, "resize");
       map.setCenter(center);
     } else {
-      document.getElementById('map-canvas').className = "off-left_hide";
+      document.getElementById('map-canvas').className = "off-left-hide";
     }
   });	
+  
+  // Constantly check user location with station location in every
+  window.setInterval(function(){checkLocation(pos, transitObj)},10000);
 });
 
-// function showMapCanvas() {
-//   var mapClass = document.getElementById('map-canvas').className;
-//   if ( mapClass == "off-left_hide") {
-//     document.getElementById('map-canvas').className = "show-canvas";
-//   } else {
-//     document.getElementById('map-canvas').className = "off-left_hide";
-//   }
-// };
+// Redirect to voting page if user is in one of the station they search
+function checkLocation(userLocation, transitObj) {
+  console.log(userLocation.A + " " + userLocation.F);
+  for (var j = 0; j < transitObj.length; j++) {
+    console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
+    // // Check user location with each transit steps station location
+    // if (userLocation.A == transitObj[j].transit.departure_stop.location.A & userLocation.F == transitObj[j].transit.departure_stop.location.F) {
+    //   // Found match station
+    //   votingStation = transitObj[0];
+    //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
+    //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
+    //   // Redirect page to vote
+    //   document.getElementById('map-canvas').className = "off-left-hide";
+    //   $('#navCarousel').carousel(2);
+    // }
+    
+    // TESTING DATASET
+    if (true) {
+      // Found match station
+      votingStation = transitObj[0];
+      document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
+      document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
+      // Redirect page to vote
+      document.getElementById('map-canvas').className = "off-left-hide";
+      $('#navCarousel').carousel(2);
+    }
+  }
+};
+
+// Switching to display map
+function toggleMapCanvas() {
+  var mapClass = document.getElementById('map-canvas').className;
+  if ( mapClass == "off-left-hide") {
+    document.getElementById('map-canvas').className = "show-canvas";
+  } else {
+    document.getElementById('map-canvas').className = "off-left-hide";
+  }
+};
 
 /************************************************
 	Site Navigational Elements
@@ -292,7 +326,6 @@ function calcRoute() {
 
   directionsService.route(request, function(response, status) {
     console.log(response);
-    transit_obj = response.routes.legs;
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
@@ -301,19 +334,24 @@ function calcRoute() {
       // Differentiate transit type
       diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
-      //Move to next slide when directions have been retrieved.
-      console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
-        $('#navCarousel').carousel('prev');
-      } else {
-        $('#navCarousel').carousel('next');
-      }
       
-      //$('#navCarousel').carousel('next');
-      document.getElementById('map-canvas').className = "show-canvas";
-      var center = map.getCenter();
-      google.maps.event.trigger(map, "resize");
-      map.setCenter(center);
+      // Write to cookies
+      writeCookies(savedRoutes);
+      
+      //Move to next slide when directions have been retrieved.
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
+        // First station as voting station
+        votingStation = getFirstStep(transitObj);
+        // Redirect to vote page
+        $('#navCarousel').carousel(2);
+      } else {
+        // Redirect to map info page
+        $('#navCarousel').carousel(1);
+        document.getElementById('map-canvas').className = "show-canvas";
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+      }
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
     }
@@ -324,6 +362,46 @@ function calcRoute() {
     }
   });
 };
+
+// Write info to cookies
+function writeCookies (routeObj){
+  getAlltransit(routeObj);
+  console.log(transitObj);
+  getFirstStep(transitObj);
+}
+
+// Get all transit(Subway) consist transit info
+function getAlltransit (routeObj){
+  for (i = 0; i < routeObj.routes.length; i++){
+    var thisRoute = routeObj.routes[i].legs[0];
+    for (var j = 0; j < thisRoute.steps.length; j++) {
+      // Only check obj which is related to transit
+      if (thisRoute.steps[j].hasOwnProperty('transit') && thisRoute.steps[j].transit.line.vehicle.type == "SUBWAY") {
+        transitObj.push(thisRoute.steps[j]);
+      }
+    }
+  }
+}
+
+// Get first step which consist transit info
+function getFirstStep (transitObj){
+  // transitObj node name steps 
+  if (transitObj.length > 0) {
+    return transitObj[0];
+    // console.log(
+    //   // Station name
+    //   transitObj[0].transit.departure_stop.name + " " +
+    //   // Train short name
+    //   transitObj[0].transit.line.short_name + " " +
+    //   // Headsign
+    //   transitObj[0].transit.headsign + " " +
+    //   // Current time
+    //   getTime() + " " +
+    //   // Train time
+    //   transitObj[0].transit.departure_time.value + " "
+    // );
+  }
+}
 
 // Compare the first train step station location with user geolocation
 function getVotePage (){
@@ -487,33 +565,58 @@ function voteButton(id){
   //     console.log(data[0]);
   //   }
   // });
-
-
+  
+  // Get route time
+  var routeTime = transitObj[0].transit.departure_time.value.getUTCHours() + ":" +
+                  transitObj[0].transit.departure_time.value.getUTCMinutes() + ":" +
+                  transitObj[0].transit.departure_time.value.getUTCSeconds();
+  console.log(routeTime);
+  
+  var weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+  var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
+    
+  
+  // Get route time
+  var theTime = transitObj[0].transit.departure_time.value.toJSON().substr(11, 8);
+  console.log(theTime);
+  // console.log(theTime[1] + theTime[2]);
+  // theTime = theTime.substr(1, 4);
+  
 $.ajax({
     type:'GET',
     url:'/welcome/try',
-    data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEG", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
+    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, current_time : dateTime, vote :  currentVote, day: routeDay, time: theTime},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
-      console.log(data);
-      console.log(data[0]);
     }
   });
 
 $.ajax({
     type:'GET',
     url:'/welcome/prediction_alg',
-    data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEGE", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
+    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, current_time : dateTime, vote :  currentVote, day: routeDay, time: theTime},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
-      console.log(data);
-      console.log(data[0]);
     }
   });
-
-
+  
+  // $.ajax({
+  //     type:'GET',
+  //     url:'/welcome/prediction_alg',
+  //     data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEGE", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
+  //     success:function(data){
+  //       //I assume you want to do something on controller action execution success?
+  //       //$(this).addClass('done');
+  //     }
+  //   });
+  
+  // Clean up transitObj to prevent redirect to voting page
+  transitObj = [];
+  // Redirect to info page
+  toggleMapCanvas();  
+  $('#navCarousel').carousel(1);
 };
 
 function emailSend () {
