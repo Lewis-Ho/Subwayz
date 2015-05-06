@@ -567,12 +567,12 @@ function voteButton(id){
   // });
   
   // Get route time
-  var routeTime = transitObj[0].transit.departure_time.value.getUTCHours() + ":" +
-                  transitObj[0].transit.departure_time.value.getUTCMinutes() + ":" +
-                  transitObj[0].transit.departure_time.value.getUTCSeconds();
-  console.log(routeTime);
+  // var routeTime = transitObj[0].transit.departure_time.value.getUTCHours() + ":" +
+  //                 transitObj[0].transit.departure_time.value.getUTCMinutes() + ":" +
+  //                 transitObj[0].transit.departure_time.value.getUTCSeconds();
+  // console.log(routeTime);
   
-  var weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
     
   
@@ -585,7 +585,7 @@ function voteButton(id){
 $.ajax({
     type:'GET',
     url:'/welcome/try',
-    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, current_time : dateTime, vote :  currentVote, day: routeDay, time: theTime},
+    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, day: routeDay, time: theTime},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
@@ -595,7 +595,7 @@ $.ajax({
 $.ajax({
     type:'GET',
     url:'/welcome/prediction_alg',
-    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, current_time : dateTime, vote :  currentVote, day: routeDay, time: theTime},
+    data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, day: routeDay, time: theTime},
     success:function(data){
       //I assume you want to do something on controller action execution success?
       //$(this).addClass('done');
