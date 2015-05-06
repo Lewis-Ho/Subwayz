@@ -288,8 +288,8 @@ function calcRoute() {
     return;
   }
   else {
-    start += ' new york city';
-    end += ' new york city';
+    start += ' New York City';
+    end += ' New York City';
   }
 
   //Add "Directions" button to #sidebar #menu after initial search.
@@ -637,16 +637,12 @@ function renderDir (routeObj, routeNum){
     else if (thisRoute.steps[i].hasOwnProperty('transit') ) {
       // Switch case for vehicle type
       switch(thisRoute.steps[i].transit.line.vehicle.type) {
-          case "RAIL":
-              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + "RAIL </div>";
-              $('#tab0').append(newInstr);              
-              break;
           case "SUBWAY":
               newInstr =  '<div class="instr"><a href="#tab'+trainNum+'">'
               + '<img src="'+ thisRoute.steps[i].transit.line.icon 
-              + '" alt="' + thisRoute.steps[i].transit.line.short_name + '">' +' train to '
+              + '" alt="' + thisRoute.steps[i].transit.line.short_name + '">' + ' Train to '
               + thisRoute.steps[i].transit.arrival_stop.name
-              + '<br><span class="subtext">' + thisRoute.steps[i].instructions + '<br>'
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + '<br>'
               + thisRoute.steps[i].transit.num_stops + ' stop';
               //If stop needs to be plural i.e. stops...
               if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
@@ -655,15 +651,23 @@ function renderDir (routeObj, routeNum){
               trainNum++;
               break;
           case "BUS":
-              newInstr = '<div class="instr">' + thisRoute.steps[i].transit.line.short_name + ' ' + thisRoute.steps[i].instructions + '</div>';
+              newInstr = '<div class="instr">' 
+              + '<span style="background-color: ' + thisRoute.steps[i].transit.line.color + '; '
+              + 'color: white; padding-left: 5px; padding-right: 5px;">' + thisRoute.steps[i].transit.line.short_name + '</span>'
+              + ' Bus to ' + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign + '<br>'
+              + thisRoute.steps[i].transit.num_stops + ' stop';
+              //If stop needs to be plural i.e. stops...
+              if (thisRoute.steps[i].transit.num_stops > 1) newInstr += 's';
+              newInstr += '</span></div>';
               $('#tab0').append(newInstr);
               break;
           case "FERRY":
-              newInstr =  '<div class="instr">' + thisRoute.steps[i].instructions + ' ' + 'FERRY </div>';
-              $('#tab0').append(newInstr);
-              break;
-          case "HEAVY_RAIL":
-              newInstr ='<div class="instr">' + thisRoute.steps[i].transit.line.name + ' ' + thisRoute.steps[i].instructions + '</div>';
+              newInstr = '<div class="instr">' 
+              +'<img src="' + thisRoute.steps[i].transit.line.vehicle.icon + '">'
+              + 'Ferry to ' + thisRoute.steps[i].transit.arrival_stop.name
+              + '<br><span class="subtext">towards ' + thisRoute.steps[i].transit.headsign
+              +  '</span></div>';
               $('#tab0').append(newInstr);
               break;
           default:
@@ -674,6 +678,7 @@ function renderDir (routeObj, routeNum){
     }
   } // End Steps Loop
 
+  $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
   $('#tab0').append (routeObj.routes[routeNum].copyrights);
 
   $('#tab0 .instr a').on('click', function (e) { 
