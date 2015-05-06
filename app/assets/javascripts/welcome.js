@@ -10,12 +10,12 @@ var savedRoutes;                        // Returned direction result included al
 var map;                                // Map object
 var pos;                                // Current user position
 
+
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
 
 
 $(document).ready(function(){
-
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
@@ -110,8 +110,10 @@ $(document).ready(function(){
     }
   }); 
   
-  // Constantly check user location with station location in every
-  window.setInterval(function(){checkLocation(transitObj)},10000);
+  $("#goBtn").click(function () {
+    // Constantly check user location with station location in every
+    window.setInterval(function(){checkLocation(transitObj)},12000);
+  });
 });
 
 // Redirect to voting page if user is in one of the station they search
@@ -246,7 +248,7 @@ function successCallback(position){
         alert('No results found');
       }
     } else {
-      alert('Geocoder failed due to: ' + status);
+      console.log('Geocoder failed due to: ' + status);
     }
   });
 };
@@ -674,6 +676,15 @@ function renderDir (routeObj, routeNum){
     $('a[href="' + $(this).attr('href') + '"]').tab('show');
   });
 };
+
+// Set Cookies
+function setCookie(firstTrans, firstTransValue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = firstTrans + "=" + firstTransValue + "; " + expires;
+};
+
 
 /*
 // Markers for current locaiton
