@@ -40,4 +40,3 @@ Special thanks to professor Brizan and all classmate from Spring 2015 capstone c
 == License
 
 © 2015 Subwayz.  All rights reserved.
-

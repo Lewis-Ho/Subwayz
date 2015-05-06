@@ -9,8 +9,8 @@ default: &default
   pool: 5
  # timeout: 5000
   username: root
-  password: 
-  #host: localhost
+  password: 12pipipikapi
+  host: localhost
 
 development:
   <<: *default
