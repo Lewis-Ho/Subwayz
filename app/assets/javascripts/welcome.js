@@ -265,7 +265,7 @@ function successCallback(position){
 
 // Error Message for Geolocation API
 function errorCallback(){
-  alert('Geocoder failed');
+  console.log('Geocoder failed');
 };
 
 // Callback Function Used From the Front
@@ -475,6 +475,25 @@ function getTransitDetail(obj, tabNo){
   $(parent+'#departure_time').text(obj.transit.departure_time.text);
   $(parent+'#distance').text(obj.distance.text);
   $(parent+'#duration').text(obj.duration.text);
+  
+  // Get weekday
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
+  
+  // Get route time
+  var theTime = obj.transit.departure_time.value.toJSON().substr(11, 8);
+  // Get prediction info
+  $.ajax({
+      type:'GET',
+      url:'/welcome/prediction_alg',
+      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
+      success:function(data){
+        //I assume you want to do something on controller action execution success?
+        //$(this).addClass('done');
+        console.log(data);
+        $(parent+'#predict-info').text(data);
+      }
+    });
 };
 
 // Get current time from device
@@ -532,6 +551,7 @@ function trainTab (obj) {
 		    <p id="departure_time"></p>\
 		    <p id="distance"></p>\
 		    <p id="duration"></p>\
+        <p id="predict-info"></p>\
 		    <!-- <%= link_to "an article", @station%> -->\
 		  </div>');
 	getTransitDetail (obj, tabCount);
@@ -572,6 +592,7 @@ function voteButton(id){
   //                 transitObj[0].transit.departure_time.value.getUTCSeconds();
   // console.log(routeTime);
   
+  // Get weekday
   var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
     
