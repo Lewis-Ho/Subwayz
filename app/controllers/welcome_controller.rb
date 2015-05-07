@@ -88,21 +88,23 @@ def prediction_alg
 
 
 
-     @dateNow = DateTime.now.strftime("%Y-%m-%d");
-     @dateTom=DateTime.tomorrow.strftime("%Y-%m-%d");
-
-      @timeNow = DateTime.now.strftime("%H:%M:%S");
-
-     
     
-     v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
+  
+ 
+    puts @timeNow = DateTime.now.strftime("%H:%M:%S");
+
+     @dateNow = Time.now.strftime("%Y-%m-%d")
+   
+     @dateTom= ((Time.now.strftime("%Y-%m-%d")).to_time + 1.day).strftime("%Y-%m-%d")
+    
+     v = StopTime.stop_time_row(params[:day],params[:station_name],params[:train], ((params[:time]).to_time).strftime("%H:%M:%S"), params[:headsign])
     
      
      keys = [:stop_sequence, :trip_id, :arrival_time, :id,:arrival_time_min,:route_id,:stop_id]
      values = [v.pluck("stop_times.stop_sequence"),v.pluck(:trip_id),v.pluck("stop_times.arrival_time"), v.pluck("stop_times.id"),v.pluck("stop_times.arrival_time_min"), v.pluck("trips.route_id"), v.pluck("stop_times.stop_id")]
-     
+    
      @temp = Hash[*keys.zip(values).flatten] #creates things from array to a hash
-   
+  
 
      @firstStop_id = (@temp[:id]-@temp[:stop_sequence]+1).to_i;
      
@@ -113,7 +115,10 @@ def prediction_alg
       val_temp = [firstStop_train_info.pluck(:id),firstStop_train_info.pluck(:stop_sequence),firstStop_train_info.pluck(:departure_time),firstStop_train_info.pluck(:trip_id)]
       @firstStop_answer= Hash[*keys2.zip(val_temp).flatten] #creates things from array to a hash
 
-      @firstStop_answer[:departure_time];
+     puts "dep time"
+     puts  @firstStop_answer[:departure_time];
+
+   
 
       if (@temp[:stop_sequence]!=1) #person is here
 #       #check if train has departed then do previous stop regression
@@ -122,19 +127,19 @@ def prediction_alg
       
           if(@firstStop_answer[:departure_time] < @timeNow) 
                
-             @ps_regression= prev_stop_regression(@temp[:trip_id], @temp[:stop_sequence]);
+            render json: @ps_regression= prev_stop_regression(@temp[:trip_id], @temp[:stop_sequence]);
 
 
            elsif(@firstStop_answer[:departure_time] >= @timeNow)
                 
                 
-                @reg = same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
+              render json: @reg = same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
                
       end   
 
       elsif (@temp[:stop_sequence]==1)
             
-              puts @sstop_regression=same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
+             render json: @sstop_regression=same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
         
       end
       
@@ -147,36 +152,25 @@ def prediction_alg
 
     #if(cookies[:vote]!="1")
 
-        @current_time_convert=Time.parse(params[:time]); #with date and time
-
-        @current_time_final=@current_time_convert.strftime("%H:%M:%S"); #final time object to subtract with time_now_ET
-
-            @time_now_ET=DateTime.now.strftime("%H:%M:%S");
-
-            @answer=TimeDifference.between(@current_time_final, @time_now_ET).in_minutes
+           @delay= (((Time.now).strftime("%F %H:%M:%S").to_time - ((params[:time]).to_time).strftime("%F %H:%M:%S").to_time)/60).to_i
 
 
-            
+           puts "head"
+           puts params[:headsign]
 
-        #transit_name
-        @transit_name = params[:transit_name];
-
-        @curr_time= params[:time]
-
-        puts params[:station_name]
-        puts v = StopTime.try(params[:day],params[:station_name],params[:train], params[:time], params[:headsign])
+        puts v = StopTime.stop_time_row(params[:day],params[:station_name],params[:train],((params[:time]).to_time).strftime("%H:%M:%S"), params[:headsign])
 
 
 
         keys = [:id, :stop_sequence]
-        values = [v.pluck(:id),v.pluck(:stop_sequence)]
+         values = [v.pluck(:id),v.pluck(:stop_sequence)]
 
-        puts @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
+         puts @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
        
-        Vote.create(stop_time_id: @test[:id],d_t: @time_now_ET, day: params[:day], vote: @answer) #time is in UTC (make it ot EST)
+       Vote.create(stop_time_id: @test[:id],d_t: (Time.now).strftime("%F %H:%M:%S"), day: params[:day], vote: @delay) #time is in UTC (make it ot EST)
 
-    #end
-    cookies[:vote]= {:value=> "1", :expires=> 2.minutes.from_now}
+    # #end
+    # cookies[:vote]= {:value=> "1", :expires=> 2.minutes.from_now}
   end 
 
   
