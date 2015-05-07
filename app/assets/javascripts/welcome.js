@@ -294,11 +294,23 @@ function calcRoute() {
     end += ' New York City';
   }
 
-  //Add "Directions" button to #sidebar after initial search.
+  //Adds several things after initial search.
   if ($('button:contains("Go")').data('initial') == true) {
     $('.searchBar button').data('initial', false);
-    //Add After "Home" button.
-    $('.btn.btn-default[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1"> Directions</button>');
+    //Add "Directions" after "Home" button.
+    $('.btn.btn-default[data-slide-to="0"]').after('\
+        <button class="btn btn-default"\
+        data-target="#navCarousel" data-slide-to="1">\
+        Directions</button>');
+    //Add "Vote" after "Directions" button.
+    $('.btn.btn-default[data-slide-to="1"]').after('\
+        <button class="btn btn-default"\
+        data-target="#navCarousel" data-slide-to="2">\
+        Vote</button>');
+    $('.voting.jumbotron').append('\
+      <p>You seem to be near <span id="cur-station"></span>\
+      for <span id="cur-train"></span> train.\
+      </p><p>Is there any delay?</p>');
   }
 
   var request = {

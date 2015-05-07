@@ -7,7 +7,6 @@
 
 	<div class="btn-group-vertical">
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="0">Home</button>
-    <button class="btn btn-default" data-target="#navCarousel" data-slide-to="2">Vote</button>
     <button class="btn btn-default">About Us</button>
     <a href="https://github.com/Lewis-Ho/Subwayz" target="_blank" class="btn btn-default">Github</a>
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="3">Feedback</button>
@@ -91,16 +90,12 @@
   
   	<div class="item">
   		<div class="col-xs-12 col-sm-offset-3 col-sm-6">
-  			<div class="row">
-				<div class="row row-same-height voting jumbotron">
-          <p>You seem to be near <span id="cur-station"></span> for <span id="cur-train"></span> train.</p>
-          <p>Is there any delay?</p>
+				<div class="voting jumbotron">
         </div>
     			<div class="btn-group-vertical centered">
     				<button id="yes" class="btn btn-default" onclick="voteButton(this.id)">Yes</button>
     				<button id="no" class="btn btn-default" onclick="voteButton(this.id)">No</button>
     			</div>
-  		  </div>
   	 </div>
     </div><!--End of Item 2-->
 

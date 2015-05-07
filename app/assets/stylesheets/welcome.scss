@@ -326,7 +326,8 @@ input:focus, textarea:focus {
 }
 
 #yes, #no {
-  min-width: 200px;
+  display: inline-block;
+  max-width: 200px;
   margin-bottom: 15px;
   margin-left: auto;
   margin-right: auto;
