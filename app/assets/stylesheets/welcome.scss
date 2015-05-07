@@ -135,8 +135,6 @@ input:focus, textarea:focus {
 #carousel-container {
   padding-top: 30px;
   padding-bottom: 80px;
-  min-height: 300px;
-  max-width: 1000px;
   overflow-y: hidden;
 }
 
@@ -174,29 +172,16 @@ input:focus, textarea:focus {
   position: fixed;
   min-width: 200px;
   min-height: 200px;
-  max-width: 400px;
-  max-height: 400px;
   border-style: solid;
   border-color: $mta-blue;
   margin-bottom: 10px;
 }
 
-.tab-content .tab-pane:not(#tab0){
-  height: 400px;
-  color: white;
-  
-  background-color: $mta-silver;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-
-  overflow-y: scroll;
-}
-
 #tabs {
-  max-width: 400px;
 
   li a {
     color: $light-blue;
+    /*border-radius : tl tr br bl;*/
     border-radius: 10px 10px 0px 0px;
   }
 
@@ -213,13 +198,12 @@ input:focus, textarea:focus {
 
   /*Instructions found in #tab0.*/
  .instr {
-  max-width: 400px;
-  border-style: none;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  border-bottom: 1px solid $mta-platinum;
+    border-style: none;
+    /*padding: top right bottom left;*/
+    padding: 5px 10px 5px 10px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid $mta-platinum;
 
     /*Subway instructions are anchors to other tabs.*/
     a {
@@ -240,6 +224,17 @@ input:focus, textarea:focus {
     margin-top: -5px;
     font-size: small;
   }
+}
+
+.tab-content .tab-pane:not(#tab0){
+  height: 400px;
+  color: white;
+  
+  background-color: $mta-silver;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  overflow-y: scroll;
 }
 
 .blue-tab {
@@ -307,9 +302,8 @@ input:focus, textarea:focus {
 ************************************************/
 
 #feedback {
-  .form-group.centered {
+  .form-group {
     margin-bottom: 15px;
-    max-width: 400px;
   }
 
   button {

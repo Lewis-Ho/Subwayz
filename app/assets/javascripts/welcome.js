@@ -32,13 +32,6 @@ $(document).ready(function(){
 
   $('#tabs').tab();
 
-  $('#tab0 > a').on('click', function (e) { 
-  	e.preventDefault();
-    //$(this).tab('show');
-    console.log ("A");
-    //$('a [href="' + $(this).attr('href') + '"]').tab('show');
-  });
-
   $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
   $('#routeChange').click(function () {
@@ -287,10 +280,11 @@ function calcRoute() {
     end += ' New York City';
   }
 
-  //Add "Directions" button to #sidebar #menu after initial search.
-  if ($('.searchBar button').data('initial') == true) {
+  //Add "Directions" button to #sidebar after initial search.
+  if ($('button:contains("Go")').data('initial') == true) {
     $('.searchBar button').data('initial', false);
-    $('#menu button[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1">Directions</button>');
+    //Add After "Home" button.
+    $('.btn.btn-default[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1"> Directions</button>');
   }
 
   var request = {
@@ -448,7 +442,7 @@ function deleteTabs() {
 	while (tabCount >= 1) {
 		thisTab = 'tab' + tabCount;
 		//Remove tab from nav bar
-		$('ul#tabs li:not(a[href="#tab0"]:a[href="#"] )').remove();
+		$('ul#tabs li:not(#directionsTab, #routeChange)').remove();
 		//Remove contents of tab
 		$('#'+thisTab).remove();
 		tabCount--;
