@@ -10,12 +10,12 @@ var savedRoutes;                        // Returned direction result included al
 var map;                                // Map object
 var pos;                                // Current user position
 
+
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
 
 
 $(document).ready(function(){
-
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
@@ -118,15 +118,68 @@ $(document).ready(function(){
     map.setCenter(center);
   }, false);
   
-  // Constantly check user location with station location in every
-  window.setInterval(function(){checkLocation(pos, transitObj)},10000);
+  // Get address from cookies as array
+  var lastSearch = getAllCookies();
+  // Only output the last 3 searches
+  lastSearch = lastSearch.slice(-3).reverse();
+  
+  for (var i = 0; i < lastSearch.length; i++) {
+    var c = lastSearch[i].split('"');
+		$("#recent-search").after('<a class="recent-search-btn" data-pointA="'+c[3]+'" data-pointB="'+c[7]+'">'+c[3]+' To '+c[7]+'</a><br>');
+  }
+  
+  // Timer on after clicked go button
+  $("#goBtn").click(function () {
+    // Save point A & B to cookies
+    var start = document.getElementById('start').value;
+    var end = document.getElementById('end').value;
+    var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
+    
+    // Create cookies
+    createCookie('data',valueString,9999);
+    //     var vals = readCookie('data');
+    // for(var i = 0; i < vals.length; i++) {
+    //   //console.log(vals[i]);
+    //       console.log(vals[3]);
+    //       console.log(vals[7]);
+    // }
+    
+    // Constantly check user location with station location in every
+    window.setInterval(function(){checkLocation(transitObj)},12000);
+  });
+  
+  // Recent button fill in pointA, pointB textbox, search route and redirect to info page
+  $(".recent-search-btn").click(function () {
+    // Get data
+    var pointA = this.getAttribute('data-pointA');
+    var pointB = this.getAttribute('data-pointB');
+    
+    // Write to textboxes
+    document.getElementById('start').value = pointA;
+    document.getElementById('end').value = pointB;
+    
+    // Search route
+    calcRoute(); 
+    hideMessage();
+    
+    // Constantly check user location with station location in every
+    window.setInterval(function(){checkLocation(transitObj)},12000);
+  });
 });
 
 // Redirect to voting page if user is in one of the station they search
-function checkLocation(userLocation, transitObj) {
-  console.log(userLocation.A + " " + userLocation.F);
+function checkLocation(transitObj) {
+  // If geolocation available, get position
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
+  }
+  // Geolocation val
+  console.log(pos.j + " " + pos.C);
+  console.log(transitObj);
   for (var j = 0; j < transitObj.length; j++) {
-    console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
+    //console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
+    console.log(transitObj[j].transit.departure_stop.location.j + " " + transitObj[j].transit.departure_stop.location.C);
+    
     // // Check user location with each transit steps station location
     // if (userLocation.A == transitObj[j].transit.departure_stop.location.A & userLocation.F == transitObj[j].transit.departure_stop.location.F) {
     //   // Found match station
@@ -141,6 +194,7 @@ function checkLocation(userLocation, transitObj) {
     if (true) {
       // Found match station
       votingStation = transitObj[0];
+      console.log(votingStation);
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
@@ -231,8 +285,8 @@ function getAddress(callback){
 
 // Browser Supported Geolocation API, Get Current Location
 function successCallback(position){
-  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+  pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  console.log(pos);
   //Reverse geocoding for current location
   geocoder.geocode({'latLng': pos}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
@@ -245,7 +299,7 @@ function successCallback(position){
         alert('No results found');
       }
     } else {
-      alert('Geocoder failed due to: ' + status);
+      console.log('Geocoder failed due to: ' + status);
     }
   });
 };
@@ -438,6 +492,47 @@ function printRoute (routeObj, routeNo) {
   }
 };
 
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+	var parent='';
+	if (tabNo) {
+		parent='div#tab'+tabNo+' ';
+	}
+
+  $(parent+'#train').text(obj.transit.line.short_name + " Train");
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text(obj.transit.departure_time.text);
+  $(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
+  
+  // Get weekday
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
+  
+  // Get route time
+  var month = obj.transit.departure_time.value.getMonth()+1;
+  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                obj.transit.departure_time.value.getDate() +' '+ 
+                obj.transit.departure_time.value.toTimeString().substr(0, 8);
+  
+  // Get prediction info
+  $.ajax({
+      type:'GET',
+      url:'/welcome/prediction_alg',
+      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
+      success:function(data){
+        //I assume you want to do something on controller action execution success?
+        //$(this).addClass('done');
+        //console.log(data);
+        $(parent+'#predict-info').text(data);
+      }
+    });
+};
+
 // Get current time from device
 function getTime(){
   var currentdate = new Date(); 
@@ -571,11 +666,15 @@ function voteButton(id){
   // console.log(routeTime);
   
   // Get weekday
-  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
   
   // Get route time
-  var theTime = transitObj[0].transit.departure_time.value.toJSON().substr(11, 8);
+  var month   = transitObj[0].transit.departure_time.value.getMonth()+1;
+  var theTime = transitObj[0].transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                transitObj[0].transit.departure_time.value.getDate() +' '+ 
+                transitObj[0].transit.departure_time.value.toTimeString().substr(0, 8);
   
 $.ajax({
     type:'GET',
@@ -698,3 +797,112 @@ function renderDir (routeObj, routeNum){
     $('a[href="' + $(this).attr('href') + '"]').tab('show');
   });
 };
+
+// Randomly create word in size of 5
+function randomText(){
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 5; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
+// Set Cookies
+function createCookie(name,value,days) {
+  if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toUTCString();
+	}
+	else var expires = "";
+  // Write to new cookies if cookies does not exist, else append on existing cookies
+  if (document.cookie == ""){
+    document.cookie = name+"="+value+expires+"; path=/";
+  } else {
+    // Append on existing cookies
+    document.cookie = randomText()+"="+value+expires+"; path=/";
+  }
+};
+
+// Read Cookies
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i].split('"');
+    console.log(c);
+    return c;
+		//while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		//if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+};
+
+// Return all cookies in array
+var getAllCookies = function(){
+  var pairs = document.cookie.split(";");
+  return pairs;
+}
+
+/*
+// Markers for current locaiton
+var markers = [];
+// Store all transit involved route 
+var transit_obj = [];
+
+$(document).ready(function(){
+  var map;
+  var directionsDisplay;
+  var directionsService = new google.maps.DirectionsService();
+  var lat;
+  var lon;
+  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
+
+  function initialize() {
+
+    // Try HTML5 geolocation
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+        console.log(pos);
+
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var mapOptions = {
+          zoom: 11,
+          center: pos
+        };
+        // Draw map
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        directionsDisplay.setMap(map);
+        
+        var request = {
+            origin: pos,
+            destination: hunter,
+            travelMode: google.maps.TravelMode.TRANSIT
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          }
+        });
+
+        map.setCenter(pos);
+      }, function() {
+        handleNoGeolocation(true);
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
+    }
+  }
+  else {
+    $('#navCarousel').carousel(0);
+    pushMessage ('error', 'Empty Message not sent!');
+  }
+};
+*/
