@@ -722,7 +722,7 @@ $.ajax({
   //       //$(this).addClass('done');
   //     }
   //   });
-  
+  readCookie('data');
   // Clean up transitObj to prevent redirect to voting page
   transitObj = [];
   // Redirect to info page
