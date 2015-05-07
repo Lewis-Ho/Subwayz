@@ -102,7 +102,21 @@ $(document).ready(function(){
       google.maps.event.trigger(map, "resize");
       map.setCenter(center);
     }
-  }); 
+  });
+
+  //If the devices orientation changes, resize and recenter map.
+  window.addEventListener("orientationchange", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+  }, false);
+
+  //If the device's resolution changes, resize and recenter map.
+  window.addEventListener("resize", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+  }, false);
   
   // Constantly check user location with station location in every
   window.setInterval(function(){checkLocation(pos, transitObj)},10000);
@@ -665,7 +679,7 @@ function renderDir (routeObj, routeNum){
   } // End Steps Loop
 
   $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
-  $('#tab0').append (routeObj.routes[routeNum].copyrights);
+  $('#tab0').append ('<p>'+routeObj.routes[routeNum].copyrights+'<p>');
 
   $('#tab0 .instr a').on('click', function (e) { 
     e.preventDefault();

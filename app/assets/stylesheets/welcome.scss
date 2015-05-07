@@ -177,8 +177,35 @@ input:focus, textarea:focus {
   margin-bottom: 10px;
 }
 
-#tabs {
+/*Media queries are based on bootstrap's sm, md, and lg queries.*/
+@media (min-width: 768px) {
+  #map-canvas {
+    height: 450px;
+  }
+  .tab-pane {
+    height: 380px;
+  }
+}
 
+@media (min-width: 992px) {
+  #map-canvas {
+    height: 550px;
+  }
+  .tab-pane {
+    height: 480px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #map-canvas {
+    height: 720px;
+  }
+  .tab-pane {
+    height: 675px;
+  }
+}
+
+#tabs {
   li a {
     color: $light-blue;
     /*border-radius : tl tr br bl;*/
@@ -193,16 +220,23 @@ input:focus, textarea:focus {
 }
 
 #tab0 {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 10px;
 
-  /*Instructions found in #tab0.*/
- .instr {
+  p {
+    margin-top: 2px;
+    margin-bottom: 2px;
     border-style: none;
     /*padding: top right bottom left;*/
     padding: 5px 10px 5px 10px;
+  }
+
+  /*Instructions found in #tab0.*/
+ .instr {
     margin-top: 2px;
     margin-bottom: 2px;
+    border-style: none;
+    /*padding: top right bottom left;*/
+    padding: 5px 10px 5px 10px;
     border-bottom: 1px solid $mta-platinum;
 
     /*Subway instructions are anchors to other tabs.*/
@@ -226,15 +260,16 @@ input:focus, textarea:focus {
   }
 }
 
-.tab-content .tab-pane:not(#tab0){
-  height: 400px;
-  color: white;
-  
-  background-color: $mta-silver;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-
+.tab-content {
   overflow-y: scroll;
+
+  .tab-pane:not(#tab0){
+    color: white;
+    
+    background-color: $mta-silver;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 }
 
 .blue-tab {
@@ -277,6 +312,7 @@ input:focus, textarea:focus {
   background-color: $mta-purple;
 }
 
+
 /************************************************
 	2c. Survey (Slide 2) Content
 ************************************************/
@@ -285,7 +321,6 @@ input:focus, textarea:focus {
   background: black;
   border-radius: 30px;
   margin-top: 30px;
-  max-width: 800px;
   color: white;
   text-align: center;
 }
