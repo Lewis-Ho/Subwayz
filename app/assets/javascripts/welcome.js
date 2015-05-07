@@ -288,8 +288,8 @@ function calcRoute() {
   }
 
   //Add "Directions" button to #sidebar #menu after initial search.
-  if ($('#goBtn').data('initial') == true) {
-    $('#goBtn').data('initial', false);
+  if ($('.searchBar button').data('initial') == true) {
+    $('.searchBar button').data('initial', false);
     $('#menu button[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1">Directions</button>');
   }
 
@@ -448,7 +448,7 @@ function deleteTabs() {
 	while (tabCount >= 1) {
 		thisTab = 'tab' + tabCount;
 		//Remove tab from nav bar
-		$('ul#tabs li:not(#directionsTab, #routeChange)').remove();
+		$('ul#tabs li:not(a[href="#tab0"]:a[href="#"] )').remove();
 		//Remove contents of tab
 		$('#'+thisTab).remove();
 		tabCount--;
@@ -464,7 +464,7 @@ function trainTab (obj) {
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 
   $('#tab'+tabCount).append (
-			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
+			'<div class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
 			  <p id="train"></p>\
 		    <p id="train-stop-depart"></p>\
 		    <p id="departure_time"></p>\
@@ -553,7 +553,6 @@ function voteButton(id){
   // Get weekday
   var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
-    
   
   // Get route time
   var theTime = transitObj[0].transit.departure_time.value.toJSON().substr(11, 8);

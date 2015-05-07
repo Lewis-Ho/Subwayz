@@ -23,19 +23,18 @@ $mta-purple:    #B933AD;
 $light-blue:    #6B89CD;
 $dark-blue:     #0B2B74;
 
-html {
+html, body {
   height: 100%;
-  width: 100%;
-}
-
-body {
-	height: 100%;
   width: 100%;
 }
 
 .centered {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+input:focus, textarea:focus {
+  border-color: $mta-blue !important;
 }
 
 /************************************************
@@ -50,16 +49,65 @@ body {
   background-color: $mta-blue;
   text-align: right;
   margin-left: -150px;
+
+  #togglebtn {
+    background: none;
+    border: none;
+    border-left: 1px solid white;
+    border-radius: 0px;
+    outline: none;
+    width: 50px;
+    height: 100%;
+    float: right;
+    color: white;
+
+    #menu-label {
+      position: absolute;
+      top: 30px;
+      transform: rotate(90deg) translate(30px, 35px);
+      transform-origin: top, right;
+      font-weight: bold;
+      font-size: 125%
+    }
+  }
+
+  /*Menu*/
+  .btn-group-vertical {
+    float: left;
+
+    button, a {
+      background: none;
+      border: none;
+      outline: none;
+      text-align: left;
+      margin: 10px;
+      border-radius: 10px;
+      color: white;
+    }
+
+    .btn.btn-default:hover{
+      background: #6B89CD;
+      font-weight: bold;
+    }
+  }
 }
 
 .sidebar-hidden {
   animation: slideOut 0.5s linear;
   animation-fill-mode: forwards;
+
+  #togglebtn {
+    color: white;
+  }
 }
 
 .sidebar-appear {
   animation: slideIn 0.5s linear;
   animation-fill-mode: forwards;
+
+  #togglebtn {
+    color: $dark-blue;
+  }
 }
 
 @keyframes slideIn {
@@ -80,55 +128,6 @@ body {
   }
 }
 
-#togglebtn {
-  background: none;
-  border: none;
-  border-left: 1px solid white;
-  border-radius: 0px;
-  outline: none;
-  width: 50px;
-  height: 100%;
-  float: right;
-  color: white;
-}
-
-#sidebar.sidebar-hidden #togglebtn {
-  color: white;
-}
-
-#sidebar.sidebar-appear #togglebtn {
-  color: $dark-blue;
-}
-
-#togglebtn #menu-label {
-  position: absolute;
-  top: 30px;
-  transform: rotate(90deg) translate(30px, 35px);
-  transform-origin: top, right;
-  font-weight: bold;
-  font-size: 125%
-}
-
-#menu {
-  float: left;
-}
-
-#menu button, #menu a {
-  background: none;
-  border: none;
-  outline: none;
-  text-align: left;
-  margin: 10px;
-  border-radius: 10px;
-  color: white;
-}
-
-#menu button:hover, #menu button:active,
-#menu a:hover, #menu a:active {
-  background: #6B89CD;
-  font-weight: bold;
-}
-
 /************************************************
 	2. Carousel
 ************************************************/
@@ -138,13 +137,6 @@ body {
   padding-bottom: 80px;
   min-height: 300px;
   max-width: 1000px;
-}
-
-.carousel-indicators.custom {
-	background-color: $mta-blue;
-}
-
-.container-fluid {
   overflow-y: hidden;
 }
 
@@ -163,7 +155,7 @@ body {
   max-width: 400px;
 }
 
-.glyphicon-map-marker.redMarker {
+.searchBar .glyphicon-map-marker {
   color: $mta-red;
 }
 
@@ -171,10 +163,7 @@ body {
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
-}
-
-input.form-control:focus, textarea.form-control:focus {
-  border-color: $mta-blue;
+  text-align: center;
 }
 
 /************************************************
@@ -182,6 +171,7 @@ input.form-control:focus, textarea.form-control:focus {
 ************************************************/
 
 #map-canvas {
+  position: fixed;
   min-width: 200px;
   min-height: 200px;
   max-width: 400px;
@@ -191,51 +181,105 @@ input.form-control:focus, textarea.form-control:focus {
   margin-bottom: 10px;
 }
 
-#directions-panel, #station-info {
-  max-width: 400px;
+.tab-content .tab-pane:not(#tab0){
   height: 400px;
+  color: white;
+  
+  background-color: $mta-silver;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
   overflow-y: scroll;
 }
 
-#message-container {
-  text-align: center;
-}
+#tabs {
+  max-width: 400px;
 
-#station-info {
-}
+  li a {
+    color: $light-blue;
+    border-radius: 10px 10px 0px 0px;
+  }
 
-.nav-tabs.custom > li > a {
-  color: $light-blue;
+  li:not(#directionsTab):not(#routeChange) a:active, 
+  li:not(#directionsTab):not(#routeChange) a:hover, 
+  li:not(#directionsTab):not(#routeChange) a:focus {
+    color: white;
+  }
 }
 
 #tab0 {
   padding-top: 5px;
   padding-bottom: 5px;
-}
 
-#tab0 .instr {
+  /*Instructions found in #tab0.*/
+ .instr {
+  max-width: 400px;
   border-style: none;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-top: 2px;
   margin-bottom: 2px;
   border-bottom: 1px solid $mta-platinum;
+
+    /*Subway instructions are anchors to other tabs.*/
+    a {
+     color: $light-blue;
+    }
+    
+    /*Icons and logos for different transit vehicles.*/
+    img {
+      width: 16px;
+      height: 16px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+
+  /*Additional information found under instructions.*/
+  .subtext {
+    margin-top: -5px;
+    font-size: small;
+  }
 }
 
-#tab0 .instr a {
-  color: $light-blue;
+.blue-tab {
+  background-color: $mta-blue;
 }
 
-#tab0 .instr img {
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
-  margin-right: 2px;
+.orange-tab {
+  background-color: $mta-orange;
 }
 
-.subtext {
-  margin-top: -5px;
-  font-size: small;
+.lime-tab {
+  background-color: $mta-lime;
+}
+
+.brown-tab {
+  background-color: $mta-brown;
+}
+
+.platinum-tab {
+  background-color: $mta-platinum;
+}
+
+.yellow-tab {
+  background-color: $mta-yellow;
+}
+
+.silver-tab {
+  background-color: $mta-silver;
+}
+
+.red-tab {
+  background-color: $mta-red;
+}
+
+.green-tab {
+  background-color: $mta-green;
+}
+
+.purple-tab {
+  background-color: $mta-purple;
 }
 
 /************************************************
@@ -251,8 +295,8 @@ input.form-control:focus, textarea.form-control:focus {
   text-align: center;
 }
 
-#vote-yes, #vote-no {
-  min-width: 400px;
+#yes, #no {
+  min-width: 200px;
   margin-bottom: 15px;
   margin-left: auto;
   margin-right: auto;
@@ -262,12 +306,14 @@ input.form-control:focus, textarea.form-control:focus {
 	2c. Feedback (Slide 3) Content
 ************************************************/
 
-.form-group.centered {
-  margin-bottom: 15px;
-  max-width: 400px;
-}
+#feedback {
+  .form-group.centered {
+    margin-bottom: 15px;
+    max-width: 400px;
+  }
 
-#feedback button {
-  margin-top: 15px;
-  margin-bottom: 15px;
+  button {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
 }

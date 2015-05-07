@@ -5,7 +5,7 @@
     </span>
   </button>
 
-	<div id="menu" class="btn-group-vertical">
+	<div class="btn-group-vertical">
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="0">Home</button>
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="2">Vote</button>
     <button class="btn btn-default">About Us</button>
@@ -31,7 +31,7 @@
                     <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
                     <span class="input-group-btn">
                       <button class="btn btn-default" type="button" onClick="getAddress(fillAddress)">
-                        <span class="glyphicon glyphicon-map-marker redMarker"></span>
+                        <span class="glyphicon glyphicon-map-marker"></span>
                       </button>
                     </span>
                   </div>
@@ -44,7 +44,7 @@
                   <div class="input-group">
                     <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
                     <span class="input-group-btn">
-                      <button id="goBtn" class="btn btn-default" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
+                      <button class="btn btn-default" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
                         Go
                       </button>
                     </span>
@@ -64,7 +64,7 @@
       </div><!--End of Item 0-->
     
     <div class="item">
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-md-offset-3 col-md-6">
         <div id="map-canvas" class="hide-canvas"></div> 
           <div class="row">
           	<ul id="tabs" class="nav nav-tabs custom" data-tabs="tabs">
@@ -75,8 +75,7 @@
           	</ul>
 
           	<div class="tab-content">
-            	<div id="tab0" class="tab-pane active">
-				      </div>
+            	<div id="tab0" class="tab-pane active"></div>
           	</div>
           </div>
       	</div>
@@ -89,7 +88,7 @@
           <p>You seem to be near <span id="cur-station"></span> for <span id="cur-train"></span> train.</p>
           <p>Is there any delay?</p>
         </div>
-    			<div class="btn-group-vertical" style="margin-left: auto; margin-right: auto;">
+    			<div class="btn-group-vertical">
     				<button id="yes" class="btn btn-default" onclick="voteButton(this.id)">Yes</button>
     				<button id="no" class="btn btn-default" onclick="voteButton(this.id)">No</button>
     			</div>
