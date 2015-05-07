@@ -16,6 +16,20 @@ var transitObj = [];        // Store all transit involved route
 
 
 $(document).ready(function(){
+  // Make sure direction-info fix the size of screen
+  function checkWidth() {
+    if (screen.width < 767) {
+      // Mobile
+      document.getElementById('direction-info').className = "col-xs-12";
+    } else {
+      document.getElementById('direction-info').className = "col-xs-4";
+    }
+  }
+  // Execute on load
+  checkWidth();
+  // Bind event listener
+  $(screen).resize(checkWidth);
+  
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
@@ -120,12 +134,15 @@ $(document).ready(function(){
   
   // Get address from cookies as array
   var lastSearch = getAllCookies();
-  // Only output the last 3 searches
-  lastSearch = lastSearch.slice(-3).reverse();
   
-  for (var i = 0; i < lastSearch.length; i++) {
-    var c = lastSearch[i].split('"');
-		$("#recent-search").after('<a class="recent-search-btn" data-pointA="'+c[3]+'" data-pointB="'+c[7]+'">'+c[3]+' To '+c[7]+'</a><br>');
+  if (lastSearch.length > 0 ) {
+    // Only output the last 3 searches
+    lastSearch = lastSearch.slice(-3);
+    for (var i = 0; i < lastSearch.length; i++) {
+      var c = lastSearch[i].split('"');
+  		$("#recent-search").after('<a class="recent-search-btn" data-pointA="'+c[3]+'" data-pointB="'+c[7]+'">'+c[3]+' To '+c[7]+'</a><br>');
+    }
+    $("#recent-search").after('<p>Recent Search:</p>');
   }
   
   // Timer on after clicked go button
@@ -137,7 +154,7 @@ $(document).ready(function(){
     
     // Create cookies
     createCookie('data',valueString,9999);
-    //     var vals = readCookie('data');
+        var vals = readCookie('data');
     // for(var i = 0; i < vals.length; i++) {
     //   //console.log(vals[i]);
     //       console.log(vals[3]);

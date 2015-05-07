@@ -167,11 +167,23 @@ input:focus, textarea:focus {
 /************************************************
 	2b. Info (Slide 1) Content
 ************************************************/
+@media (max-width: 767px) {
+  #map-canvas {
+    min-width: 250px;
+    min-height: 200px;
+    max-width: 400px;
+    max-height: 400px;
+  }
+}
+
+@media (min-width: 768px) {
+  #map-canvas {
+    min-width: 40em;
+    min-height: 45em;
+  }
+}
 
 #map-canvas {
-  position: fixed;
-  min-width: 200px;
-  min-height: 200px;
   border-style: solid;
   border-color: $mta-blue;
   margin-bottom: 10px;
