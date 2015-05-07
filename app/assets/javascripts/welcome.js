@@ -110,9 +110,48 @@ $(document).ready(function(){
     }
   }); 
   
+  // Get address from cookies as array
+  var lastSearch = getAllCookies();
+  // Only output the last 3 searches
+  lastSearch = lastSearch.slice(-3).reverse();
+  
+  for (var i = 0; i < lastSearch.length; i++) {
+    var c = lastSearch[i].split('"');
+		$("#recent-search").after('<a class="recent-search-btn" data-pointA="'+c[3]+'" data-pointB="'+c[7]+'">'+c[3]+' To '+c[7]+'</a><br>');
+  }
+  
+  // Timer on after clicked go button
   $("#goBtn").click(function () {
+    // Save point A & B to cookies
+    var start = document.getElementById('start').value;
+    var end = document.getElementById('end').value;
+    var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
+    
+    // Create cookies
+    createCookie('data',valueString,9999);
+    var vals = readCookie('data');
+  	for(var i = 0; i < vals.length; i++) {
+  		//console.log(vals[i]);
+      console.log(vals[3]);
+      console.log(vals[7]);
+  	}
     // Constantly check user location with station location in every
     window.setInterval(function(){checkLocation(transitObj)},12000);
+  });
+  
+  // Recent button fill in pointA, pointB textbox, search route and redirect to info page
+  $(".recent-search-btn").click(function () {
+    // Get data
+    var pointA = this.getAttribute('data-pointA');
+    var pointB = this.getAttribute('data-pointB');
+    
+    // Write to textboxes
+    document.getElementById('start').value = pointA;
+    document.getElementById('end').value = pointB;
+    
+    // Search route
+    calcRoute(); 
+    hideMessage();
   });
 });
 
@@ -449,7 +488,12 @@ function getTransitDetail(obj, tabNo){
   var routeDay = weekday[obj.transit.departure_time.value.getDay()];
   
   // Get route time
-  var theTime = obj.transit.departure_time.value.toJSON().substr(11, 8);
+  var month = obj.transit.departure_time.value.getMonth()+1;
+  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                obj.transit.departure_time.value.getDate() +' '+ 
+                obj.transit.departure_time.value.toTimeString().substr(0, 8);
+  
   // Get prediction info
   $.ajax({
       type:'GET',
@@ -561,11 +605,14 @@ function voteButton(id){
   
   // Get weekday
   var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-  var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
-    
+  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
   
   // Get route time
-  var theTime = transitObj[0].transit.departure_time.value.toJSON().substr(11, 8);
+  var month = obj.transit.departure_time.value.getMonth()+1;
+  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                obj.transit.departure_time.value.getDate() +' '+ 
+                obj.transit.departure_time.value.toTimeString().substr(0, 8);
   
 $.ajax({
     type:'GET',
@@ -677,14 +724,53 @@ function renderDir (routeObj, routeNum){
   });
 };
 
+// Randomly create word in size of 5
+function randomText(){
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 5; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 // Set Cookies
-function setCookie(firstTrans, firstTransValue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  var expires = "expires="+d.toUTCString();
-  document.cookie = firstTrans + "=" + firstTransValue + "; " + expires;
+function createCookie(name,value,days) {
+  if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toUTCString();
+	}
+	else var expires = "";
+  // Write to new cookies if cookies does not exist, else append on existing cookies
+  if (document.cookie == ""){
+    document.cookie = name+"="+value+expires+"; path=/";
+  } else {
+    // Append on existing cookies
+    document.cookie = randomText()+"="+value+expires+"; path=/";
+  }
 };
 
+// Read Cookies
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i].split('"');
+    console.log(c);
+    return c;
+		//while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		//if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+};
+
+// Return all cookies in array
+var getAllCookies = function(){
+  var pairs = document.cookie.split(";");
+  return pairs;
+}
 
 /*
 // Markers for current locaiton
