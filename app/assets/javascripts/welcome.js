@@ -130,12 +130,13 @@ $(document).ready(function(){
     
     // Create cookies
     createCookie('data',valueString,9999);
-    var vals = readCookie('data');
-  	for(var i = 0; i < vals.length; i++) {
-  		//console.log(vals[i]);
-      console.log(vals[3]);
-      console.log(vals[7]);
-  	}
+    //     var vals = readCookie('data');
+    // for(var i = 0; i < vals.length; i++) {
+    //   //console.log(vals[i]);
+    //       console.log(vals[3]);
+    //       console.log(vals[7]);
+    // }
+    
     // Constantly check user location with station location in every
     window.setInterval(function(){checkLocation(transitObj)},12000);
   });
@@ -153,6 +154,9 @@ $(document).ready(function(){
     // Search route
     calcRoute(); 
     hideMessage();
+    
+    // Constantly check user location with station location in every
+    window.setInterval(function(){checkLocation(transitObj)},12000);
   });
 });
 
@@ -183,6 +187,7 @@ function checkLocation(transitObj) {
     if (true) {
       // Found match station
       votingStation = transitObj[0];
+      console.log(votingStation);
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
@@ -641,15 +646,15 @@ function voteButton(id){
   // console.log(routeTime);
   
   // Get weekday
-  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
+  var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
   
   // Get route time
-  var month = obj.transit.departure_time.value.getMonth()+1;
-  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+  var month   = transitObj[0].transit.departure_time.value.getMonth()+1;
+  var theTime = transitObj[0].transit.departure_time.value.getFullYear() +'-'+ 
                 month +'-'+ 
-                obj.transit.departure_time.value.getDate() +' '+ 
-                obj.transit.departure_time.value.toTimeString().substr(0, 8);
+                transitObj[0].transit.departure_time.value.getDate() +' '+ 
+                transitObj[0].transit.departure_time.value.toTimeString().substr(0, 8);
   
 $.ajax({
     type:'GET',
