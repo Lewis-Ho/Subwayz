@@ -5,9 +5,8 @@
     </span>
   </button>
 
-	<div id="menu" class="btn-group-vertical">
+	<div class="btn-group-vertical">
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="0">Home</button>
-    <button class="btn btn-default" data-target="#navCarousel" data-slide-to="2">Vote</button>
     <button class="btn btn-default">About Us</button>
     <a href="https://github.com/Lewis-Ho/Subwayz" target="_blank" class="btn btn-default">Github</a>
     <button class="btn btn-default" data-target="#navCarousel" data-slide-to="3">Feedback</button>
@@ -20,7 +19,7 @@
     <div class="carousel-inner">
 
       <div class="item active">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-offset-3 col-sm-6">
           <img id="logo" src="logo.png" class="img-responsive centered" alt="Logo">
           <form id="pointAB" role="form">
 
@@ -31,7 +30,7 @@
                     <input id="start" type="text" class="form-control" data-bind="value:start" placeholder="Current Location"/>
                     <span class="input-group-btn">
                       <button class="btn btn-default" type="button" onClick="getAddress(fillAddress)">
-                        <span class="glyphicon glyphicon-map-marker redMarker"></span>
+                        <span class="glyphicon glyphicon-map-marker"></span>
                       </button>
                     </span>
                   </div>
@@ -44,7 +43,7 @@
                   <div class="input-group">
                     <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
                     <span class="input-group-btn">
-                      <button id="goBtn" class="btn btn-default" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
+                      <button class="btn btn-default" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
                         Go
                       </button>
                     </span>
@@ -65,48 +64,51 @@
       </div><!--End of Item 0-->
     
     <div class="item">
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-sm-offset-1 col-sm-4">
         <div id="map-canvas" class="hide-canvas"></div> 
-          <div class="row">
-          	<ul id="tabs" class="nav nav-tabs custom" data-tabs="tabs">
-          		<li id="directionsTab" class="active"><a href="#tab0" data-toggle="tab">Directions</a></li>
-          		<li id="routeChange" data-route="0"><a href="#">
-          			<span class="glyphicon glyphicon-triangle-right"></span>
-          		</a></li>
-          	</ul>
+      </div>
 
-          	<div class="tab-content">
-            	<div id="tab0" class="tab-pane active">
-				      </div>
-          	</div>
-          </div>
-      	</div>
-      </div><!--End of Item 1-->
+      <div class="col-xs-12 col-sm-4">
+        <div class="row">
+        	<ul id="tabs" class="nav nav-tabs custom" data-tabs="tabs">
+        		<li id="directionsTab" class="active">
+              <a href="#tab0" data-toggle="tab">Directions</a>
+            </li>
+        		<li id="routeChange" data-route="0">
+              <a href="#"><span class="glyphicon glyphicon-triangle-right"></span></a>
+            </li>
+        	</ul>
+        </div>
+
+        <div class="row">
+        	<div class="tab-content">
+          	<div id="tab0" class="tab-pane active"></div>
+        	</div>
+        </div>
+      </div>
+
+    </div><!--End of Item 1-->
   
   	<div class="item">
-  		<div class="col-xs-12">
-  			<div class="row">
-				<div class="row row-same-height voting jumbotron">
-          <p>You seem to be near <span id="cur-station"></span> for <span id="cur-train"></span> train.</p>
-          <p>Is there any delay?</p>
+  		<div class="col-xs-12 col-sm-offset-3 col-sm-6">
+				<div class="voting jumbotron">
         </div>
-    			<div class="btn-group-vertical" style="margin-left: auto; margin-right: auto;">
+    			<div class="btn-group-vertical centered">
     				<button id="yes" class="btn btn-default" onclick="voteButton(this.id)">Yes</button>
     				<button id="no" class="btn btn-default" onclick="voteButton(this.id)">No</button>
     			</div>
-  		  </div>
   	 </div>
     </div><!--End of Item 2-->
 
   	<div class="item">
-  		<div class="col-xs-12">
+  		<div class="col-xs-12  col-sm-offset-3 col-sm-6">
   			<form id="feedback">
 						<div class="row">
-	    				<div class="form-group centered">
+	    				<div class="form-group">
                 <label for="user-email">Email</label>
                 <input id="user-email" class="form-control" placeholder="Please enter your email for replies. (Optional)">
               </div>
-              <div class="form-group centered">
+              <div class="form-group">
 	    					<label for="feedback-content">Please let us know what you think of our project. Thanks!</label>
 			    			<textarea id="feedback-content" class="form-control" rows="4" placeholder="Please write your comments here."></textarea>
 			    			<button class="btn btn-default" onclick="emailSend()">Submit</button>

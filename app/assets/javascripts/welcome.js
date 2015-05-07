@@ -32,13 +32,6 @@ $(document).ready(function(){
 
   $('#tabs').tab();
 
-  $('#tab0 > a').on('click', function (e) { 
-  	e.preventDefault();
-    //$(this).tab('show');
-    console.log ("A");
-    //$('a [href="' + $(this).attr('href') + '"]').tab('show');
-  });
-
   $('#sidebar').click(toggleSidebar);
   $('#deletes').click(deleteTabs);
   $('#routeChange').click(function () {
@@ -109,7 +102,21 @@ $(document).ready(function(){
       google.maps.event.trigger(map, "resize");
       map.setCenter(center);
     }
-  }); 
+  });
+
+  //If the devices orientation changes, resize and recenter map.
+  window.addEventListener("orientationchange", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+  }, false);
+
+  //If the device's resolution changes, resize and recenter map.
+  window.addEventListener("resize", function() {
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+  }, false);
   
   // Get address from cookies as array
   var lastSearch = getAllCookies();
@@ -341,10 +348,23 @@ function calcRoute() {
     end += ' New York City';
   }
 
-  //Add "Directions" button to #sidebar #menu after initial search.
-  if ($('#goBtn').data('initial') == true) {
-    $('#goBtn').data('initial', false);
-    $('#menu button[data-slide-to="0"]').after('<button class="btn btn-default" data-target="#navCarousel" data-slide-to="1">Directions</button>');
+  //Adds several things after initial search.
+  if ($('button:contains("Go")').data('initial') == true) {
+    $('.searchBar button').data('initial', false);
+    //Add "Directions" after "Home" button.
+    $('.btn.btn-default[data-slide-to="0"]').after('\
+        <button class="btn btn-default"\
+        data-target="#navCarousel" data-slide-to="1">\
+        Directions</button>');
+    //Add "Vote" after "Directions" button.
+    $('.btn.btn-default[data-slide-to="1"]').after('\
+        <button class="btn btn-default"\
+        data-target="#navCarousel" data-slide-to="2">\
+        Vote</button>');
+    $('.voting.jumbotron').append('\
+      <p>You seem to be near <span id="cur-station"></span>\
+      for <span id="cur-train"></span> train.\
+      </p><p>Is there any delay?</p>');
   }
 
   var request = {
@@ -559,7 +579,7 @@ function trainTab (obj) {
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 
   $('#tab'+tabCount).append (
-			'<div id="station-info" class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
+			'<div class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
 			  <p id="train"></p>\
 		    <p id="train-stop-depart"></p>\
 		    <p id="departure_time"></p>\
@@ -770,7 +790,7 @@ function renderDir (routeObj, routeNum){
   } // End Steps Loop
 
   $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
-  $('#tab0').append (routeObj.routes[routeNum].copyrights);
+  $('#tab0').append ('<p>'+routeObj.routes[routeNum].copyrights+'<p>');
 
   $('#tab0 .instr a').on('click', function (e) { 
     e.preventDefault();
