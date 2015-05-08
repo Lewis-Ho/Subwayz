@@ -403,9 +403,11 @@ function calcRoute() {
       
       // Write to cookies
       writeCookies(savedRoutes);
-      
+      console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
+      document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
       if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 300){
+        console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
         // First station as voting station
         votingStation = getFirstStep(transitObj);
         // Redirect to vote page
