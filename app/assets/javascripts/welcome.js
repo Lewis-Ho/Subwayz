@@ -511,7 +511,7 @@ function getTransitDetail(obj, tabNo){
 	if (tabNo) {
 		parent='div#tab'+tabNo+' ';
 	}
-
+  console.log("TAB");
   $(parent+'#train').text(obj.transit.line.short_name + " Train");
   $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
   $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
@@ -599,12 +599,15 @@ function trainTab (obj) {
 			'<div class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
 			  <p id="train"></p>\
 		    <p id="train-stop-depart"></p>\
+        <p id="train-stop-end"></p>\
+        <p id="num-stop"></p>\
+        <p id="arrival_time"></p>\
 		    <p id="departure_time"></p>\
 		    <p id="duration"></p>\
+        <p id="arrival_time"></p>\
         <p id="predict-info"></p>\
 		  </div>');
-      //<p id="train-stop-end"></p>\
-      //<p id="num-stop"></p>\
+      
       //<p id="arrival_time"></p>\
       //<p id="distance"></p>\
         
@@ -619,13 +622,13 @@ function getTransitDetail(obj, tabNo){
   }
 
   $(parent+'#train').text(obj.transit.line.short_name + ' Train');
-  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
-  //$(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
-  //$(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
-  //$(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#train-stop-depart').text('From station: ' +obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text('Destination: ' +obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text('MTA says it arrives at: '+obj.transit.arrival_time.text);
   $(parent+'#departure_time').text('Next train arrives at: ' + obj.transit.departure_time.text);
   //$(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text(obj.duration.text);
+  $(parent+'#duration').text('Travel time: ' +obj.duration.text);
   
   // Get weekday
   var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
