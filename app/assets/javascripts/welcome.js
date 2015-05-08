@@ -192,19 +192,10 @@ function checkLocation(transitObj) {
   }
   // User updated geolocation to search for station that is match
   for (var j = 0; j < transitObj.length; j++) {
-
-    // // Check user location with each transit steps station location
-    // if (userLocation.lat() == transitObj[j].transit.departure_stop.location.lat() & userLocation.lng() == transitObj[j].transit.departure_stop.location.lng()) {
-    //   // Found match station
-    //   votingStation = transitObj[0];
-    //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
-    //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
-    //   // Redirect page to vote
-    //   $('#navCarousel').carousel(2);
-    // }
-    
-    // TESTING DATASET
-    if (true) {
+    // console.log(pos.lat());
+    // console.log(transitObj[j].transit.departure_stop.location.lat());
+    // Check user location with each transit steps station location
+    if (pos.lat() == transitObj[j].transit.departure_stop.location.lat() & pos.lng() == transitObj[j].transit.departure_stop.location.lng()) {
       // Found match station
       votingStation = transitObj[0];
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
@@ -212,6 +203,16 @@ function checkLocation(transitObj) {
       // Redirect page to vote
       $('#navCarousel').carousel(2);
     }
+    
+    // // TESTING DATASET
+    // if (true) {
+    //   // Found match station
+    //   votingStation = transitObj[0];
+    //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
+    //   document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
+    //   // Redirect page to vote
+    //   $('#navCarousel').carousel(2);
+    // }
   }
 };
 
