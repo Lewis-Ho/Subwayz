@@ -39,7 +39,7 @@ class WelcomeController < ApplicationController
 
        else
 
-          @rEquation="No data";
+          @rEquation= 9999;
 
         end
   end
@@ -73,7 +73,7 @@ class WelcomeController < ApplicationController
           @rEquation_new = @intercept_new +(@slope_new* arrival_time_min).to_f;
 
       else
-          @rEquation_new = "No data";
+          @rEquation_new = 9999;
 
       end
 
@@ -87,8 +87,8 @@ def prediction_alg
 #     #prev stop regression
 
 
-
-    
+puts "Lewis' time "
+puts params[:time]
   
  
     puts @timeNow = DateTime.now.strftime("%H:%M:%S");
@@ -98,7 +98,8 @@ def prediction_alg
      @dateTom= ((Time.now.strftime("%Y-%m-%d")).to_time + 1.day).strftime("%Y-%m-%d")
     
      v = StopTime.stop_time_row(params[:day],params[:station_name],params[:train], ((params[:time]).to_time).strftime("%H:%M:%S"), params[:headsign])
-    
+     puts "v"
+     puts v.empty?
      
      keys = [:stop_sequence, :trip_id, :arrival_time, :id,:arrival_time_min,:route_id,:stop_id]
      values = [v.pluck("stop_times.stop_sequence"),v.pluck(:trip_id),v.pluck("stop_times.arrival_time"), v.pluck("stop_times.id"),v.pluck("stop_times.arrival_time_min"), v.pluck("trips.route_id"), v.pluck("stop_times.stop_id")]
@@ -126,21 +127,24 @@ def prediction_alg
 
       
           if(@firstStop_answer[:departure_time] < @timeNow) 
-               
-            render json: @ps_regression= prev_stop_regression(@temp[:trip_id], @temp[:stop_sequence]);
-
+            @ps_regression= prev_stop_regression(@temp[:trip_id], @temp[:stop_sequence]);
+            render :json => @ps_regression
+            puts "reg1"
+            puts @ps_regression
 
            elsif(@firstStop_answer[:departure_time] >= @timeNow)
                 
                 
-              render json: @reg = same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
-               
+               render json: @reg = same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
+              puts "reg2"
+              puts @reg
       end   
 
       elsif (@temp[:stop_sequence]==1)
             
-             render json: @sstop_regression=same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
-        
+              render json: @sstop_regression=same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
+             puts "reg3"
+             puts @sstop_regression
       end
       
   end

@@ -147,6 +147,7 @@ $(document).ready(function(){
   
   // Timer on after clicked go button
   $("#goBtn").click(function () {
+    console.log("here");
     // Save point A & B to cookies
     var start = document.getElementById('start').value;
     var end = document.getElementById('end').value;
@@ -544,7 +545,7 @@ function getTransitDetail(obj, tabNo){
       success:function(data){
         //I assume you want to do something on controller action execution success?
         //$(this).addClass('done');
-        //console.log(data);
+        console.log("data");
         $(parent+'#predict-info').text(data);
       }
     });
@@ -626,13 +627,18 @@ function getTransitDetail(obj, tabNo){
   $(parent+'#departure_time').text('Next train arrives at: ' + obj.transit.departure_time.text);
   //$(parent+'#distance').text(obj.distance.text);
   $(parent+'#duration').text(obj.duration.text);
-
+  
   // Get weekday
-  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[obj.transit.departure_time.value.getDay()];
   
   // Get route time
-  var theTime = obj.transit.departure_time.value.toJSON().substr(11, 8);
+  var month   = obj.transit.departure_time.value.getMonth()+1;
+  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                obj.transit.departure_time.value.getDate() +' '+ 
+                obj.transit.departure_time.value.toTimeString().substr(0, 8);
+  
   // Get prediction info
   $.ajax({
       type:'GET',
