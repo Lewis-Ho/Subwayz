@@ -27,7 +27,7 @@ class Welcome < ActiveRecord::Base
              @intercept = (((@sumY)-(@slope*@sumX))/@xyCount).to_f;
 
 
-             @rEquation = @intercept +(@slope*stop_seq).to_i;
+             @rEquation = (@intercept +@slope*stop_seq).to_i;
 
              puts "prv st reg"
              puts @rEquation
@@ -71,7 +71,7 @@ class Welcome < ActiveRecord::Base
 
           @intercept_new = (((@sumY_firstStop)-(@slope_new*@sumX_firstStop))/@sum_rows).to_f;
 
-          @rEquation_new = @intercept_new +(@slope_new* arrival_time_min).to_i;
+          @rEquation_new = (@intercept_new + @slope_new* arrival_time_min).to_i;
 
           puts "same st reg"
           puts @rEquation_new
