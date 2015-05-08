@@ -405,7 +405,7 @@ function calcRoute() {
       writeCookies(savedRoutes);
       
       //Move to next slide when directions have been retrieved.
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 150){
         // First station as voting station
         votingStation = getFirstStep(transitObj);
         // Redirect to vote page
