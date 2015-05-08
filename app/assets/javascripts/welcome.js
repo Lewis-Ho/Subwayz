@@ -190,15 +190,11 @@ function checkLocation(transitObj) {
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout:60000,maximumAge:60000});
   }
-  // Geolocation val
-  console.log(pos.j + " " + pos.C);
-  console.log(transitObj);
+  // User updated geolocation to search for station that is match
   for (var j = 0; j < transitObj.length; j++) {
-    //console.log(transitObj[j].transit.departure_stop.location.A + " " + transitObj[j].transit.departure_stop.location.F);
-    console.log(transitObj[j].transit.departure_stop.location.j + " " + transitObj[j].transit.departure_stop.location.C);
-    
+
     // // Check user location with each transit steps station location
-    // if (userLocation.A == transitObj[j].transit.departure_stop.location.A & userLocation.F == transitObj[j].transit.departure_stop.location.F) {
+    // if (userLocation.lat() == transitObj[j].transit.departure_stop.location.lat() & userLocation.lng() == transitObj[j].transit.departure_stop.location.lng()) {
     //   // Found match station
     //   votingStation = transitObj[0];
     //   document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
@@ -211,7 +207,6 @@ function checkLocation(transitObj) {
     if (true) {
       // Found match station
       votingStation = transitObj[0];
-      console.log(votingStation);
       document.getElementById('cur-train').innerHTML = votingStation.transit.line.short_name;
       document.getElementById('cur-station').innerHTML = votingStation.transit.departure_stop.name;
       // Redirect page to vote
