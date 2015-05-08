@@ -689,28 +689,7 @@ function voteButton(id){
   // });
   
   // Redirect to info page without calling prediction function
-  if (id=='no'){
-    // Get weekday
-    var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-    var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
-  
-    // Get route time
-    var month   = transitObj[0].transit.departure_time.value.getMonth()+1;
-    var theTime = transitObj[0].transit.departure_time.value.getFullYear() +'-'+ 
-                  month +'-'+ 
-                  transitObj[0].transit.departure_time.value.getDate() +' '+ 
-                  transitObj[0].transit.departure_time.value.toTimeString().substr(0, 8);
-  
-    $.ajax({
-      type:'GET',
-      url:'/welcome/try',
-      data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, day: routeDay, time: theTime},
-      success:function(data){
-        //I assume you want to do something on controller action execution success?
-        //$(this).addClass('done');
-      }
-    });
-    
+  if (id=='no'){    
     // Clean up transitObj to prevent redirect to voting page
     transitObj = [];
     // Redirect to info page
@@ -732,16 +711,6 @@ function voteButton(id){
     $.ajax({
       type:'GET',
       url:'/welcome/try',
-      data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, day: routeDay, time: theTime},
-      success:function(data){
-        //I assume you want to do something on controller action execution success?
-        //$(this).addClass('done');
-      }
-    });
-
-    $.ajax({
-      type:'GET',
-      url:'/welcome/prediction_alg',
       data: { station_name : transitObj[0].transit.departure_stop.name, train : transitObj[0].transit.line.short_name , headsign : transitObj[0].transit.headsign, day: routeDay, time: theTime},
       success:function(data){
         //I assume you want to do something on controller action execution success?
