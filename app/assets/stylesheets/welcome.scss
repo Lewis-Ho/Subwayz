@@ -276,7 +276,8 @@ input:focus, textarea:focus {
   overflow-y: scroll;
 
   .tab-pane:not(#tab0){
-    color: white;
+    //color: white;
+    color: black;
     
     background-color: $mta-silver;
     border-bottom-left-radius: 10px;
