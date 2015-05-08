@@ -407,11 +407,22 @@ function calcRoute() {
       document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
       if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 400){
-        console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
-        // First station as voting station
-        votingStation = getFirstStep(transitObj);
-        // Redirect to vote page
-        $('#navCarousel').carousel(2);
+        // Constantly check user location with station location in every
+        $('#navCarousel').carousel(1);
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+        
+        window.setTimeout(
+          function(){ 
+            console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
+            // First station as voting station
+            votingStation = getFirstStep(transitObj);
+            // Redirect to vote page
+            $('#navCarousel').carousel(2);
+          },
+        12000);
+        
       } else {
         // Redirect to map info page, make sure the map is centered
         $('#navCarousel').carousel(1);
