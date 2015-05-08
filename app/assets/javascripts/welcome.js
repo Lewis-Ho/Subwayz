@@ -134,8 +134,7 @@ $(document).ready(function(){
   
   // Get address from cookies as array
   var lastSearch = getAllCookies();
-  
-  if (lastSearch.length > 0 ) {
+  if (lastSearch.length > 0 && lastSearch[0] != "") {
     // Only output the last 3 searches
     lastSearch = lastSearch.slice(-3);
     for (var i = 0; i < lastSearch.length; i++) {
