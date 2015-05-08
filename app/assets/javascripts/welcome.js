@@ -543,10 +543,14 @@ function getTransitDetail(obj, tabNo){
       url:'/welcome/prediction_alg',
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
-        //I assume you want to do something on controller action execution success?
-        //$(this).addClass('done');
-        console.log("data");
-        $(parent+'#predict-info').text(data);
+        // 9999 means no enough data, but we still show no delay as result
+        if (data == 9999 || data == 0) {
+          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
+        }
+        // Show different result
+        else { 
+          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay");
+        }
       }
     });
 };
@@ -645,10 +649,14 @@ function getTransitDetail(obj, tabNo){
       url:'/welcome/prediction_alg',
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
-        //I assume you want to do something on controller action execution success?
-        //$(this).addClass('done');
-        console.log(data);
-        $(parent+'#predict-info').text(data);
+        // 9999 means no enough data, but we still show no delay as result
+        if (data == 9999 || data == 0) {
+          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
+        }
+        // Show different result
+        else { 
+          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay");
+        }
       }
     });
 };
@@ -682,12 +690,6 @@ function voteButton(id){
   //   }
   // });
   
-  // Get route time
-  // var routeTime = transitObj[0].transit.departure_time.value.getUTCHours() + ":" +
-  //                 transitObj[0].transit.departure_time.value.getUTCMinutes() + ":" +
-  //                 transitObj[0].transit.departure_time.value.getUTCSeconds();
-  // console.log(routeTime);
-  
   // Get weekday
   var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[transitObj[0].transit.departure_time.value.getDay()];
@@ -719,15 +721,6 @@ $.ajax({
     }
   });
   
-  // $.ajax({
-  //     type:'GET',
-  //     url:'/welcome/prediction_alg',
-  //     data: { station_name : "135 St", train : "2" , headsign : "FLATBUSH AV - BROOKLYN COLLEGE", current_time : dateTime, vote :  currentVote, day: "monday", time:"17:36:30"},
-  //     success:function(data){
-  //       //I assume you want to do something on controller action execution success?
-  //       //$(this).addClass('done');
-  //     }
-  //   });
   readCookie('data');
   // Clean up transitObj to prevent redirect to voting page
   transitObj = [];
