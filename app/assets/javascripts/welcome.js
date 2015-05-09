@@ -122,7 +122,7 @@ $(document).ready(function(){
       var mask = /^.[^,]+/i;
       a = a.match (mask);
       b = b.match (mask);
-  		$('p:contains("Recent Searches:")').after('<a data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' to '+b[0]+'</a><br>');
+  		$('p:contains("Recent Searches:")').after('<a class="btn btn-default" data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' to '+b[0]+'</a><br>');
     }
   }
   
@@ -604,7 +604,7 @@ function trainTab (obj) {
 
   $('#tab'+tabCount).append (
 			'<div class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
-			  <p id="train"></p>\
+			  <h1 id="train"></h1>\
 		    <p id="train-stop-depart"></p>\
         <p id="train-stop-end"></p>\
         <p id="num-stop"></p>\

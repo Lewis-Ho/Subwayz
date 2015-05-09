@@ -169,20 +169,26 @@ input:focus, textarea:focus {
   border-radius: 10px;
   padding: 5px;
   max-width: 400px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 15px auto;
 
   p, a {
     color: white;
-    margin: 10px;
   }
-  a:hover {
+
+  .btn {
+    margin: 2px auto;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+    white-space: normal;
+  }
+
+  .btn:hover {
     background-color: $light-blue;
     font-weight: bold;
   }
-  a:active {
+  .btn:active {
     color: $dark-blue;
   }
 }
@@ -292,6 +298,11 @@ input:focus, textarea:focus {
     background-color: $mta-silver;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+
+    h1 {
+      border-width: 5px;
+      border-color: white;
+    }
   }
 }
 
