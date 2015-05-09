@@ -98,24 +98,18 @@ $(document).ready(function(){
     // Get/Set map-canvas class using off-left technique
     if(this.id == 'marker2'){
       // Center map to prevent 
-      var center = map.getCenter();
-      google.maps.event.trigger(map, "resize");
-      map.setCenter(center);
+      resizeMap();
     }
   });
 
   //If the devices orientation changes, resize and recenter map.
   window.addEventListener("orientationchange", function() {
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center);
+    resizeMap();
   }, false);
 
   //If the device's resolution changes, resize and recenter map.
   window.addEventListener("resize", function() {
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center);
+    resizeMap();
   }, false);
   
   // Get address from cookies as array
@@ -132,23 +126,8 @@ $(document).ready(function(){
   
   // Timer on after clicked go button
   $('button:contains("Go")').click(function () {
-    console.log("here");
-    // Save point A & B to cookies
-    var start = document.getElementById('start').value;
-    var end = document.getElementById('end').value;
-    var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
-    
-    // Create cookies
-    createCookie('data',valueString,9999);
-        var vals = readCookie('data');
-    // for(var i = 0; i < vals.length; i++) {
-    //   //console.log(vals[i]);
-    //       console.log(vals[3]);
-    //       console.log(vals[7]);
-    // }
-    
-    // Constantly check user location with station location in every
-    window.setInterval(function(){checkLocation(transitObj)},12000);
+    calcRoute();
+    hideMessage();
   });
   
   // Recent button fill in pointA, pointB textbox, search route and redirect to info page
@@ -355,11 +334,13 @@ function calcRoute() {
         <button class="btn btn-default"\
         data-target="#navCarousel" data-slide-to="1">\
         Directions</button>');
-    //Add "Vote" after "Directions" button.
+    //Add "Vote" button and jumbotron after "Directions" button.
+    /*
     $('.btn.btn-default[data-slide-to="1"]').after('\
         <button class="btn btn-default"\
         data-target="#navCarousel" data-slide-to="2">\
         Vote</button>');
+    */
     $('.voting.jumbotron').append('\
       <p>You seem to be near <span id="cur-station"></span>\
       for <span id="cur-train"></span> train.\
@@ -379,6 +360,8 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
+      saveToRecent();
+      
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
@@ -395,9 +378,7 @@ function calcRoute() {
       if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 400){
         // Constantly check user location with station location in every
         $('#navCarousel').carousel(1);
-        var center = map.getCenter();
-        google.maps.event.trigger(map, "resize");
-        map.setCenter(center);
+        resizeMap();
         
         window.setTimeout(
           function(){ 
@@ -412,9 +393,7 @@ function calcRoute() {
       } else {
         // Redirect to map info page, make sure the map is centered
         $('#navCarousel').carousel(1);
-        var center = map.getCenter();
-        google.maps.event.trigger(map, "resize");
-        map.setCenter(center);
+        resizeMap();
       }
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
@@ -427,11 +406,31 @@ function calcRoute() {
   });
 };
 
+//Saves point A to B onto cookie.
+function saveToRecent () {
+  // Save point A & B to cookies
+  var start = document.getElementById('start').value;
+  var end = document.getElementById('end').value;
+  var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
+  
+  // Create cookies
+  createCookie('data',valueString,9999);
+      var vals = readCookie('data');
+  // for(var i = 0; i < vals.length; i++) {
+  //   //console.log(vals[i]);
+  //       console.log(vals[3]);
+  //       console.log(vals[7]);
+  // }
+  
+  // Constantly check user location with station location in every
+  window.setInterval(function(){checkLocation(transitObj)},12000);
+};
+
 // Write info to cookies
 function writeCookies (routeObj){
   getAlltransit(routeObj);
   getFirstStep(transitObj);
-}
+};
 
 // Get all transit(Subway) consist transit info
 function getAlltransit (routeObj){
@@ -444,7 +443,7 @@ function getAlltransit (routeObj){
       }
     }
   }
-}
+};
 
 // Get first step which consist transit info
 function getFirstStep (transitObj){
@@ -452,7 +451,7 @@ function getFirstStep (transitObj){
   if (transitObj.length > 0) {
     return transitObj[0];
   }
-}
+};
 
 // Differentiate Transit Type for SavedRoute Object
 function diffRoute (routeObj){
@@ -486,8 +485,7 @@ function diffRoute (routeObj){
       }
     } // End Steps Loop
   } // End Routes Loop
-}
-    
+};  
 
 function printRoute (routeObj, routeNo) {
 	// Get route object
@@ -503,6 +501,12 @@ function printRoute (routeObj, routeNo) {
     }
   }
 };
+
+function resizeMap () {
+  var center = map.getCenter();
+  google.maps.event.trigger(map, "resize");
+  map.setCenter(center);
+}
 
 //Get details from Maps API json object
 function getTransitDetail(obj, tabNo){
@@ -818,7 +822,7 @@ function randomText(){
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
-}
+};
 
 // Set Cookies
 function createCookie(name,value,days) {
@@ -855,65 +859,4 @@ function readCookie(name) {
 var getAllCookies = function(){
   var pairs = document.cookie.split(";");
   return pairs;
-}
-
-/*
-// Markers for current locaiton
-var markers = [];
-// Store all transit involved route 
-var transit_obj = [];
-
-$(document).ready(function(){
-  var map;
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  var lat;
-  var lon;
-  var hunter = new google.maps.LatLng(40.7687020,-73.9648760);
-
-  function initialize() {
-
-    // Try HTML5 geolocation
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude,
-                                         position.coords.longitude);
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        console.log(pos);
-
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        var mapOptions = {
-          zoom: 11,
-          center: pos
-        };
-        // Draw map
-        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        directionsDisplay.setMap(map);
-        
-        var request = {
-            origin: pos,
-            destination: hunter,
-            travelMode: google.maps.TravelMode.TRANSIT
-        };
-        directionsService.route(request, function(response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-          }
-        });
-
-        map.setCenter(pos);
-      }, function() {
-        handleNoGeolocation(true);
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
-    }
-  }
-  else {
-    $('#navCarousel').carousel(0);
-    pushMessage ('error', 'Empty Message not sent!');
-  }
 };
-*/
