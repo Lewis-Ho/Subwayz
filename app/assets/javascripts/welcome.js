@@ -118,10 +118,14 @@ $(document).ready(function(){
     // Only output the last 3 searches
     lastSearch = lastSearch.slice(-3);
     for (var i = 0; i < lastSearch.length; i++) {
-      var c = lastSearch[i].split('"');
-  		$("#recent-search").after('<a class="recent-search-btn" data-pointA="'+c[3]+'" data-pointB="'+c[7]+'">'+c[3]+' To '+c[7]+'</a><br>');
+      var a = (lastSearch[i].split('"'))[3];
+      var b = (lastSearch[i].split('"'))[7];
+      //Use regex to create string of characters before first comma.
+      var mask = /^.[^,]+/i;
+      a = a.match (mask);
+      b = b.match (mask);
+  		$('p:contains("Recent Searches:")').after('<a data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' To '+b[0]+'</a><br>');
     }
-    $("#recent-search").after('<p>Recent Search:</p>');
   }
   
   // Timer on after clicked go button
@@ -131,7 +135,7 @@ $(document).ready(function(){
   });
   
   // Recent button fill in pointA, pointB textbox, search route and redirect to info page
-  $(".recent-search-btn").click(function () {
+  $('#recent a').click(function () {
     // Get data
     var pointA = this.getAttribute('data-pointA');
     var pointB = this.getAttribute('data-pointB');
@@ -373,7 +377,7 @@ function calcRoute() {
       // Write to cookies
       writeCookies(savedRoutes);
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
-      document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
+      //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
       if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 400){
         // Constantly check user location with station location in every
@@ -408,6 +412,8 @@ function calcRoute() {
 
 //Saves point A to B onto cookie.
 function saveToRecent () {
+  //Needs to prevent storing duplicate points.
+
   // Save point A & B to cookies
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
