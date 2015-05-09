@@ -10,10 +10,8 @@ var savedRoutes;                        // Returned direction result included al
 var map;                                // Map object
 var pos;                                // Current user position
 
-
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
-
 
 $(document).ready(function(){  
   // Keeps form pointAB from refreshing the page.
@@ -124,7 +122,7 @@ $(document).ready(function(){
       var mask = /^.[^,]+/i;
       a = a.match (mask);
       b = b.match (mask);
-  		$('p:contains("Recent Searches:")').after('<a data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' To '+b[0]+'</a><br>');
+  		$('p:contains("Recent Searches:")').after('<a data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' to '+b[0]+'</a><br>');
     }
   }
   
