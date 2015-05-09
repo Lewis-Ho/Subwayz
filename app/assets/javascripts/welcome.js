@@ -364,8 +364,11 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
-      saveToRecent();
       
+      saveToRecent();  
+      // Constantly check user location with station location in every
+      window.setInterval(function(){checkLocation(transitObj)},12000);   
+
       directionsDisplay.setDirections(response);
 			altRouteCount = response.routes.length;
 			savedRoutes = response;
@@ -427,9 +430,6 @@ function saveToRecent () {
   //       console.log(vals[3]);
   //       console.log(vals[7]);
   // }
-  
-  // Constantly check user location with station location in every
-  window.setInterval(function(){checkLocation(transitObj)},12000);
 };
 
 // Write info to cookies
