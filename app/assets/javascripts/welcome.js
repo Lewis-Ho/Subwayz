@@ -15,21 +15,7 @@ var votingStation = [];     // Store transit information where matched user's cu
 var transitObj = [];        // Store all transit involved route
 
 
-$(document).ready(function(){
-  // Make sure direction-info fix the size of screen
-  function checkWidth() {
-    if (screen.width < 767) {
-      // Mobile
-      document.getElementById('direction-info').className = "col-xs-12";
-    } else {
-      document.getElementById('direction-info').className = "col-xs-4";
-    }
-  }
-  // Execute on load
-  checkWidth();
-  // Bind event listener
-  $(screen).resize(checkWidth);
-  
+$(document).ready(function(){  
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
