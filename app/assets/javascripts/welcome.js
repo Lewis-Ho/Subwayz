@@ -131,7 +131,7 @@ $(document).ready(function(){
   }
   
   // Timer on after clicked go button
-  $("#goBtn").click(function () {
+  $('button:contains("Go")').click(function () {
     console.log("here");
     // Save point A & B to cookies
     var start = document.getElementById('start').value;

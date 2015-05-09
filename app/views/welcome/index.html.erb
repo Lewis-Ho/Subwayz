@@ -43,7 +43,7 @@
                   <div class="input-group">
                     <input id="end" type="text" class="form-control" data-bind="value:end" placeholder="Destination"/>
                     <span class="input-group-btn">
-                      <button class="btn btn-default" id="goBtn" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
+                      <button class="btn btn-default" data-slide="next" data-initial="true" onclick="calcRoute(); hideMessage();">
                         Go
                       </button>
                     </span>
@@ -51,8 +51,6 @@
               </div>
           </div>
         </form>
-        <div id="recent-search"></div>
-        <div id="testing-current-distance"></div>
 
           <div class "row">
             <div id="message-container">
@@ -60,7 +58,12 @@
               <span id="message"></span>
             </div>
           </div>
-        
+
+        <div class "row">
+          <div id="recent-search"></div>
+          <div id="testing-current-distance"></div>
+        </div>
+
         </div>
       </div><!--End of Item 0-->
     
