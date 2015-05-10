@@ -134,8 +134,7 @@ input:focus, textarea:focus {
 
 #carousel-container {
   padding-top: 30px;
-  padding-bottom: 80px;
-  overflow-y: hidden;
+  padding-bottom: 30px;
 }
 
 @media (max-width: 767px) {
@@ -237,8 +236,14 @@ input:focus, textarea:focus {
 #tabs {
   li a {
     color: $light-blue;
+    font-weight: bold;
     /*border-radius : tl tr br bl;*/
     border-radius: 10px 10px 0px 0px;
+  }
+
+  li:not(.active) a {
+    background: white;
+    border: none;
   }
   
   li:not(#directionsTab):not(#routeChange).active a,
@@ -246,6 +251,48 @@ input:focus, textarea:focus {
   li:not(#directionsTab):not(#routeChange) a:hover, 
   li:not(#directionsTab):not(#routeChange) a:focus {
     color: white;
+  }
+
+  li.active, li:not(active):hover {
+    a.blue-tab {
+      background: $mta-blue;
+    }
+
+    a.orange-tab {
+      background-color: $mta-orange;
+    }
+
+    a.lime-tab {
+      background-color: $mta-lime;
+    }
+
+    a.brown-tab {
+      background-color: $mta-brown;
+    }
+
+    a.platinum-tab {
+      background-color: $mta-platinum;
+    }
+
+    a.yellow-tab {
+      background-color: $mta-yellow;
+    }
+
+    a.silver-tab {
+      background-color: $mta-silver;
+    }
+
+    a.red-tab {
+      background-color: $mta-red;
+    }
+
+    a.green-tab {
+      background-color: $mta-green;
+    }
+
+    a.purple-tab {
+      background-color: $mta-purple;
+    }
   }
 }
 
@@ -291,12 +338,10 @@ input:focus, textarea:focus {
 }
 
 .tab-content {
-  overflow-y: scroll;
+  overflow-y: auto;
 
   :not(#tab0).tab-pane{
-    color: white;
     padding: 15px;
-    background-color: $mta-silver;
     /*border-radius : tl tr br bl;*/
     border-radius: 0px 0px 15px 15px;
 
@@ -321,42 +366,52 @@ input:focus, textarea:focus {
 }
 
 .blue-tab {
+  color: white;
   background-color: $mta-blue;
 }
 
 .orange-tab {
+  color: white;
   background-color: $mta-orange;
 }
 
 .lime-tab {
+  color: white;
   background-color: $mta-lime;
 }
 
 .brown-tab {
+  color: white;
   background-color: $mta-brown;
 }
 
 .platinum-tab {
+  color: white;
   background-color: $mta-platinum;
 }
 
 .yellow-tab {
+  color: white;
   background-color: $mta-yellow;
 }
 
 .silver-tab {
+  color: white;
   background-color: $mta-silver;
 }
 
 .red-tab {
+  color: white;
   background-color: $mta-red;
 }
 
 .green-tab {
+  color: white;
   background-color: $mta-green;
 }
 
 .purple-tab {
+  color: white;
   background-color: $mta-purple;
 }
 

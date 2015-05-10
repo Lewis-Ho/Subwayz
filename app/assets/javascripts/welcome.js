@@ -552,10 +552,62 @@ function deleteTabs() {
 
 function trainTab (obj) {
 	makeNewTab();
-	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 
   var thisTab = '#tab'+tabCount;
-  var thisTable = thisTab+' div table';
+
+	$('ul#tabs li a[href='+thisTab+']').text(obj.transit.line.short_name);
+
+  function colorTab (color) {
+    $('ul#tabs li a[href='+thisTab+']').addClass(color+'-tab');
+    $(thisTab).addClass(color+'-tab');
+  }
+
+  switch (obj.transit.line.short_name) {
+    case 'A':
+    case 'C':
+    case 'E':
+      colorTab ('blue');
+      break;
+    case 'B':
+    case 'D':
+    case 'M':
+      colorTab ('orange');
+      break;
+    case 'G':
+      colorTab ('lime');
+      break;
+    case 'J':
+    case 'Z':
+      colorTab ('brown');
+      break;
+    case 'L':
+      colorTab ('platinum');
+      break;
+    case 'N':
+    case 'Q':
+    case 'R':
+      colorTab ('yellow');
+      break;
+    case 'S':
+      colorTab ('silver');
+      break;
+    case '1':
+    case '2':
+    case '3':
+      colorTab ('red');
+      break;
+    case '4':
+    case '5':
+    case '6':
+      colorTab ('green');
+      break;
+    case '7':
+      colorTab ('purple');
+      break;
+    default:
+      console.log ('Bad short_name. Cannot color.');
+      break;
+    }
 
   function newRow (field, objProperty) {
     return '<p>'+field+':</p>\
