@@ -273,8 +273,8 @@ function successCallback(position){
       if (results.length != 0) {
         currentAddress = results[0].formatted_address;
         // Write into start textbox
-        var start = document.getElementById('start');
-        start.value = currentAddress;
+        // var start = document.getElementById('start');
+        // start.value = currentAddress;
       } else {
         alert('No results found');
       }
@@ -344,9 +344,8 @@ function calcRoute() {
         Vote</button>');
     */
     $('.voting.jumbotron').append('\
-      <p>You seem to be near <span id="cur-station"></span>\
-      for <span id="cur-train"></span> train.\
-      </p><p>Is there any delay?</p>');
+      <p>You seem waiting for the train at the station.\
+      </p><p>Is the train here yet?</p>');
   }
 
   var request = {
@@ -380,7 +379,7 @@ function calcRoute() {
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
       //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 999999999){
         // Constantly check user location with station location in every
         $('#navCarousel').carousel(1);
         resizeMap();
@@ -686,18 +685,7 @@ function voteButton(id){
 
 
   // transit_name - transit_obj: transit: line: name: "Boardway Express"
-               
-  // $.ajax({
-  //   type:'GET',
-  //   url:'/welcome/show',
-  //   data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
-  //   success:function(data){
-  //     //I assume you want to do something on controller action execution success?
-  //     //$(this).addClass('done');
-  //     console.log(data);
-  //     console.log(data[0]);
-  //   }
-  // });
+
   
   // Redirect to info page without calling prediction function
   if (id=='no'){    
