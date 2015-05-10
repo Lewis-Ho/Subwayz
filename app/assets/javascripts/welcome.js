@@ -9,6 +9,7 @@ var altRouteCount = 0;                  // Alt route count
 var savedRoutes;                        // Returned direction result included all routes information
 var map;                                // Map object
 var pos;                                // Current user position
+var expires = "";
 
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
@@ -418,16 +419,17 @@ function saveToRecent () {
   // Save point A & B to cookies
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
-  var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
+  var valueString = '"pointA"="' + start + '","pointB"="' + end + '"';
   
-  // Create cookies
-  createCookie('data',valueString,9999);
-  var vals = readCookie('data');
-  // for(var i = 0; i < vals.length; i++) {
-  //   //console.log(vals[i]);
-  //       console.log(vals[3]);
-  //       console.log(vals[7]);
-  // }
+  // Prevent duplicate write to cookies if same search appear before, reorder recent search history
+  if(!checkCookies(start,end)){
+    // Found duplicate, Do nothing but checkCookies do reordering
+  } else {
+    // No duplicate, Create cookies
+    createCookie('data',valueString,9999);
+  }
+  
+  //var vals = readCookie('data');
 };
 
 // Write info to cookies
@@ -720,7 +722,7 @@ function voteButton(id){
       }
     });
   
-    readCookie('data');
+    // readCookie('data');
     // Clean up transitObj to prevent redirect to voting page
     transitObj = [];
     // Redirect to info page
@@ -830,9 +832,9 @@ function createCookie(name,value,days) {
   if (days) {
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toUTCString();
+		expires = "; expires="+date.toUTCString();
 	}
-	else var expires = "";
+	else expires = "";
   //console.log(document.cookie);
   var splitCookies = document.cookie.split('|');
   if (splitCookies.length < 4){
@@ -854,19 +856,54 @@ function createCookie(name,value,days) {
   }
 };
 
-// Read Cookies
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split('|');
-  console.log(ca.length);
-  console.log(ca);
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i].split('"');
-    console.log(c);
-	}
-};
+// // Read Cookies
+// function readCookie(name) {
+//   var nameEQ = name + "=";
+//   var ca = document.cookie.split('|');
+//   console.log(ca.length);
+//   console.log(ca);
+//   for(var i=0;i < ca.length;i++) {
+//     var c = ca[i].split('"');
+//     console.log(c);
+//   }
+// };
 
-
+// Validate cookies points to prevent duplicate, return true if there is no duplication, false if duplicate existed and reorder
+function checkCookies(strA, strB){
+	var splitCookies = document.cookie.split('|');
+  // Loop through cookies for checking
+	for(var i=0;i < splitCookies.length;i++) {
+		var c = splitCookies[i].split('"');
+    // Found matching, reorder
+    if ( c[3] == strA && c[7] == strB ){
+      console.log("catch duplicate");
+      var j;
+      
+      // Reorder history, notice that there is always a empty string at the end of all cookies, 
+      // No reorder for these: Case 1: length=4, i=2 ;  Case 2: length=3, i=1 ;  Case 2: length=2, i=1  
+      if ( (i.toString()!=2 && splitCookies.length == 4) || (i.toString()!=1 && splitCookies.length == 3) || (i.toString()!=0 && splitCookies.length == 2)) {
+        // Push each cookies one forward spot
+        for (j=i;j+1 < splitCookies.length;j++){
+          // Slice current cookies
+          var prev = splitCookies[j+1];
+          var splitPrev = prev.split('"');
+          
+          // Prevent empty string case
+          if (splitPrev != ""){
+            // Get value from cookies
+            var valueString = '"pointA"="' + splitPrev[3] + '","pointB"="' + splitPrev[7] + '"'; 
+      
+            document.cookie = j +"="+ valueString+"|"+expires+"; path=/";
+          }
+        }
+        // Write to third cookies spot, j-1 to prevent push to exceeded range 
+        document.cookie = j-1 +"="+ '"pointA"="' + strA + '","pointB"="' + strB + '"'+"|"+expires+"; path=/";
+      }
+      return false;
+    }// End Reorder
+	}// End Checking
+  return true;
+}
 
 // Return all cookies in array
 var getAllCookies = function(){
