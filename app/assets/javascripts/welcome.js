@@ -362,9 +362,6 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
-      
-      // Write point A and point B to cookies
-      saveToRecent();  
       // Constantly check user location with station location in every
       window.setInterval(function(){checkLocation(transitObj)},12000);   
 
@@ -381,7 +378,7 @@ function calcRoute() {
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
       //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 999999999){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
         // Constantly check user location with station location in every
         $('#navCarousel').carousel(1);
         resizeMap();
@@ -401,6 +398,9 @@ function calcRoute() {
         $('#navCarousel').carousel(1);
         resizeMap();
       }
+      
+      // Write point A and point B to cookies
+      saveToRecent();  
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
     }
