@@ -199,8 +199,8 @@ input:focus, textarea:focus {
 
 #map-canvas {
   position: fixed;
-  min-width: 200px;
-  min-height: 200px;
+  min-width: 190px;
+  min-height: 190px;
   border-style: solid;
   border-color: $mta-blue;
   margin-bottom: 10px;
@@ -240,7 +240,8 @@ input:focus, textarea:focus {
     /*border-radius : tl tr br bl;*/
     border-radius: 10px 10px 0px 0px;
   }
-
+  
+  li:not(#directionsTab):not(#routeChange).active a,
   li:not(#directionsTab):not(#routeChange) a:active, 
   li:not(#directionsTab):not(#routeChange) a:hover, 
   li:not(#directionsTab):not(#routeChange) a:focus {
@@ -292,16 +293,29 @@ input:focus, textarea:focus {
 .tab-content {
   overflow-y: scroll;
 
-  .tab-pane:not(#tab0){
+  :not(#tab0).tab-pane{
     color: white;
-    
+    padding: 15px;
     background-color: $mta-silver;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    /*border-radius : tl tr br bl;*/
+    border-radius: 0px 0px 15px 15px;
 
     h1 {
-      border-width: 5px;
-      border-color: white;
+      width: 50px;
+      height: 50px;
+      padding-top: 3px;
+      border: 3px solid white;
+      border-radius: 50%;
+      text-align: center;
+      background-color:transparent;
+    }
+
+    p:nth-child(even) {
+      font-weight: bold;
+    }
+
+    p:nth-child(odd) {
+      margin-left: 15px;
     }
   }
 }
@@ -351,7 +365,7 @@ input:focus, textarea:focus {
 ************************************************/
 
 .voting.jumbotron {
-  background: black;
+  background: $mta-blue;
   border-radius: 30px;
   margin-top: 30px;
   color: white;

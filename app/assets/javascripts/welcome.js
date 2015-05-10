@@ -13,12 +13,36 @@ var pos;                                // Current user position
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
 
-$(document).ready(function(){  
+$(document).ready(function(){
+
+  $('#sidebar').click(toggleSidebar);
+
+  /*Item 0 relevant handlers.*/
   // Keeps form pointAB from refreshing the page.
   $('#pointAB').on('submit', function (e) { 
   	e.preventDefault(); 
   });
 
+  // Timer on after clicked go button
+  $('button:contains("Go")').click(function () {
+    calcRoute();
+    hideMessage();
+  });
+
+  /*Item 1 relevant handlers.*/
+  $('#tabs').tab();
+  //Changes active route.
+  $('#routeChange').click(function () {
+    var index = $('#routeChange').data('route');
+    index = (index+1)%altRouteCount;
+    directionsDisplay.setRouteIndex(index);
+    deleteTabs();
+    printRoute (savedRoutes, index);
+    $('#routeChange').data('route', index);
+  });
+
+  /*Item 3 relevant handlers.*/
+  //Disable feedback form on submit.
   $('#feedback').on('submit', function (e) {
     e.preventDefault();
     if ($('#feedback-content').val() != '') {
@@ -27,19 +51,6 @@ $(document).ready(function(){
       $('#navCarousel').carousel(0);
     }
   });
-
-  $('#tabs').tab();
-
-  $('#sidebar').click(toggleSidebar);
-  $('#deletes').click(deleteTabs);
-  $('#routeChange').click(function () {
-		var index = $('#routeChange').data('route');
-		index = (index+1)%altRouteCount;
-    directionsDisplay.setRouteIndex(index);
-		deleteTabs();
-		printRoute (savedRoutes, index);
-		$('#routeChange').data('route', index);
-	});
 
   // Call Google Direction 
   directionsService = new google.maps.DirectionsService();
@@ -92,20 +103,13 @@ $(document).ready(function(){
   // Load Map
   google.maps.event.addDomListener(window, 'load', initialize);
 
+  //Resize map on carousel slid, orientation change, or window resizing.
   $('#navCarousel').on('slid', function() {
-    // Get/Set map-canvas class using off-left technique
-    if(this.id == 'marker2'){
-      // Center map to prevent 
-      resizeMap();
-    }
+    resizeMap();
   });
-
-  //If the devices orientation changes, resize and recenter map.
   window.addEventListener("orientationchange", function() {
     resizeMap();
   }, false);
-
-  //If the device's resolution changes, resize and recenter map.
   window.addEventListener("resize", function() {
     resizeMap();
   }, false);
@@ -125,13 +129,7 @@ $(document).ready(function(){
   		$('p:contains("Recent Searches:")').after('<a class="btn btn-default" data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' to '+b[0]+'</a><br>');
     }
   }
-  
-  // Timer on after clicked go button
-  $('button:contains("Go")').click(function () {
-    calcRoute();
-    hideMessage();
-  });
-  
+
   // Recent button fill in pointA, pointB textbox, search route and redirect to info page
   $('#recent a').click(function () {
     // Get data
@@ -301,7 +299,7 @@ fillAddress = function() {
 };
 
 // Take inputs from user and set route. Function get request direction result 
-function calcRoute() {
+function calcRoute(bool) {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
 
@@ -363,7 +361,8 @@ function calcRoute() {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       
-      saveToRecent();  
+      //saveToRecent();  
+      
       // Constantly check user location with station location in every
       window.setInterval(function(){checkLocation(transitObj)},12000);   
 
@@ -372,7 +371,6 @@ function calcRoute() {
 			savedRoutes = response;
 
       // Differentiate transit type
-      //diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
       
       // Write to cookies
@@ -404,8 +402,7 @@ function calcRoute() {
       //$('#loadingIcon').hide(300);
     }
     else {
-      //If DirectionsStatus.NOT_FOUND 
-      //or DirectionsStatus.ZERO_RESULTS
+      //If DirectionsStatus.NOT_FOUND || DirectionsStatus.ZERO_RESULTS
       pushMessage ('error', 'No directions found.');
     }
   });
@@ -422,7 +419,7 @@ function saveToRecent () {
   
   // Create cookies
   createCookie('data',valueString,9999);
-      var vals = readCookie('data');
+  var vals = readCookie('data');
   // for(var i = 0; i < vals.length; i++) {
   //   //console.log(vals[i]);
   //       console.log(vals[3]);
@@ -512,51 +509,6 @@ function resizeMap () {
   map.setCenter(center);
 }
 
-//Get details from Maps API json object
-function getTransitDetail(obj, tabNo){
-	var parent='';
-	if (tabNo) {
-		parent='div#tab'+tabNo+' ';
-	}
-  console.log("TAB");
-  $(parent+'#train').text(obj.transit.line.short_name + " Train");
-  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
-  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
-  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
-  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
-  $(parent+'#departure_time').text(obj.transit.departure_time.text);
-  $(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text(obj.duration.text);
-  
-  // Get weekday
-  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
-  
-  // Get route time
-  var month = obj.transit.departure_time.value.getMonth()+1;
-  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
-                month +'-'+ 
-                obj.transit.departure_time.value.getDate() +' '+ 
-                obj.transit.departure_time.value.toTimeString().substr(0, 8);
-  
-  // Get prediction info
-  $.ajax({
-      type:'GET',
-      url:'/welcome/prediction_alg',
-      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
-      success:function(data){
-        // 9999 means no enough data, but we still show no delay as result
-        if (data == 9999 || data == 0) {
-          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
-        }
-        // Show different result
-        else { 
-          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay");
-        }
-      }
-    });
-};
-
 // Get current time from device
 function getTime(){
   var currentdate = new Date(); 
@@ -602,45 +554,34 @@ function trainTab (obj) {
 	makeNewTab();
 	$('ul#tabs li a[href="#tab'+tabCount+'"]').text(obj.transit.line.short_name);
 
-  $('#tab'+tabCount).append (
-			'<div class="col-xs-11 col-xs-height col-sm-12 col-sm-height">\
-			  <h1 id="train"></h1>\
-		    <p id="train-stop-depart"></p>\
-        <p id="train-stop-end"></p>\
-        <p id="num-stop"></p>\
-        <p id="duration"></p>\
-		    <p id="departure_time"></p>\
-        <p id="predict-info"></p>\
-		  </div>');
-      
-      //<p id="arrival_time"></p>\
-      //<p id="distance"></p>\
-        
-	getTransitDetail (obj, tabCount);
-};
+  var thisTab = '#tab'+tabCount;
+  var thisTable = thisTab+' div table';
 
-//Get details from Maps API json object
-function getTransitDetail(obj, tabNo){
-  var parent='';
-  if (tabNo) {
-    parent='div#tab'+tabNo+' ';
+  function newRow (field, objProperty) {
+    return '<p>'+field+':</p>\
+            <p>'+objProperty+'</p>';
   }
 
-  $(parent+'#train').text(obj.transit.line.short_name + ' Train');
-  $(parent+'#train-stop-depart').text('From station: ' +obj.transit.departure_stop.name);
-  $(parent+'#train-stop-end').text('Destination: ' +obj.transit.arrival_stop.name);
-  $(parent+'#num-stop').text("Number of stops: " +obj.transit.num_stops);
-  // $(parent+'#arrival_time').text('MTA says it arrives at: '+obj.transit.arrival_time.text);
-  $(parent+'#departure_time').text('MTA says it arrives at: ' + obj.transit.departure_time.text);
-  //$(parent+'#distance').text(obj.distance.text);
-  $(parent+'#duration').text('Expected traveling time: ' +obj.duration.text);
-  
+  $(thisTab).append (
+			'<div class="col-xs-12 col-sm-12 col-sm-height">');
+  $(thisTab).append (
+    '<h1 id="train">'+obj.transit.line.short_name+'</h1>');
+  $(thisTab).append ('<table>');
+  $(thisTab).append ( 
+    newRow('Departing', obj.transit.departure_stop.name)
+    +newRow('Destination', obj.transit.arrival_stop.name)
+    +newRow('Scheduled Departure', obj.transit.departure_time.text)
+    +newRow('Estimated Travel Time', obj.duration.text)
+    +newRow('Number of Stops', obj.transit.num_stops)
+    //+newRow('Distance', obj.transit.distance)
+  );
+        
   // Get weekday
-  var weekday  = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
   var routeDay = weekday[obj.transit.departure_time.value.getDay()];
   
   // Get route time
-  var month   = obj.transit.departure_time.value.getMonth()+1;
+  var month = obj.transit.departure_time.value.getMonth()+1;
   var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
                 month +'-'+ 
                 obj.transit.departure_time.value.getDate() +' '+ 
@@ -652,13 +593,15 @@ function getTransitDetail(obj, tabNo){
       url:'/welcome/prediction_alg',
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
-        // 9999 means no enough data, but we still show no delay as result
+        // 9999 means not enough data, but we still show no delay as result
         if (data == 9999 || data == 0) {
-          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
+          $(thisTab).append( newRow ('Prediction', 
+            'There is no delay. Enjoy your ride!') );
         }
         // Show different result
         else { 
-          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay");
+          $(thisTab).append( newRow('Prediction', 
+            'There is a chance of a '+data+' minute delay.') );
         }
       }
     });
