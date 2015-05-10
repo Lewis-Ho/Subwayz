@@ -9,6 +9,7 @@ var altRouteCount = 0;                  // Alt route count
 var savedRoutes;                        // Returned direction result included all routes information
 var map;                                // Map object
 var pos;                                // Current user position
+var expires = "";
 
 var votingStation = [];     // Store transit information where matched user's current location 
 var transitObj = [];        // Store all transit involved route
@@ -271,8 +272,8 @@ function successCallback(position){
       if (results.length != 0) {
         currentAddress = results[0].formatted_address;
         // Write into start textbox
-        var start = document.getElementById('start');
-        start.value = currentAddress;
+        // var start = document.getElementById('start');
+        // start.value = currentAddress;
       } else {
         alert('No results found');
       }
@@ -340,9 +341,8 @@ function calcRoute(bool) {
         data-target="#navCarousel" data-slide-to="2">\
         Vote</button>');
     $('.voting.jumbotron').append('\
-      <p>You seem to be near <span id="cur-train"> train\
-      at <span id="cur-station"></span>\
-      </p><p>Is there any delay?</p>');
+      <p>You seem waiting for the train at the station.\
+      </p><p>Is the train here yet?</p>');
   }
 
   var request = {
@@ -371,12 +371,12 @@ function calcRoute(bool) {
       // Differentiate transit type
 			printRoute (savedRoutes, 0);
       
-      // Write to cookies
-      writeCookies(savedRoutes);
+      // Write to transit array obj 
+      writeTransitArray(savedRoutes);
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
       //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 400){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
         // Constantly check user location with station location in every
         $('#navCarousel').carousel(1);
         resizeMap();
@@ -396,6 +396,9 @@ function calcRoute(bool) {
         $('#navCarousel').carousel(1);
         resizeMap();
       }
+      
+      // Write point A and point B to cookies
+      saveToRecent();  
       //Disable loading icon pseudocode.
       //$('#loadingIcon').hide(300);
     }
@@ -413,21 +416,24 @@ function saveToRecent () {
   // Save point A & B to cookies
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
-  var valueString = '"pointA"="' + start + '","pointB"="' + end + '"'; 
+  var valueString = '"pointA"="' + start + '","pointB"="' + end + '"';
   
-  // Create cookies
-  createCookie('data',valueString,9999);
-  var vals = readCookie('data');
-  // for(var i = 0; i < vals.length; i++) {
-  //   //console.log(vals[i]);
-  //       console.log(vals[3]);
-  //       console.log(vals[7]);
-  // }
+  // Prevent duplicate write to cookies if same search appear before, reorder recent search history
+  if(!checkCookies(start,end)){
+    // Found duplicate, Do nothing but checkCookies do reordering
+  } else {
+    // No duplicate, Create cookies
+    createCookie('data',valueString,9999);
+  }
+  
+  //var vals = readCookie('data');
 };
 
 // Write info to cookies
-function writeCookies (routeObj){
+function writeTransitArray (routeObj){
+  // All transit obj push to transitObj array
   getAlltransit(routeObj);
+  // Take transitObj array and get first transit
   getFirstStep(transitObj);
 };
 
@@ -506,6 +512,54 @@ function resizeMap () {
   google.maps.event.trigger(map, "resize");
   map.setCenter(center);
 }
+
+//Get details from Maps API json object
+function getTransitDetail(obj, tabNo){
+	var parent='';
+	if (tabNo) {
+		parent='div#tab'+tabNo+' ';
+	}
+  console.log("TAB");
+  $(parent+'#train').text(obj.transit.line.short_name + " Train");
+  $(parent+'#train-stop-depart').text(obj.transit.departure_stop.name);
+  $(parent+'#train-stop-end').text(obj.transit.arrival_stop.name);
+  $(parent+'#num-stop').text(obj.transit.num_stops + " Stops");
+  $(parent+'#arrival_time').text(obj.transit.arrival_time.text);
+  $(parent+'#departure_time').text(obj.transit.departure_time.text);
+  $(parent+'#distance').text(obj.distance.text);
+  $(parent+'#duration').text(obj.duration.text);
+  
+  // Get weekday
+  var weekday = new Array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+  var routeDay = weekday[obj.transit.departure_time.value.getDay()];
+  
+  // Get route time
+  var month = obj.transit.departure_time.value.getMonth()+1;
+  var theTime = obj.transit.departure_time.value.getFullYear() +'-'+ 
+                month +'-'+ 
+                obj.transit.departure_time.value.getDate() +' '+ 
+                obj.transit.departure_time.value.toTimeString().substr(0, 8);
+  
+  // Get prediction info
+  $.ajax({
+      type:'GET',
+      url:'/welcome/prediction_alg',
+      data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
+      success:function(data){
+        // 9999 means no enough data, but we still show no delay as result
+        if (data == 9999) {
+          $(parent+'#predict-info').text("Train Status: Not enough data to determine current Status yet.");
+        } 
+        else if (data == 0) {
+          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
+        }
+        // Show different result
+        else { 
+          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay.");
+        }
+      }
+    });
+};
 
 // Get current time from device
 function getTime(){
@@ -644,10 +698,12 @@ function trainTab (obj) {
       url:'/welcome/prediction_alg',
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
-        // 9999 means not enough data, but we still show no delay as result
-        if (data == 9999 || data == 0) {
-          $(thisTab).append( newRow ('Prediction', 
-            'There is no delay. Enjoy your ride!') );
+        // 9999 means no enough data, but we still show no delay as result
+        if (data == 9999) {
+          $(parent+'#predict-info').text("Train Status: Not enough data to determine current Status yet.");
+        } 
+        else if (data == 0) {
+          $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
         }
         // Show different result
         else { 
@@ -674,18 +730,7 @@ function voteButton(id){
 
 
   // transit_name - transit_obj: transit: line: name: "Boardway Express"
-               
-  // $.ajax({
-  //   type:'GET',
-  //   url:'/welcome/show',
-  //   data: { station_name : "DeKalb Av", train : "Q", headsign : "Astoria - Ditmars Blvd", current_time : dateTime, vote :  currentVote},
-  //   success:function(data){
-  //     //I assume you want to do something on controller action execution success?
-  //     //$(this).addClass('done');
-  //     console.log(data);
-  //     console.log(data[0]);
-  //   }
-  // });
+
   
   // Redirect to info page without calling prediction function
   if (id=='no'){    
@@ -717,7 +762,7 @@ function voteButton(id){
       }
     });
   
-    readCookie('data');
+    // readCookie('data');
     // Clean up transitObj to prevent redirect to voting page
     transitObj = [];
     // Redirect to info page
@@ -827,31 +872,78 @@ function createCookie(name,value,days) {
   if (days) {
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toUTCString();
+		expires = "; expires="+date.toUTCString();
 	}
-	else var expires = "";
-  // Write to new cookies if cookies does not exist, else append on existing cookies
-  if (document.cookie == ""){
-    document.cookie = name+"="+value+expires+"; path=/";
+	else expires = "";
+  //console.log(document.cookie);
+  var splitCookies = document.cookie.split('|');
+  if (splitCookies.length < 4){
+    var curCookies = splitCookies.length - 1;
+    document.cookie = curCookies.toString() +"="+ value+"|"+expires+"; path=/";
   } else {
-    // Append on existing cookies
-    document.cookie = randomText()+"="+value+expires+"; path=/";
+    // Push each cookies to next spot
+    for (i=0;i+1 < splitCookies.length;i++){
+      // Slice current cookies
+      var cur = splitCookies[i+1];
+      var c = cur.split('"');
+      // Get value from cookies
+      var valueString = '"pointA"="' + c[3] + '","pointB"="' + c[7] + '"'; 
+      
+      document.cookie = i +"="+ valueString+"|"+expires+"; path=/";
+    }
+    // Write to third cookies spot
+    document.cookie = "2" +"="+ value+"|"+expires+"; path=/";
   }
 };
 
-// Read Cookies
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i].split('"');
-    console.log(c);
-    return c;
-		//while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		//if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-};
+// // Read Cookies
+// function readCookie(name) {
+//   var nameEQ = name + "=";
+//   var ca = document.cookie.split('|');
+//   console.log(ca.length);
+//   console.log(ca);
+//   for(var i=0;i < ca.length;i++) {
+//     var c = ca[i].split('"');
+//     console.log(c);
+//   }
+// };
+
+// Validate cookies points to prevent duplicate, return true if there is no duplication, false if duplicate existed and reorder
+function checkCookies(strA, strB){
+	var splitCookies = document.cookie.split('|');
+  // Loop through cookies for checking
+	for(var i=0;i < splitCookies.length;i++) {
+		var c = splitCookies[i].split('"');
+    // Found matching, reorder
+    if ( c[3] == strA && c[7] == strB ){
+      console.log("catch duplicate");
+      var j;
+      
+      // Reorder history, notice that there is always a empty string at the end of all cookies, 
+      // No reorder for these: Case 1: length=4, i=2 ;  Case 2: length=3, i=1 ;  Case 2: length=2, i=1  
+      if ( (i.toString()!=2 && splitCookies.length == 4) || (i.toString()!=1 && splitCookies.length == 3) || (i.toString()!=0 && splitCookies.length == 2)) {
+        // Push each cookies one forward spot
+        for (j=i;j+1 < splitCookies.length;j++){
+          // Slice current cookies
+          var prev = splitCookies[j+1];
+          var splitPrev = prev.split('"');
+          
+          // Prevent empty string case
+          if (splitPrev != ""){
+            // Get value from cookies
+            var valueString = '"pointA"="' + splitPrev[3] + '","pointB"="' + splitPrev[7] + '"'; 
+      
+            document.cookie = j +"="+ valueString+"|"+expires+"; path=/";
+          }
+        }
+        // Write to third cookies spot, j-1 to prevent push to exceeded range 
+        document.cookie = j-1 +"="+ '"pointA"="' + strA + '","pointB"="' + strB + '"'+"|"+expires+"; path=/";
+      }
+      return false;
+    }// End Reorder
+	}// End Checking
+  return true;
+}
 
 // Return all cookies in array
 var getAllCookies = function(){
