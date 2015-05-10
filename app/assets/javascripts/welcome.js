@@ -334,7 +334,7 @@ function calcRoute(bool) {
         <button class="btn btn-default"\
         data-target="#navCarousel" data-slide-to="1">\
         Directions</button>');
-    //Add "Vote" button and jumbotron after "Directions" button.
+    //Add "Vote" (item) button and jumbotron after "Directions" button.
     /*
     $('.btn.btn-default[data-slide-to="1"]').after('\
         <button class="btn btn-default"\
@@ -342,8 +342,8 @@ function calcRoute(bool) {
         Vote</button>');
     */
     $('.voting.jumbotron').append('\
-      <p>You seem to be near <span id="cur-station"></span>\
-      for <span id="cur-train"></span> train.\
+      <p>You seem to be near <span id="cur-train"> train\
+      at <span id="cur-station"></span>\
       </p><p>Is there any delay?</p>');
   }
 
