@@ -362,6 +362,7 @@ function calcRoute() {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       
+      // Write point A and point B to cookies
       saveToRecent();  
       // Constantly check user location with station location in every
       window.setInterval(function(){checkLocation(transitObj)},12000);   
@@ -374,8 +375,8 @@ function calcRoute() {
       //diffRoute (savedRoutes);
 			printRoute (savedRoutes, 0);
       
-      // Write to cookies
-      writeCookies(savedRoutes);
+      // Write to transit array obj 
+      writeTransitArray(savedRoutes);
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
       //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
@@ -421,7 +422,7 @@ function saveToRecent () {
   
   // Create cookies
   createCookie('data',valueString,9999);
-      var vals = readCookie('data');
+  var vals = readCookie('data');
   // for(var i = 0; i < vals.length; i++) {
   //   //console.log(vals[i]);
   //       console.log(vals[3]);
@@ -430,8 +431,10 @@ function saveToRecent () {
 };
 
 // Write info to cookies
-function writeCookies (routeObj){
+function writeTransitArray (routeObj){
+  // All transit obj push to transitObj array
   getAlltransit(routeObj);
+  // Take transitObj array and get first transit
   getFirstStep(transitObj);
 };
 
@@ -830,28 +833,40 @@ function createCookie(name,value,days) {
 		var expires = "; expires="+date.toUTCString();
 	}
 	else var expires = "";
-  // Write to new cookies if cookies does not exist, else append on existing cookies
-  if (document.cookie == ""){
-    document.cookie = name+"="+value+expires+"; path=/";
+  //console.log(document.cookie);
+  var splitCookies = document.cookie.split('|');
+  if (splitCookies.length < 4){
+    var curCookies = splitCookies.length - 1;
+    document.cookie = curCookies.toString() +"="+ value+"|"+expires+"; path=/";
   } else {
-    // Append on existing cookies
-    document.cookie = randomText()+"="+value+expires+"; path=/";
+    // Push each cookies to next spot
+    for (i=0;i+1 < splitCookies.length;i++){
+      // Slice current cookies
+      var cur = splitCookies[i+1];
+      var c = cur.split('"');
+      // Get value from cookies
+      var valueString = '"pointA"="' + c[3] + '","pointB"="' + c[7] + '"'; 
+      
+      document.cookie = i +"="+ valueString+"|"+expires+"; path=/";
+    }
+    // Write to third cookies spot
+    document.cookie = "2" +"="+ value+"|"+expires+"; path=/";
   }
 };
 
 // Read Cookies
 function readCookie(name) {
 	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
+	var ca = document.cookie.split('|');
+  console.log(ca.length);
+  console.log(ca);
 	for(var i=0;i < ca.length;i++) {
 		var c = ca[i].split('"');
     console.log(c);
-    return c;
-		//while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		//if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 	}
-	return null;
 };
+
+
 
 // Return all cookies in array
 var getAllCookies = function(){
