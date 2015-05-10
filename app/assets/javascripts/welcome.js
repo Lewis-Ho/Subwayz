@@ -335,12 +335,10 @@ function calcRoute(bool) {
         data-target="#navCarousel" data-slide-to="1">\
         Directions</button>');
     //Add "Vote" (item) button and jumbotron after "Directions" button.
-    /*
     $('.btn.btn-default[data-slide-to="1"]').after('\
         <button class="btn btn-default"\
         data-target="#navCarousel" data-slide-to="2">\
         Vote</button>');
-    */
     $('.voting.jumbotron').append('\
       <p>You seem to be near <span id="cur-train"> train\
       at <span id="cur-station"></span>\
@@ -361,7 +359,7 @@ function calcRoute(bool) {
     console.log(response);
     if (status == google.maps.DirectionsStatus.OK) {
       
-      //saveToRecent();  
+      saveToRecent();  
       
       // Constantly check user location with station location in every
       window.setInterval(function(){checkLocation(transitObj)},12000);   
