@@ -546,12 +546,15 @@ function getTransitDetail(obj, tabNo){
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
         // 9999 means no enough data, but we still show no delay as result
-        if (data == 9999 || data == 0) {
+        if (data == 9999) {
+          $(parent+'#predict-info').text("Train Status: Not enough data to determine current Status yet.");
+        } 
+        else if (data == 0) {
           $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
         }
         // Show different result
         else { 
-          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay");
+          $(parent+'#predict-info').text("Train Status: Please expected " +data+ " mins delay.");
         }
       }
     });
@@ -653,7 +656,10 @@ function getTransitDetail(obj, tabNo){
       data: { station_name : obj.transit.departure_stop.name, train : obj.transit.line.short_name , headsign : obj.transit.headsign, day: routeDay, time: theTime},
       success:function(data){
         // 9999 means no enough data, but we still show no delay as result
-        if (data == 9999 || data == 0) {
+        if (data == 9999) {
+          $(parent+'#predict-info').text("Train Status: Not enough data to determine current Status yet.");
+        } 
+        else if (data == 0) {
           $(parent+'#predict-info').text("Train Status: There is no delay. Enjoy your ride!");
         }
         // Show different result
