@@ -570,6 +570,7 @@ function trainTab (obj) {
       break;
     case 'B':
     case 'D':
+    case 'F':
     case 'M':
       colorTab ('orange');
       break;
