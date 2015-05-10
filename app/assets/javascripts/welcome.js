@@ -380,7 +380,7 @@ function calcRoute() {
       console.log(savedRoutes.routes[0].legs[0].steps[0].distance.value);
       //document.getElementById("testing-current-distance").innerHTML = savedRoutes.routes[0].legs[0].steps[0].distance.value; 
       //Move to next slide when directions have been retrieved.
-      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 400){
+      if(savedRoutes.routes[0].legs[0].steps[0].distance.value < 60){
         // Constantly check user location with station location in every
         $('#navCarousel').carousel(1);
         resizeMap();
