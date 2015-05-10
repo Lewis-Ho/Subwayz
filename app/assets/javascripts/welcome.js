@@ -123,11 +123,14 @@ $(document).ready(function(){
     for (var i = 0; i < lastSearch.length; i++) {
       var a = (lastSearch[i].split('"'))[3];
       var b = (lastSearch[i].split('"'))[7];
+
+      var cp = {pointA: a, pointB: b};
+
       //Use regex to create string of characters before first comma.
       var mask = /^.[^,]+/i;
       a = a.match (mask);
       b = b.match (mask);
-  		$('p:contains("Recent Searches:")').after('<a class="btn btn-default" data-pointA="'+a+'" data-pointB="'+b+'">'+a[0]+' to '+b[0]+'</a><br>');
+  		$('p:contains("Recent Searches:")').after('<a class="btn btn-default" data-pointA="'+cp.pointA+'" data-pointB="'+cp.pointB+'">'+a[0]+' to '+b[0]+'</a><br>');
     }
   }
 
