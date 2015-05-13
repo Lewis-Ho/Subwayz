@@ -128,7 +128,7 @@ def self.prediction(day,station_name,train,time, headsign)
          val_temp = [firstStop_train_info.pluck(:id),firstStop_train_info.pluck(:stop_sequence),firstStop_train_info.pluck(:departure_time),firstStop_train_info.pluck(:trip_id)]
          @firstStop_answer= Hash[*keys2.zip(val_temp).flatten] #creates things from array to a hash
 
-        if (@temp[:stop_sequence]!=1) #person is here
+        if (@temp[:stop_sequence]>2) #person is here
 #       #check if train has departed then do previous stop regression
        
 
@@ -194,7 +194,7 @@ def self.prediction(day,station_name,train,time, headsign)
         
       end     
 
-      elsif (@temp[:stop_sequence]==1)
+      elsif (@temp[:stop_sequence] < 3)
 
 
           puts "********************************"
