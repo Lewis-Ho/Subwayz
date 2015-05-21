@@ -849,8 +849,12 @@ function renderDir (routeObj, routeNum){
       }
     }
   } // End Steps Loop
-
-  $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
+  if (thisRoute.arrival_time != undefined) {
+    $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.arrival_time.text+'</p>');
+  } else { 
+    $('#tab0').append ('<p>Estimated Time of Arrival: '+thisRoute.duration.text+'</p>');
+  }
+  
   $('#tab0').append ('<p>'+routeObj.routes[routeNum].copyrights+'<p>');
 
   $('#tab0 .instr a').on('click', function (e) { 
