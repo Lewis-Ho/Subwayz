@@ -1,3 +1,76 @@
+
+README:
+
+*****************************************************************************
+
+Must have MysQL version 5.6
+
+In Subwayz/config/database.yml enter the username and  password of the MysQL account.
+
+Enter MysQL 
+In MysQL create an empty database called subwaz by entering the following: create database subwaz;
+
+enter that empty database by typing : use subwaz;
+
+  In Subway/db delete a file name schema.rb 
+
+After deleting the file write the following commend : rake db:migrate 
+
+Go to MysQL and enter subwaz database;
+
+Dump the subwaz.sql dump file into the database by typing the following: source /your path to our project/Subwayz/db/subwaz.sql
+
+Please dump the file twice into the database.
+
+**********************************************************************************
+SSH information 
+
+You can SSH using ssh ruth@24.102.109.113
+password:  h@uptm@n
+
+The project is under project/Subwayz 
+
+In order to enter the database enter : mysql -u root -p
+                                                password:  h@uptm@n
+
+
+****************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 == Subwayz
 
 Subwayz is an application for the average New Yorker who may want to retrieve the status of the subway train they intend to take as a part of their daily commute. 

@@ -13,18 +13,18 @@ def self.stop_time_row (day,sname,rid,time_google,headsign)
     #make function for different days of the week (weekday/weekend) using the variables that lewis passes
       
 
-      if day == "saturday"
+      if day == "saturday" #checking that the day is saturday
          test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {saturday: "1"}).where(routes: {route_short_name: rid}).where(stop_times: {departure_time: time_google})
          
   
 
-      elsif day == "sunday"
+      elsif day == "sunday" #checking that the day is sunday
          test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {sunday: "1"}).where(routes: {route_short_name: rid}).where(stop_times: {departure_time: time_google})
          
 
 
       else
-
+            #all the days of the WEEKDAY
             test = StopTime.joins(:stop,trip: [:calendar, :route]).where(trips:{trip_headsign: headsign }).where(stops:{stop_name: sname}).where(calendars: {monday: "1"}).where(routes: {route_short_name: rid}).where(stop_times: {departure_time: time_google})
           
        end

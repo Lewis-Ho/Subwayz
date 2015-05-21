@@ -2,26 +2,28 @@ class Welcome < ActiveRecord::Base
   
 
 
-  def self.prev_stop_regression (tid,stop_seq)
+  def self.prev_stop_regression (tid,stop_seq)  # regression calculation for middle of line
      @rEquation
      
-      @dateNow = DateTime.now.strftime("%Y-%m-%d");
-      @dateTom= DateTime.tomorrow.strftime("%Y-%m-%d");
+      @dateNow = DateTime.now.strftime("%Y-%m-%d");     #date today
+      @dateTom= DateTime.tomorrow.strftime("%Y-%m-%d"); #date tomorrow
 
-    
-      @sumxy=Vote.sum_xy(tid,@dateTom,@dateNow);
-      @sumXX=Vote.sum_xx(tid,@dateTom,@dateNow);
-      @sumX=Vote.sum_x(tid,@dateTom,@dateNow);
-      @sumY=Vote.sum_y(tid,@dateTom,@dateNow);
+      #following are variables for calculating regression function (calculated in VOTE.RB)
+      #refer VOTE.RB for INFORMATION
+
+      @sumxy=Vote.sum_xy(tid,@dateTom,@dateNow);  # sum xy
+      @sumXX=Vote.sum_xx(tid,@dateTom,@dateNow);  # sum xx 
+      @sumX=Vote.sum_x(tid,@dateTom,@dateNow);    # sum x 
+      @sumY=Vote.sum_y(tid,@dateTom,@dateNow);    # sum y 
       @xyCount =Vote.XY_rowCount(tid,@dateTom,@dateNow);
 
      
 
-      @denominator=((@xyCount*@sumXX)-(@sumX*@sumX)).to_f;
+      @denominator=((@xyCount*@sumXX)-(@sumX*@sumX)).to_f; #formula for regression being calculated for above variable
 
       if (@denominator!=0)
         
-      
+            
              @slope = ((@xyCount*@sumxy)-((@sumX)*(@sumY)))/@denominator;
 
              @intercept = (((@sumY)-(@slope*@sumX))/@xyCount).to_f;
@@ -45,7 +47,7 @@ class Welcome < ActiveRecord::Base
 
 
 
-  def self.same_stop_regression(rid,stop_ID, arrival_time_min)
+  def self.same_stop_regression(rid,stop_ID, arrival_time_min)  #regression for same stop when train hasn't left
 
      @rEquation_new 
 
@@ -54,6 +56,9 @@ class Welcome < ActiveRecord::Base
       @time_now=(Time.now).strftime("%F %H:%M:%S")
       @time_now_minusOne;
       
+
+      #following are variables for calculating regression function (calculated in VOTE.RB)
+      #refer VOTE.RB for INFORMATION
 
       @sumXY_firstStop = Vote.sum_xy2(rid,stop_ID,@time_now,@time_now_minusOne);
       @sumXX_firstStop = Vote.sum_xx2(rid,stop_ID,@time_now,@time_now_minusOne);
@@ -114,8 +119,8 @@ def self.prediction(day,station_name,train,time, headsign)
     
      if((v.empty?)==false)
      
-         keys = [:stop_sequence, :trip_id, :arrival_time, :id,:arrival_time_min,:route_id,:stop_id]
-         values = [v.pluck("stop_times.stop_sequence"),v.pluck(:trip_id),v.pluck("stop_times.arrival_time"), v.pluck("stop_times.id"),v.pluck("stop_times.arrival_time_min"), v.pluck("trips.route_id"), v.pluck("stop_times.stop_id")]
+         keys = [:stop_sequence, :trip_id, :arrival_time, :id,:arrival_time_min,:route_id,:stop_id] #assigning keys
+         values = [v.pluck("stop_times.stop_sequence"),v.pluck(:trip_id),v.pluck("stop_times.arrival_time"), v.pluck("stop_times.id"),v.pluck("stop_times.arrival_time_min"), v.pluck("trips.route_id"), v.pluck("stop_times.stop_id")] #assigning values to the keys
     
          @temp = Hash[*keys.zip(values).flatten] #creates things from array to a hash
   
@@ -125,7 +130,7 @@ def self.prediction(day,station_name,train,time, headsign)
 
          firstStop_train_info=StopTime.where(id: @firstStop_id)
          keys2=[:id,:stop_sequence,:departure_time,:trip_id]
-         val_temp = [firstStop_train_info.pluck(:id),firstStop_train_info.pluck(:stop_sequence),firstStop_train_info.pluck(:departure_time),firstStop_train_info.pluck(:trip_id)]
+         val_temp = [firstStop_train_info.pluck(:id),firstStop_train_info.pluck(:stop_sequence),firstStop_train_info.pluck(:departure_time),firstStop_train_info.pluck(:trip_id)] #plucking things from the query
          @firstStop_answer= Hash[*keys2.zip(val_temp).flatten] #creates things from array to a hash
 
         if (@temp[:stop_sequence]>2) #person is here
@@ -140,7 +145,7 @@ def self.prediction(day,station_name,train,time, headsign)
 
 
       
-            if(@firstStop_answer[:departure_time] < @timeNow) 
+            if(@firstStop_answer[:departure_time] < @timeNow) # if time now > departure time
                 @ps_regression= Welcome.prev_stop_regression(@temp[:trip_id], @temp[:stop_sequence]);
                @ps_regression
                 puts "reg 1"
@@ -172,7 +177,7 @@ def self.prediction(day,station_name,train,time, headsign)
                
          
 
-        if(@firstStop_answer[:departure_time] >= @timeNow)
+        if(@firstStop_answer[:departure_time] >= @timeNow) #when departure time > the time now
 
              puts "reg 2"    
 
@@ -253,7 +258,7 @@ def self.vote(day,station_name,train,time, headsign)
 
     #if(cookies[:vote]!="1")
 
-       @delay= (((Time.now).strftime("%F %H:%M:%S").to_time - ((time).to_time).strftime("%F %H:%M:%S").to_time)/60).to_i
+       @delay= (((Time.now).strftime("%F %H:%M:%S").to_time - ((time).to_time).strftime("%F %H:%M:%S").to_time)/60).to_i #calculating the time in minutes for delay
 
 
          v = StopTime.stop_time_row(day,station_name,train,((time).to_time).strftime("%H:%M:%S"), headsign)
