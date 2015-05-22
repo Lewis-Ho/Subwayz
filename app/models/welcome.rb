@@ -1,7 +1,9 @@
 class Welcome < ActiveRecord::Base
   
 
-
+  #Previous stop, when the stop is in the middle of the trip and 
+  #the train already left the first stop on the trip, 
+  #the following algorithim is used. 
   def self.prev_stop_regression (tid,stop_seq)  # regression calculation for middle of line
      @rEquation
      
@@ -10,10 +12,12 @@ class Welcome < ActiveRecord::Base
 
       #following are variables for calculating regression function (calculated in VOTE.RB)
       #refer VOTE.RB for INFORMATION
-
+      
+      #x represents the previous stop sequences, before the current stop
+      #y represents the time of delay of the train, this could be positive or negative
       @sumxy=Vote.sum_xy(tid,@dateTom,@dateNow);  # sum xy
       @sumXX=Vote.sum_xx(tid,@dateTom,@dateNow);  # sum xx 
-      @sumX=Vote.sum_x(tid,@dateTom,@dateNow);    # sum x 
+      @sumX=Vote.sum_x(tid,@dateTom,@dateNow);    # sum x -
       @sumY=Vote.sum_y(tid,@dateTom,@dateNow);    # sum y 
       @xyCount =Vote.XY_rowCount(tid,@dateTom,@dateNow);
 
@@ -36,7 +40,7 @@ class Welcome < ActiveRecord::Base
          
 
       else
-
+        #if there was no data for previous stops, we return 999.
         @rEquation= 9999;
         puts "else prv reg"
         puts @rEquation
@@ -46,12 +50,14 @@ class Welcome < ActiveRecord::Base
   end
 
 
-
+  #This algorithm is used when it is the first stop, the second stop or a stop that is in the middle
+  #but the previous stop does not have information.
   def self.same_stop_regression(rid,stop_ID, arrival_time_min)  #regression for same stop when train hasn't left
 
      @rEquation_new 
 
-
+     #x represents the time of arrival in mins. of the trains coming to the station in question
+     #y represents the delay, this could be positive or negative
       @time_now_minusOne = (Time.now - 1.day).strftime("%F %H:%M:%S")
       @time_now=(Time.now).strftime("%F %H:%M:%S")
       @time_now_minusOne;
@@ -59,7 +65,7 @@ class Welcome < ActiveRecord::Base
 
       #following are variables for calculating regression function (calculated in VOTE.RB)
       #refer VOTE.RB for INFORMATION
-
+      
       @sumXY_firstStop = Vote.sum_xy2(rid,stop_ID,@time_now,@time_now_minusOne);
       @sumXX_firstStop = Vote.sum_xx2(rid,stop_ID,@time_now,@time_now_minusOne);
       @sumX_firstStop = Vote.sum_x2(rid,stop_ID,@time_now,@time_now_minusOne);
@@ -81,6 +87,7 @@ class Welcome < ActiveRecord::Base
           puts "same st reg"
           puts @rEquation_new
 
+          
       else
           @rEquation_new = 9999;
           puts "else same"
@@ -96,7 +103,7 @@ class Welcome < ActiveRecord::Base
 def self.prediction(day,station_name,train,time, headsign)
 
 
-
+  # this is for testing purposes, it outputs some comments on the server
 
           puts "********************************"
           puts "                                 "
@@ -104,7 +111,7 @@ def self.prediction(day,station_name,train,time, headsign)
           puts train
           puts "*********************************"
     
-#     #prev stop regression
+
 
   
    @ps_regression
@@ -114,7 +121,7 @@ def self.prediction(day,station_name,train,time, headsign)
      @dateNow = Time.now.strftime("%Y-%m-%d")
    
      @dateTom= ((Time.now.strftime("%Y-%m-%d")).to_time + 1.day).strftime("%Y-%m-%d")
-    
+     #checking that the query exists in the database
      v = StopTime.stop_time_row(day,station_name,train, ((time).to_time).strftime("%H:%M:%S"), headsign)
     
      if((v.empty?)==false)
@@ -132,17 +139,18 @@ def self.prediction(day,station_name,train,time, headsign)
          keys2=[:id,:stop_sequence,:departure_time,:trip_id]
          val_temp = [firstStop_train_info.pluck(:id),firstStop_train_info.pluck(:stop_sequence),firstStop_train_info.pluck(:departure_time),firstStop_train_info.pluck(:trip_id)] #plucking things from the query
          @firstStop_answer= Hash[*keys2.zip(val_temp).flatten] #creates things from array to a hash
-
-        if (@temp[:stop_sequence]>2) #person is here
-#       #check if train has departed then do previous stop regression
-       
-
+         #if a person is in a station that is after the second stop
+        if (@temp[:stop_sequence]>2)
+          
+          #for testing purposes
+          
           puts "********************************"
           puts "                                 "
           puts @firstStop_answer[:departure_time]
           puts @timeNow
           puts "*********************************"
 
+          #check if train has departed then do previous stop regression
 
       
             if(@firstStop_answer[:departure_time] < @timeNow) # if time now > departure time
@@ -150,7 +158,8 @@ def self.prediction(day,station_name,train,time, headsign)
                @ps_regression
                 puts "reg 1"
                 puts @ps_regression
-
+                
+                #testing purposes
 
           puts "********************************"
           puts "                                 "
@@ -159,14 +168,15 @@ def self.prediction(day,station_name,train,time, headsign)
           puts "*********************************"
             end
                
-            
+            #if a previous stop regression did not give a value, use the same stop regression
            if (@ps_regression==9999)
                 puts "reg ps 999 2"    
                 
                   @ps_regression = Welcome.same_stop_regression(@temp[:route_id], @temp[:stop_id],@temp[:arrival_time_min]);
                   puts "reg 999 2"
                 puts @ps_regression
-
+                
+                #testing purposes
 
           puts "********************************"
           puts "                                 "
@@ -175,13 +185,13 @@ def self.prediction(day,station_name,train,time, headsign)
           puts "*********************************"
             end
                
-         
+            #if the train did not leave the first stop, use the same stop regression
 
         if(@firstStop_answer[:departure_time] >= @timeNow) #when departure time > the time now
 
              puts "reg 2"    
 
-
+             #testing purposes
 
           puts "********************************"
           puts    "reg 2                                "
@@ -198,7 +208,7 @@ def self.prediction(day,station_name,train,time, headsign)
              
         
       end     
-
+      #if it is the first stop, or second stop, use the same stop regression
       elsif (@temp[:stop_sequence] < 3)
 
 
@@ -222,7 +232,7 @@ def self.prediction(day,station_name,train,time, headsign)
       
     end
 
-
+    #testing pruposes
 
 
     puts "********************************"
@@ -254,13 +264,11 @@ end
 def self.vote(day,station_name,train,time, headsign)
 
 
-    
+      #calculating the time in minutes for delay (taking time of the trains supposed arrival - the actaul time)    
 
-    #if(cookies[:vote]!="1")
-
-       @delay= (((Time.now).strftime("%F %H:%M:%S").to_time - ((time).to_time).strftime("%F %H:%M:%S").to_time)/60).to_i #calculating the time in minutes for delay
-
-
+       @delay= (((Time.now).strftime("%F %H:%M:%S").to_time - ((time).to_time).strftime("%F %H:%M:%S").to_time)/60).to_i 
+       
+       #finding the station and the time and the train corresponding to the person vote
          v = StopTime.stop_time_row(day,station_name,train,((time).to_time).strftime("%H:%M:%S"), headsign)
 
         if((v.empty?)==false)
@@ -269,22 +277,16 @@ def self.vote(day,station_name,train,time, headsign)
          values = [v.pluck(:id),v.pluck(:stop_sequence)]
 
           @test = Hash[*keys.zip(values).flatten] #creates things from array to a hash
-       
+          #storing the vote that consists of time of delay 
+          #recorded and all the relavent information associated with that vote
          Vote.create(stop_time_id: @test[:id],d_t: (Time.now).strftime("%F %H:%M:%S"), day: day, vote: @delay) #time is in UTC (make it ot EST)
          
          end 
                       
 
-    # #end
-    # cookies[:vote]= {:value=> "1", :expires=> 2.minutes.from_now}
+ 
   end 
 
   
- 
-
-
-
-
-
   
 end

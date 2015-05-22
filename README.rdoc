@@ -22,19 +22,7 @@ Dump the subwaz.sql dump file into the database by typing the following: source 
 
 Please dump the file twice into the database.
 
-**********************************************************************************
-SSH information 
 
-You can SSH using ssh ruth@24.102.109.113
-password:  h@uptm@n
-
-The project is under project/Subwayz 
-
-In order to enter the database enter : mysql -u root -p
-                                                password:  h@uptm@n
-
-
-****************************************************************************
 
 
 

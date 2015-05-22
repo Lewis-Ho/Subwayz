@@ -14,33 +14,16 @@ class WelcomeController < ApplicationController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
 def prediction_alg
     
    puts "prediction" 
- 
+   #take these parameters and outputs the right prediction associated with the right prediction
+   #algorithm described in prediction.rb
      @prediction= Welcome.prediction(params[:day],params[:station_name],params[:train],params[:time], params[:headsign])
     puts "prediction" 
     puts  @prediction
 
+    #only for testing
      puts "********************************"
           puts "                                 "
           puts "in prediction"
@@ -51,16 +34,17 @@ def prediction_alg
     
 end    
 
+#the try funtion calls the vote funtion in welcome.rb
 
 def try
 
-
+  #time = the time that the train is scheduled to arrive at the station
     @v=Welcome.vote(params[:day],params[:station_name],params[:train],params[:time], params[:headsign])
     
 
 end 
 
-  
+#feedback for the website
   
   def create
     @lng_lat = [params[:lng].to_f, params[:lat].to_f]
