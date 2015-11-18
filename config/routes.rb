@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   get 'welcome/prediction_alg'
 
+  get 'about_us/index'
+
   get 'votes/new'
 
   get 'trips/new'
